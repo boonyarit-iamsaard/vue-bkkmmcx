@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// Initiate
 import CreateLeave from "@/components/CreateLeave";
 
 export default {

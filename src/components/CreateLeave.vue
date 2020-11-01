@@ -90,6 +90,7 @@
 >
 
 <script>
+// Initiate
 export default {
   name: "CreateLeave",
   data: () => ({

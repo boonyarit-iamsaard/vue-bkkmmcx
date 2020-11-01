@@ -26,6 +26,7 @@
 </template>
 
 <script>
+// Initiate
 export default {
   name: "LeaveList",
   data() {

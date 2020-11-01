@@ -13,6 +13,7 @@
 </template>
 
 <script>
+// Initiate
 import Details from "@/components/Details";
 import LeaveList from "@/components/LeaveList";
 export default {
