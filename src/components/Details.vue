@@ -81,16 +81,22 @@
 </template>
 
 <script>
-// Initiate
+import { mapGetters } from "vuex";
+
 export default {
   name: "Profile",
   data() {
     return {
-      staff: this.$store.getters.getStaff.find(staff => staff.id === "124430K"),
-      leave: this.$store.getters.getLeaves.filter(
-        leave => leave.staffId === "124430K"
-      )
+      staff: null,
+      leave: null
     };
+  },
+  created() {
+    this.staff = this.staffsList.find(staff => staff.id === "124430K");
+    this.leave = this.leavesList.filter(leave => leave.staffId === "124430K");
+  },
+  mounted() {
+    this.leaveUsed();
   },
   methods: {
     priorityRemains() {
@@ -112,6 +118,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["leavesList", "staffsList"]),
     getFullName() {
       return `${this.staff.firstName} ${this.staff.lastName}`;
     }

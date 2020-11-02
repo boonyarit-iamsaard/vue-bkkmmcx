@@ -26,7 +26,8 @@
 </template>
 
 <script>
-// Initiate
+import { mapGetters } from "vuex";
+
 export default {
   name: "LeaveList",
   data() {
@@ -41,12 +42,16 @@ export default {
       ]
     };
   },
+  created() {
+    this.leaves = this.leavesList;
+  },
+  mounted() {},
+  computed: {
+    ...mapGetters(["leavesList"])
+  },
   methods: {
     editItem() {},
     deleteItem() {}
-  },
-  mounted() {
-    this.leaves = this.$store.getters.getLeaves;
   }
 };
 </script>

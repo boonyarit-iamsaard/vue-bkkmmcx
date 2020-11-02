@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Home",
   data() {
@@ -74,15 +76,14 @@ export default {
       },
       focus: this.$route.params.focus || "2020-12-01",
       events: [],
-      eventColor: ["#a51d36", "#c0b498", "#156665", "gray"],
-      leaves: null,
-      staffs: null
+      eventColor: ["#a51d36", "#c0b498", "#156665", "gray"]
     };
   },
+  computed: mapGetters(["leavesList", "staffsList"]),
   methods: {
     getLeaves() {
-      for (let leave of this.leaves) {
-        for (let staff of this.staffs) {
+      for (let leave of this.leavesList) {
+        for (let staff of this.staffsList) {
           if (staff.id === leave.staffId) {
             let event = {
               name: `${staff.firstName} : ${leave.priority}`,
@@ -115,11 +116,13 @@ export default {
       }
     }
   },
+  created() {
+    this.getLeaves();
+  },
   mounted() {
     this.$refs.calendar.move();
-    this.leaves = this.$store.getters.getLeaves;
-    this.staffs = this.$store.state.staffs;
-    this.getLeaves();
+    // this.leaves = this.$store.getters.getLeaves;
+    // this.staffs = this.$store.state.staffs;
   }
 };
 </script>

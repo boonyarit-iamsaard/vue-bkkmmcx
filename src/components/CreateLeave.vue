@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "CreateLeave",
   data: () => ({
@@ -101,8 +102,8 @@ export default {
       { text: "ANL-3", disabled: false }
     ],
     disablePriorityItems: [],
-    staff: "",
-    leaves: [],
+    staff: null,
+    leaves: null,
     leaveId: 0,
     startDate: new Date("2021-01-01").toISOString().substr(0, 10),
     endDate: new Date("2021-01-01").toISOString().substr(0, 10),
@@ -111,6 +112,7 @@ export default {
     endMenu: false
   }),
   methods: {
+    ...mapActions(["updatePriorityQuata", "addNewLeave"]),
     onAddLeave() {
       if (this.$refs.form.validate()) {
         let anl1Used = 0;
@@ -140,8 +142,8 @@ export default {
 
         const targetMonth = new Date(this.startDate);
         targetMonth.setMonth(targetMonth.getMonth() - 1);
-        this.$store.commit("updatePriorityQuata", updatedPriorityQuata);
-        this.$store.commit("addNewLeave", newLeave);
+        this.updatePriorityQuata(updatedPriorityQuata);
+        this.addNewLeave(newLeave);
         this.priority = null;
         this.$router.push({
           name: "Home",
@@ -154,13 +156,6 @@ export default {
       let end = new Date(`${this.endDate}T23:59:59`);
       let days = (end.getTime() - start.getTime()) / 86400000;
       return Math.round(days);
-    },
-    getTimeStamp() {
-      const today = new Date();
-      const date = `${today.getDate()}-${today.getMonth() +
-        1}-${today.getFullYear()}`;
-      const time = `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
-      return `${date} ${time}`;
     },
     validate() {
       this.$refs.form.validate();
@@ -180,14 +175,17 @@ export default {
       }
     }
   },
-  mounted() {
-    this.staff = this.$store.getters.getStaff.find(
-      staff => staff.id === "124430K"
-    );
-    this.leaves = this.$store.getters.getLeaves.filter(
+  created() {
+    this.staff = this.staffsList.find(staff => staff.id === "124430K");
+    this.leaves = this.leavesList.filter(
       leave => leave.staffId === this.staff.id
     );
+  },
+  mounted() {
     this.disabledPriority();
+  },
+  computed: {
+    ...mapGetters(["staffsList", "leavesList"])
   },
   watch: {
     leaves: "disabledPriority"
