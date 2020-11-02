@@ -86,11 +86,10 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-form></template
->
+  </v-form>
+</template>
 
 <script>
-// Initiate
 export default {
   name: "CreateLeave",
   data: () => ({
@@ -136,7 +135,7 @@ export default {
           endDate: this.endDate,
           days: this.days(),
           priority: this.priority,
-          added: this.getTimeStamp()
+          added: new Date().toISOString()
         };
 
         const targetMonth = new Date(this.startDate);
@@ -144,7 +143,6 @@ export default {
         this.$store.commit("updatePriorityQuata", updatedPriorityQuata);
         this.$store.commit("addNewLeave", newLeave);
         this.priority = null;
-
         this.$router.push({
           name: "Home",
           params: { focus: targetMonth.toISOString().substr(0, 10) }

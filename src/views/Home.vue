@@ -61,7 +61,6 @@
 </template>
 
 <script>
-// Initiate
 export default {
   name: "Home",
   data() {

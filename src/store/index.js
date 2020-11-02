@@ -39,4 +39,3 @@ export default new Vuex.Store({
     }
   }
 });
-// Initiate

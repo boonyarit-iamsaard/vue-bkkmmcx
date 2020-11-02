@@ -41,7 +41,6 @@
 </template>
 
 <script>
-// Initiate
 export default {
   name: "App",
   components: {},
