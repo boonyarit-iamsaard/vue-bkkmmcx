@@ -1,4 +1,6 @@
-// import firestore from "../../database/firebase";
+import firestore from "../../database/firebase";
+
+const leavesRef = firestore.collection("leaves");
 
 const state = {
   leaves: []
@@ -9,8 +11,27 @@ const getters = {
 };
 
 const actions = {
+  // Test fetch leaves from firestore
+  async fetchLeaves() {
+    let leaves = [];
+    try {
+      await leavesRef
+        .where("staffId", "==", "124430K") //(fieldName, queryOperator, value)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            if (doc.data()) {
+              leaves.push(doc.id, doc.data());
+            }
+          });
+          console.log(leaves);
+        });
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
   addNewLeave({ commit }, newLeave) {
-    console.log(newLeave);
     commit("addLeave", newLeave);
   },
   updateLeave({ commit }, updatedLeave) {

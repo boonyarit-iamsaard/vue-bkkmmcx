@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Home",
@@ -81,6 +81,8 @@ export default {
   },
   computed: mapGetters(["leavesList", "staffsList"]),
   methods: {
+    // 1st - map fetchLeaves from leaves 's actions.
+    ...mapActions(["fetchLeaves"]),
     getLeaves() {
       for (let leave of this.leavesList) {
         for (let staff of this.staffsList) {
@@ -118,11 +120,11 @@ export default {
   },
   created() {
     this.getLeaves();
+    // 2nd - call fetchLeaves in created hook.
+    this.fetchLeaves();
   },
   mounted() {
     this.$refs.calendar.move();
-    // this.leaves = this.$store.getters.getLeaves;
-    // this.staffs = this.$store.state.staffs;
   }
 };
 </script>
