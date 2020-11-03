@@ -1,11 +1,11 @@
 <template>
-  <v-form @submit.prevent="onAddLeave" v-model="valid" ref="form">
+  <v-form @submit.prevent="onUpdateLeave" v-model="valid" ref="form">
     <v-container>
       <v-row>
         <v-col md="8" lg="4" class="mx-auto">
           <v-card class="pa-4 rounded-lg">
             <p class="display-1 font-weight-light text-center">
-              Apply for Leave
+              Edit Leave
             </p>
             <v-row>
               <v-col cols="12">
@@ -79,7 +79,7 @@
                   type="submit"
                   color="teal darken-3"
                   class="white--text font-weight-light"
-                  >APPLY
+                  >EDIT
                 </v-btn>
               </v-col>
             </v-row>
@@ -91,51 +91,62 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
+
 export default {
-  name: "CreateLeave",
-  data: () => ({
-    valid: false,
-    priorityRules: [v => v.length > 0 || "Priority is required."],
-    priorityItems: [
-      { text: "ANL-1", disabled: false },
-      { text: "ANL-2", disabled: false },
-      { text: "ANL-3", disabled: false }
-    ],
-    disablePriorityItems: [],
-    staff: null,
-    leaves: null,
-    startDate: new Date("2021-01-01").toISOString().substr(0, 10),
-    endDate: new Date("2021-01-01").toISOString().substr(0, 10),
-    priority: "",
-    startMenu: false,
-    endMenu: false
-  }),
+  name: "UpdateLeave",
+  props: {
+    item: Object
+  },
   methods: {
-    ...mapActions(["updatePriorityQuata", "addNewLeave"]),
+    ...mapActions(["updatePriorityQuata", "updateLeave"]),
     changeEndDate() {
       return (this.endDate = this.startDate);
     },
-    onAddLeave() {
+    onUpdateLeave() {
       if (this.$refs.form.validate()) {
         let anl1Used = 0;
         let anl2Used = 0;
-        if (this.priority === "ANL-1") {
+        if (this.priority === "ANL-1" && this.item.priority === "ANL-2") {
           anl1Used = 1;
-        }
-        if (this.priority === "ANL-2") {
+          anl2Used = -1;
+        } else if (
+          this.priority === "ANL-1" &&
+          this.item.priority === "ANL-3"
+        ) {
+          anl1Used = 1;
+        } else if (
+          this.priority === "ANL-2" &&
+          this.item.priority === "ANL-1"
+        ) {
+          anl1Used = -1;
           anl2Used = 1;
+        } else if (
+          this.priority === "ANL-2" &&
+          this.item.priority === "ANL-3"
+        ) {
+          anl2Used = 1;
+        } else if (
+          this.priority === "ANL-3" &&
+          this.item.priority === "ANL-1"
+        ) {
+          anl1Used = -1;
+        } else if (
+          this.priority === "ANL-3" &&
+          this.item.priority === "ANL-2"
+        ) {
+          anl2Used = -1;
         }
 
         const updatedPriorityQuata = {
-          staffId: this.staff.id,
+          staffId: this.item.staffId,
           anl1Used: anl1Used,
           anl2Used: anl2Used
         };
 
-        const newLeave = {
-          id: Date.now(),
-          staffId: this.staff.id,
+        const updatedLeave = {
+          id: this.item.id,
+          staffId: this.item.staffId,
           startDate: this.startDate,
           endDate: this.endDate,
           days: this.days(),
@@ -145,9 +156,12 @@ export default {
 
         const targetMonth = new Date(this.startDate);
         targetMonth.setMonth(targetMonth.getMonth() - 1);
+
         this.updatePriorityQuata(updatedPriorityQuata);
-        this.addNewLeave(newLeave);
+        this.updateLeave(updatedLeave);
+
         this.priority = null;
+
         this.$router.push({
           name: "Home",
           params: { focus: targetMonth.toISOString().substr(0, 10) }
@@ -162,62 +176,29 @@ export default {
     },
     validate() {
       this.$refs.form.validate();
-    },
-    disabledPriority() {
-      if (this.leaves.length > 0) {
-        if (
-          this.leaves.filter(leave => leave.priority === "ANL-1").length > 0
-        ) {
-          this.priorityItems[0].disabled = true;
-        }
-        if (
-          this.leaves.filter(leave => leave.priority === "ANL-2").length > 0
-        ) {
-          this.priorityItems[1].disabled = true;
-        }
-      }
     }
   },
-  created() {
-    this.staff = this.staffsList.find(staff => staff.id === "124430K");
-    this.leaves = this.leavesList.filter(
-      leave => leave.staffId === this.staff.id
-    );
-  },
-  mounted() {
-    this.disabledPriority();
-  },
-  computed: {
-    ...mapGetters(["staffsList", "leavesList"])
-  },
-  filters: {
-    dateFormat(value) {
-      const months = [
-        "January",
-        "Febuary",
-        "March",
-        "April",
-        "May",
-        "Jun",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-      ];
-      let d = new Date(value);
-      let year = d.getFullYear();
-      let month = d.getMonth();
-      let date = d.getDate();
-
-      return `${date} ${months[month].substr(0, 3)} ${year}`;
-    }
-  },
-  watch: {
-    leaves: "disabledPriority"
+  data() {
+    return {
+      valid: false,
+      priorityRules: [v => v.length > 0 || "Priority is required."],
+      priorityItems: [
+        { text: "ANL-1", disabled: false },
+        { text: "ANL-2", disabled: false },
+        { text: "ANL-3", disabled: false }
+      ],
+      disablePriorityItems: [],
+      staff: null,
+      leaves: null,
+      leaveId: 0,
+      startDate: this.item.startDate,
+      endDate: this.item.endDate,
+      priority: this.item.priority,
+      startMenu: false,
+      endMenu: false
+    };
   }
 };
 </script>
 
-<style scoped></style>
+<style></style>

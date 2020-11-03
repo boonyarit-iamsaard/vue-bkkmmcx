@@ -30,7 +30,9 @@ const actions = {
 };
 
 const mutations = {
-  updatePriority: (state, staffs) => (state.staffs = staffs)
+  updatePriority: (state, staffs) => {
+    state.staffs = staffs;
+  }
 };
 
 export default {

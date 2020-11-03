@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Profile from "@/views/Profile";
 import ApplyLeave from "@/views/ApplyLeave";
+import EditLeave from "@/views/EditLeave";
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,12 @@ const routes = [
     path: "/apply",
     name: "ApplyLeave",
     component: ApplyLeave,
+    props: true
+  },
+  {
+    path: "/edit",
+    name: "EditLeave",
+    component: EditLeave,
     props: true
   },
   {

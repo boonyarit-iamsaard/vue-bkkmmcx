@@ -13,7 +13,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-icon color="#156665" class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
@@ -50,7 +50,12 @@ export default {
     ...mapGetters(["leavesList"])
   },
   methods: {
-    editItem() {},
+    editItem(item) {
+      this.$router.push({
+        name: "EditLeave",
+        params: { item: item }
+      });
+    },
     deleteItem() {}
   }
 };
