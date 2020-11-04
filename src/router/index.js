@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Profile from "@/views/Profile";
 import ApplyLeave from "@/views/ApplyLeave";
 import EditLeave from "@/views/EditLeave";
+import SignInView from "@/views/SignIn";
 
 Vue.use(VueRouter);
 
@@ -12,12 +13,6 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
-    props: true
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: Profile,
     props: true
   },
   {
@@ -30,6 +25,18 @@ const routes = [
     path: "/edit",
     name: "EditLeave",
     component: EditLeave,
+    props: true
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    props: true
+  },
+  {
+    path: "/signin",
+    name: "Signin",
+    component: SignInView,
     props: true
   },
   {

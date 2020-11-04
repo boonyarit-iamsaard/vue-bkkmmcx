@@ -154,7 +154,7 @@ export default {
           added: new Date().toISOString()
         };
 
-        const targetMonth = new Date(this.startDate);
+        const targetMonth = new Date(`${this.startDate}`);
         targetMonth.setMonth(targetMonth.getMonth() - 1);
 
         this.updatePriorityQuata(updatedPriorityQuata);

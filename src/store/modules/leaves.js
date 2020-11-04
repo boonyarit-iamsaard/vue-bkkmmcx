@@ -1,5 +1,4 @@
-import firestore from "../../database/firebase";
-
+import { firestore } from "@/database/firebase";
 const leavesRef = firestore.collection("leaves");
 
 const state = {
