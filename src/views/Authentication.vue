@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import SignIn from "@/components/SignIn";
+import SignIn from "@/components/LoginForm";
 export default {
   name: "SignInView",
   components: { SignIn }

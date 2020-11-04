@@ -2,7 +2,7 @@
   <v-form @submit.prevent="onAddLeave" v-model="valid" ref="form">
     <v-container>
       <v-row>
-        <v-col md="8" lg="4" class="mx-auto">
+        <v-col md="8" lg="6" class="mx-auto">
           <v-card class="pa-4 rounded-lg">
             <p class="display-1 font-weight-light text-center">
               Apply for Leave
@@ -76,9 +76,10 @@
               <v-col cols="12">
                 <v-btn
                   block
+                  dark
                   type="submit"
-                  color="teal darken-3"
-                  class="white--text font-weight-light"
+                  color="#156665"
+                  class="font-weight-light"
                   >APPLY
                 </v-btn>
               </v-col>

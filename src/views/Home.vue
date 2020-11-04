@@ -2,8 +2,8 @@
   <v-container>
     <v-sheet tile height="64" class="d-flex">
       <v-toolbar flat>
-        <v-btn color="#c0b498" to="/profile" dark>
-          <span class="font-weight-regular">Profile</span>
+        <v-btn color="#156665" to="/apply" dark>
+          <span class="font-weight-regular">Apply for Leave</span>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
@@ -50,13 +50,6 @@
         @click:more="viewDay"
       ></v-calendar>
     </v-sheet>
-    <v-row>
-      <v-col cols="12" class="text-center">
-        <v-btn color="#156665" to="/apply" dark>
-          <span class="font-weight-regular">Apply for Leave</span>
-        </v-btn>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -65,20 +58,6 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Home",
-  data() {
-    return {
-      showMonthOnFirst: false,
-      type: "month",
-      typeLabel: {
-        month: "Month",
-        week: "Week",
-        day: "Day"
-      },
-      focus: this.$route.params.focus || "2020-12-01",
-      events: [],
-      eventColor: ["#a51d36", "#c0b498", "#156665", "gray"]
-    };
-  },
   computed: mapGetters(["leavesList", "staffsList"]),
   methods: {
     // 1st - map fetchLeaves from leaves 's actions.
@@ -117,6 +96,20 @@ export default {
           return this.eventColor[-1];
       }
     }
+  },
+  data() {
+    return {
+      showMonthOnFirst: false,
+      type: "month",
+      typeLabel: {
+        month: "Month",
+        week: "Week",
+        day: "Day"
+      },
+      focus: this.$route.params.focus || "2020-12-01",
+      events: [],
+      eventColor: ["#a51d36", "#c0b498", "#156665", "gray"]
+    };
   },
   created() {
     this.getLeaves();

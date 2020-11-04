@@ -4,7 +4,7 @@ import Home from "../views/Home.vue";
 import Profile from "@/views/Profile";
 import ApplyLeave from "@/views/ApplyLeave";
 import EditLeave from "@/views/EditLeave";
-import SignInView from "@/views/SignIn";
+import SignInView from "@/views/Authentication";
 
 Vue.use(VueRouter);
 

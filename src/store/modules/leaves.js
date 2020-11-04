@@ -23,7 +23,6 @@ const actions = {
               leaves.push(doc.id, doc.data());
             }
           });
-          console.log(leaves);
         });
     } catch (err) {
       console.error(err);
