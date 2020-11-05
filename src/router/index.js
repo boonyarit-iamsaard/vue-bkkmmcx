@@ -4,7 +4,7 @@ import Home from "../views/Home.vue";
 import Profile from "@/views/Profile";
 import ApplyLeave from "@/views/ApplyLeave";
 import EditLeave from "@/views/EditLeave";
-import SignInView from "@/views/Authentication";
+import Login from "@/views/Login";
 
 Vue.use(VueRouter);
 
@@ -34,10 +34,13 @@ const routes = [
     props: true
   },
   {
-    path: "/signin",
-    name: "Signin",
-    component: SignInView,
+    path: "/login",
+    name: "Login",
+    component: Login,
     props: true
+  },
+  {
+    path: "/register"
   },
   {
     path: "/about",

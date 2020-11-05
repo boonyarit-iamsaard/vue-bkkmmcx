@@ -1,14 +1,16 @@
 <template>
   <v-container>
-    <SignIn />
+    <LoginForm />
   </v-container>
 </template>
 
 <script>
-import SignIn from "@/components/LoginForm";
+import LoginForm from "@/components/LoginForm";
 export default {
-  name: "SignInView",
-  components: { SignIn }
+  name: "Login",
+  comments: {
+    LoginForm
+  }
 };
 </script>
 
