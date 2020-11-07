@@ -81,10 +81,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "Profile",
+  name: 'Profile',
   data() {
     return {
       staff: null,
@@ -92,8 +92,8 @@ export default {
     };
   },
   created() {
-    this.staff = this.staffsList.find(staff => staff.id === "124430K");
-    this.leave = this.leavesList.filter(leave => leave.staffId === "124430K");
+    this.staff = this.staffsList.find(staff => staff.id === '124430K');
+    this.leave = this.leavesList.filter(leave => leave.staffId === '124430K');
   },
   mounted() {
     this.leaveUsed();
@@ -118,7 +118,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["leavesList", "staffsList"]),
+    ...mapGetters(['leavesList', 'staffsList']),
     getFullName() {
       return `${this.staff.firstName} ${this.staff.lastName}`;
     }

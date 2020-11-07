@@ -2,28 +2,29 @@
   <v-form @submit.prevent="signInHandler">
     <v-container>
       <v-row>
-        <v-col md="8" lg="4" class="mx-auto">
-          <v-card rounded-lg class="pa-4">
+        <v-col sm="6" md="4" class="mx-auto">
+          <v-card rounded="lg" class="pa-4">
             <p class="display-1 font-weight-light text-center">Login</p>
             <v-row>
               <v-col cols="12">
                 <v-text-field
                   filled
-                  color="#156665"
-                  label="E-Mail"
                   required
+                  color="primary"
+                  label="E-Mail"
                   v-model="email"
                 ></v-text-field>
                 <v-text-field
                   filled
-                  color="#156665"
-                  label="Password"
                   required
+                  type="password"
+                  color="primary"
+                  label="Password"
                   v-model="password"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-btn block dark color="#156665" type="submit">
+                <v-btn block dark color="primary" type="submit">
                   <span class="font-weight-light">Login</span>
                 </v-btn>
               </v-col>
@@ -36,10 +37,10 @@
 </template>
 
 <script>
-import { auth } from "@/database/firebase";
+import { auth } from '@/database/firebase';
 
 export default {
-  name: "SignIn",
+  name: 'SignIn',
   methods: {
     async signInHandler() {
       try {
@@ -48,17 +49,18 @@ export default {
           .then(() => {
             this.email = null;
             this.password = null;
-            console.log("Signed in");
+            console.log('Signed in');
+            this.$router.push({ name: 'Home' });
           });
       } catch (err) {
-        console.log(err);
+        console.log(err.message);
       }
     }
   },
   data() {
     return {
-      email: "",
-      password: ""
+      email: null,
+      password: null
     };
   }
 };

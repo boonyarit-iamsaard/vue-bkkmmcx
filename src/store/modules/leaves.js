@@ -1,5 +1,5 @@
-import { firestore } from "@/database/firebase";
-const leavesRef = firestore.collection("leaves");
+import { firestore } from '@/database/firebase';
+const leavesRef = firestore.collection('leaves');
 
 const state = {
   leaves: []
@@ -15,7 +15,7 @@ const actions = {
     let leaves = [];
     try {
       await leavesRef
-        .where("staffId", "==", "124430K") //(fieldName, queryOperator, value)
+        .where('staffId', '==', '124430K') //(fieldName, queryOperator, value)
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
@@ -30,10 +30,10 @@ const actions = {
   },
 
   addNewLeave({ commit }, newLeave) {
-    commit("addLeave", newLeave);
+    commit('addLeave', newLeave);
   },
   updateLeave({ commit }, updatedLeave) {
-    commit("updateLeave", updatedLeave);
+    commit('updateLeave', updatedLeave);
   }
 };
 

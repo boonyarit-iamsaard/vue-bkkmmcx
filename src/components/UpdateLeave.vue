@@ -91,15 +91,15 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex';
 
 export default {
-  name: "UpdateLeave",
+  name: 'UpdateLeave',
   props: {
     item: Object
   },
   methods: {
-    ...mapActions(["updatePriorityQuata", "updateLeave"]),
+    ...mapActions(['updatePriorityQuata', 'updateLeave']),
     changeEndDate() {
       return (this.endDate = this.startDate);
     },
@@ -107,33 +107,33 @@ export default {
       if (this.$refs.form.validate()) {
         let anl1Used = 0;
         let anl2Used = 0;
-        if (this.priority === "ANL-1" && this.item.priority === "ANL-2") {
+        if (this.priority === 'ANL-1' && this.item.priority === 'ANL-2') {
           anl1Used = 1;
           anl2Used = -1;
         } else if (
-          this.priority === "ANL-1" &&
-          this.item.priority === "ANL-3"
+          this.priority === 'ANL-1' &&
+          this.item.priority === 'ANL-3'
         ) {
           anl1Used = 1;
         } else if (
-          this.priority === "ANL-2" &&
-          this.item.priority === "ANL-1"
+          this.priority === 'ANL-2' &&
+          this.item.priority === 'ANL-1'
         ) {
           anl1Used = -1;
           anl2Used = 1;
         } else if (
-          this.priority === "ANL-2" &&
-          this.item.priority === "ANL-3"
+          this.priority === 'ANL-2' &&
+          this.item.priority === 'ANL-3'
         ) {
           anl2Used = 1;
         } else if (
-          this.priority === "ANL-3" &&
-          this.item.priority === "ANL-1"
+          this.priority === 'ANL-3' &&
+          this.item.priority === 'ANL-1'
         ) {
           anl1Used = -1;
         } else if (
-          this.priority === "ANL-3" &&
-          this.item.priority === "ANL-2"
+          this.priority === 'ANL-3' &&
+          this.item.priority === 'ANL-2'
         ) {
           anl2Used = -1;
         }
@@ -163,7 +163,7 @@ export default {
         this.priority = null;
 
         this.$router.push({
-          name: "Home",
+          name: 'Home',
           params: { focus: targetMonth.toISOString().substr(0, 10) }
         });
       }
@@ -181,11 +181,11 @@ export default {
   data() {
     return {
       valid: false,
-      priorityRules: [v => v.length > 0 || "Priority is required."],
+      priorityRules: [v => v.length > 0 || 'Priority is required.'],
       priorityItems: [
-        { text: "ANL-1", disabled: false },
-        { text: "ANL-2", disabled: false },
-        { text: "ANL-3", disabled: false }
+        { text: 'ANL-1', disabled: false },
+        { text: 'ANL-2', disabled: false },
+        { text: 'ANL-3', disabled: false }
       ],
       disablePriorityItems: [],
       staff: null,

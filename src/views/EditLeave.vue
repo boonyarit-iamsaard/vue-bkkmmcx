@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import UpdateLeave from "../components/UpdateLeave";
+import UpdateLeave from '../components/UpdateLeave';
 export default {
-  name: "EditLeave",
+  name: 'EditLeave',
   components: { UpdateLeave },
   data() {
     return {

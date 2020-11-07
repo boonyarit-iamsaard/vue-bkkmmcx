@@ -14,7 +14,7 @@
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon color="#156665" class="mr-2" @click="editItem(item)">
+        <v-icon color="primary" class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
         <v-icon color="#a51d36" @click="deleteItem(item)">
@@ -26,19 +26,19 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 
 export default {
-  name: "LeaveList",
+  name: 'LeaveList',
   data() {
     return {
       leaves: [],
       headers: [
-        { text: "Start Date", value: "startDate", align: "center" },
-        { text: "End Date", value: "endDate", align: "center" },
-        { text: "Days", value: "days", align: "center" },
-        { text: "Priority", value: "priority", align: "center" },
-        { text: "Actions", value: "actions", sortable: false, align: "center" }
+        { text: 'Start Date', value: 'startDate', align: 'center' },
+        { text: 'End Date', value: 'endDate', align: 'center' },
+        { text: 'Days', value: 'days', align: 'center' },
+        { text: 'Priority', value: 'priority', align: 'center' },
+        { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
       ]
     };
   },
@@ -47,12 +47,12 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters(["leavesList"])
+    ...mapGetters(['leavesList'])
   },
   methods: {
     editItem(item) {
       this.$router.push({
-        name: "EditLeave",
+        name: 'EditLeave',
         params: { item: item }
       });
     },

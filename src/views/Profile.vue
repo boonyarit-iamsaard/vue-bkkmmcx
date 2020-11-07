@@ -13,11 +13,10 @@
 </template>
 
 <script>
-// Initiate
-import Details from "@/components/Details";
-import LeaveList from "@/components/LeaveList";
+import Details from '@/components/Details';
+import LeaveList from '@/components/LeaveList';
 export default {
-  name: "Profile",
+  name: 'Profile',
   components: {
     LeaveList,
     Details

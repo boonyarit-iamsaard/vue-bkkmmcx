@@ -6,10 +6,10 @@
 
 <script>
 // Initiate
-import CreateLeave from "@/components/CreateLeave";
+import CreateLeave from '@/components/CreateLeave';
 
 export default {
-  name: "ApplyLeave",
+  name: 'ApplyLeave',
   components: {
     CreateLeave
   }

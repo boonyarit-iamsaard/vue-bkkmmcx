@@ -1,7 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import leaves from "./modules/leaves";
-import staffs from "./modules/staffs";
+import Vue from 'vue';
+import Vuex from 'vuex';
+import leaves from './modules/leaves';
+import staffs from './modules/staffs';
 
 Vue.use(Vuex);
 

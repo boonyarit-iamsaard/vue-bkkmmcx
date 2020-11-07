@@ -92,28 +92,28 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 export default {
-  name: "CreateLeave",
+  name: 'CreateLeave',
   data: () => ({
     valid: false,
-    priorityRules: [v => v.length > 0 || "Priority is required."],
+    priorityRules: [v => v.length > 0 || 'Priority is required.'],
     priorityItems: [
-      { text: "ANL-1", disabled: false },
-      { text: "ANL-2", disabled: false },
-      { text: "ANL-3", disabled: false }
+      { text: 'ANL-1', disabled: false },
+      { text: 'ANL-2', disabled: false },
+      { text: 'ANL-3', disabled: false }
     ],
     disablePriorityItems: [],
     staff: null,
     leaves: null,
-    startDate: new Date("2021-01-01").toISOString().substr(0, 10),
-    endDate: new Date("2021-01-01").toISOString().substr(0, 10),
-    priority: "",
+    startDate: new Date('2021-01-01').toISOString().substr(0, 10),
+    endDate: new Date('2021-01-01').toISOString().substr(0, 10),
+    priority: '',
     startMenu: false,
     endMenu: false
   }),
   methods: {
-    ...mapActions(["updatePriorityQuata", "addNewLeave"]),
+    ...mapActions(['updatePriorityQuata', 'addNewLeave']),
     changeEndDate() {
       return (this.endDate = this.startDate);
     },
@@ -121,10 +121,10 @@ export default {
       if (this.$refs.form.validate()) {
         let anl1Used = 0;
         let anl2Used = 0;
-        if (this.priority === "ANL-1") {
+        if (this.priority === 'ANL-1') {
           anl1Used = 1;
         }
-        if (this.priority === "ANL-2") {
+        if (this.priority === 'ANL-2') {
           anl2Used = 1;
         }
 
@@ -150,7 +150,7 @@ export default {
         this.addNewLeave(newLeave);
         this.priority = null;
         this.$router.push({
-          name: "Home",
+          name: 'Home',
           params: { focus: targetMonth.toISOString().substr(0, 10) }
         });
       }
@@ -167,12 +167,12 @@ export default {
     disabledPriority() {
       if (this.leaves.length > 0) {
         if (
-          this.leaves.filter(leave => leave.priority === "ANL-1").length > 0
+          this.leaves.filter(leave => leave.priority === 'ANL-1').length > 0
         ) {
           this.priorityItems[0].disabled = true;
         }
         if (
-          this.leaves.filter(leave => leave.priority === "ANL-2").length > 0
+          this.leaves.filter(leave => leave.priority === 'ANL-2').length > 0
         ) {
           this.priorityItems[1].disabled = true;
         }
@@ -180,7 +180,7 @@ export default {
     }
   },
   created() {
-    this.staff = this.staffsList.find(staff => staff.id === "124430K");
+    this.staff = this.staffsList.find(staff => staff.id === '124430K');
     this.leaves = this.leavesList.filter(
       leave => leave.staffId === this.staff.id
     );
@@ -189,23 +189,23 @@ export default {
     this.disabledPriority();
   },
   computed: {
-    ...mapGetters(["staffsList", "leavesList"])
+    ...mapGetters(['staffsList', 'leavesList'])
   },
   filters: {
     dateFormat(value) {
       const months = [
-        "January",
-        "Febuary",
-        "March",
-        "April",
-        "May",
-        "Jun",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
+        'January',
+        'Febuary',
+        'March',
+        'April',
+        'May',
+        'Jun',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
       ];
       let d = new Date(value);
       let year = d.getFullYear();
@@ -216,7 +216,7 @@ export default {
     }
   },
   watch: {
-    leaves: "disabledPriority"
+    leaves: 'disabledPriority'
   }
 };
 </script>

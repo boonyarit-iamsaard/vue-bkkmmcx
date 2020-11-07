@@ -54,14 +54,14 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: "Home",
-  computed: mapGetters(["leavesList", "staffsList"]),
+  name: 'Home',
+  computed: mapGetters(['leavesList', 'staffsList']),
   methods: {
     // 1st - map fetchLeaves from leaves 's actions.
-    ...mapActions(["fetchLeaves"]),
+    ...mapActions(['fetchLeaves']),
     getLeaves() {
       for (let leave of this.leavesList) {
         for (let staff of this.staffsList) {
@@ -79,18 +79,18 @@ export default {
     },
     viewDay({ date }) {
       this.focus = date;
-      this.type = "day";
+      this.type = 'day';
     },
     getEventColor(event) {
       return event.color;
     },
     setEventColor(priority) {
       switch (priority) {
-        case "ANL-1":
+        case 'ANL-1':
           return this.eventColor[0];
-        case "ANL-2":
+        case 'ANL-2':
           return this.eventColor[1];
-        case "ANL-3":
+        case 'ANL-3':
           return this.eventColor[2];
         default:
           return this.eventColor[-1];
@@ -100,17 +100,18 @@ export default {
   data() {
     return {
       showMonthOnFirst: false,
-      type: "month",
+      type: 'month',
       typeLabel: {
-        month: "Month",
-        week: "Week",
-        day: "Day"
+        month: 'Month',
+        week: 'Week',
+        day: 'Day'
       },
-      focus: this.$route.params.focus || "2020-12-01",
+      focus: this.$route.params.focus || '2020-12-01',
       events: [],
-      eventColor: ["#a51d36", "#c0b498", "#156665", "gray"]
+      eventColor: ['#a51d36', '#c0b498', '#156665', 'gray']
     };
   },
+  beforeCreate() {},
   created() {
     this.getLeaves();
     // 2nd - call fetchLeaves in created hook.
