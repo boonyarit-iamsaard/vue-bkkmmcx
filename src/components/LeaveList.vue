@@ -2,7 +2,7 @@
   <v-container>
     <v-data-table
       :headers="headers"
-      :items="leaves"
+      :items="getLeaves"
       :items-per-page="5"
       class="elevation-2"
     >
@@ -17,7 +17,7 @@
         <v-icon color="primary" class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
-        <v-icon color="#a51d36" @click="deleteItem(item)">
+        <v-icon color="secondary" @click="deleteItem(item)">
           mdi-delete
         </v-icon>
       </template>
@@ -26,37 +26,39 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'LeaveList',
-  data() {
-    return {
-      leaves: [],
-      headers: [
-        { text: 'Start Date', value: 'startDate', align: 'center' },
-        { text: 'End Date', value: 'endDate', align: 'center' },
-        { text: 'Days', value: 'days', align: 'center' },
-        { text: 'Priority', value: 'priority', align: 'center' },
-        { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
-      ]
-    };
-  },
-  created() {
-    this.leaves = this.leavesList;
-  },
-  mounted() {},
   computed: {
-    ...mapGetters(['leavesList'])
+    ...mapGetters(['getLeaves'])
   },
   methods: {
+    ...mapActions(['fetchLeaves']),
     editItem(item) {
       this.$router.push({
         name: 'EditLeave',
         params: { item: item }
       });
     },
-    deleteItem() {}
+    deleteItem(item) {
+      console.log(item);
+    }
+  },
+  data() {
+    return {
+      headers: [
+        { text: 'Start Date', value: 'startDate', align: 'center' },
+        { text: 'End Date', value: 'endDate', align: 'center' },
+        { text: 'Days', value: 'days', align: 'center' },
+        { text: 'Priority', value: 'priority', align: 'center' },
+        { text: 'Status', value: 'status', align: 'center' },
+        { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
+      ]
+    };
+  },
+  created() {
+    this.fetchLeaves();
   }
 };
 </script>

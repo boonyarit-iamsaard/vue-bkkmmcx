@@ -12,7 +12,7 @@
                   required
                   color="primary"
                   label="E-Mail"
-                  v-model="email"
+                  v-model.trim="email"
                 ></v-text-field>
                 <v-text-field
                   filled
@@ -20,7 +20,7 @@
                   type="password"
                   color="primary"
                   label="Password"
-                  v-model="password"
+                  v-model.trim="password"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -37,24 +37,14 @@
 </template>
 
 <script>
-import { auth } from '@/database/firebase';
+import { mapActions } from 'vuex';
 
 export default {
-  name: 'SignIn',
+  name: 'Signin',
   methods: {
-    async signInHandler() {
-      try {
-        await auth
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then(() => {
-            this.email = null;
-            this.password = null;
-            console.log('Signed in');
-            this.$router.push({ name: 'Home' });
-          });
-      } catch (err) {
-        console.log(err.message);
-      }
+    ...mapActions(['signIn']),
+    signInHandler() {
+      this.signIn({ email: this.email, password: this.password });
     }
   },
   data() {

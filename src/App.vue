@@ -8,12 +8,29 @@
 </template>
 
 <script>
+import { auth } from '@/plugins/firebase';
 import Navbar from '@/components/Navbar.vue';
 
 export default {
   name: 'App',
   components: {
     Navbar
+  },
+  data() {
+    return {
+      authUnsubscribe: null
+    };
+  },
+  created() {
+    this.authUnsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        this.$store.dispatch('fetchUserProfile', user);
+        this.$store.dispatch('fetchLeaves');
+      }
+    });
+  },
+  beforeDestroy() {
+    this.authUnsubscribe = null;
   }
 };
 </script>

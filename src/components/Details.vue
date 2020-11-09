@@ -5,18 +5,18 @@
         <v-card>
           <v-card-title class="justify-center">
             <h1 class="display-1 font-weight-light">
-              {{ getFullName }}
+              {{ getFullName() }}
             </h1>
           </v-card-title>
           <v-card-subtitle class="pb-0 pt-4">
-            <p class="subtitle-2">{{ staff.id }}</p>
+            <p class="subtitle-2">{{ userProfile.id }}</p>
           </v-card-subtitle>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>
             <v-row>
               <v-col>
                 <p class="title">Entitled</p>
-                <p class="display-1">{{ staff.entitled }}</p>
+                <p class="display-1">{{ userProfile.entitled }}</p>
                 <p>days</p>
               </v-col>
               <v-col>
@@ -43,11 +43,11 @@
         <v-card class="rounded-lg">
           <v-card-text>
             <p class="title">ANL-1</p>
-            <p class="display-1" v-if="staff.anl1 === 1">
-              {{ staff.anl1 }}
+            <p class="display-1" v-if="userProfile.anl1 === 1">
+              {{ userProfile.anl1 }}
             </p>
             <p class="display-1 red--text text--darken-3" v-else>
-              {{ staff.anl1 }}
+              {{ userProfile.anl1 }}
             </p>
             <p>remains</p>
           </v-card-text>
@@ -57,11 +57,11 @@
         <v-card class="rounded-lg">
           <v-card-text>
             <p class="title">ANL-2</p>
-            <p class="display-1" v-if="staff.anl2 === 1">
-              {{ staff.anl2 }}
+            <p class="display-1" v-if="userProfile.anl2 === 1">
+              {{ userProfile.anl2 }}
             </p>
             <p class="display-1 red--text text--darken-3" v-else>
-              {{ staff.anl2 }}
+              {{ userProfile.anl2 }}
             </p>
             <p>remains</p>
           </v-card-text>
@@ -81,47 +81,43 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { auth } from '@/plugins/firebase';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Profile',
-  data() {
-    return {
-      staff: null,
-      leave: null
-    };
-  },
   created() {
-    this.staff = this.staffsList.find(staff => staff.id === '124430K');
-    this.leave = this.leavesList.filter(leave => leave.staffId === '124430K');
+    this.fetchLeaves();
+    this.fetchUserProfile(auth.currentUser);
   },
   mounted() {
     this.leaveUsed();
   },
   methods: {
+    ...mapActions(['fetchLeaves', 'fetchUserProfile']),
     priorityRemains() {
-      return this.staff.entitled - this.leaveUsed();
+      return this.userProfile.entitled - this.leaveUsed();
     },
     leaveUsed() {
-      return this.leave.reduce((a, b) => a + b.days, 0);
+      return this.getLeaves.reduce((a, b) => a + b.days, 0);
     },
     percentUsed() {
-      let percent = (this.leaveUsed() / this.staff.entitled) * 100;
+      let percent = (this.leaveUsed() / this.userProfile.entitled) * 100;
       return percent.toPrecision(4);
     },
     leaveRemains() {
-      return this.staff.entitled - this.leaveUsed();
+      return this.userProfile.entitled - this.leaveUsed();
     },
     percentRemains() {
-      let percent = (this.leaveRemains() / this.staff.entitled) * 100;
+      let percent = (this.leaveRemains() / this.userProfile.entitled) * 100;
       return percent.toPrecision(4);
+    },
+    getFullName() {
+      return `${this.userProfile.firstName} ${this.userProfile.lastName}`;
     }
   },
   computed: {
-    ...mapGetters(['leavesList', 'staffsList']),
-    getFullName() {
-      return `${this.staff.firstName} ${this.staff.lastName}`;
-    }
+    ...mapGetters(['getLeaves', 'userProfile'])
   }
 };
 </script>

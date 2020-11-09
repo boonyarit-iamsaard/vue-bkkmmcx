@@ -1,50 +1,38 @@
-import { firestore } from '@/database/firebase';
-const leavesRef = firestore.collection('leaves');
+import * as firebase from '@/plugins/firebase';
 
 const state = {
   leaves: []
 };
 
 const getters = {
-  leavesList: state => state.leaves
+  getLeaves: state => state.leaves
 };
 
 const actions = {
-  // Test fetch leaves from firestore
-  async fetchLeaves() {
-    let leaves = [];
+  async fetchLeaves({ commit }) {
     try {
-      await leavesRef
-        .where('staffId', '==', '124430K') //(fieldName, queryOperator, value)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            if (doc.data()) {
-              leaves.push(doc.id, doc.data());
-            }
+      await firebase.leavesCollection
+        .where('userId', '==', firebase.auth.currentUser.uid)
+        .onSnapshot(snapshot => {
+          let leaves = [];
+
+          snapshot.forEach(doc => {
+            let leave = doc.data();
+            leave.id = doc.id;
+
+            leaves.push(leave);
           });
+
+          commit('setLeaves', leaves);
         });
     } catch (err) {
       console.error(err);
     }
-  },
-
-  addNewLeave({ commit }, newLeave) {
-    commit('addLeave', newLeave);
-  },
-  updateLeave({ commit }, updatedLeave) {
-    commit('updateLeave', updatedLeave);
   }
 };
 
 const mutations = {
-  addLeave: (state, newLeave) => state.leaves.push(newLeave),
-  updateLeave: (state, updatedLeave) => {
-    let targetLeave = state.leaves.findIndex(
-      leave => leave.id === updatedLeave.id
-    );
-    state.leaves.splice(targetLeave, 1, updatedLeave);
-  }
+  setLeaves: (state, leaves) => (state.leaves = leaves)
 };
 
 export default {

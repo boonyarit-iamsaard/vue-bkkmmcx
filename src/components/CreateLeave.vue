@@ -1,8 +1,8 @@
 <template>
-  <v-form @submit.prevent="onAddLeave" v-model="valid" ref="form">
+  <v-form @submit.prevent="createLeaveHandler" v-model="valid" ref="form">
     <v-container>
       <v-row>
-        <v-col md="8" lg="6" class="mx-auto">
+        <v-col sm="6" md="4" class="mx-auto">
           <v-card class="pa-4 rounded-lg">
             <p class="display-1 font-weight-light text-center">
               Apply for Leave
@@ -92,7 +92,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import * as firebase from '../plugins/firebase';
+import { mapGetters } from 'vuex';
 export default {
   name: 'CreateLeave',
   data: () => ({
@@ -104,8 +105,6 @@ export default {
       { text: 'ANL-3', disabled: false }
     ],
     disablePriorityItems: [],
-    staff: null,
-    leaves: null,
     startDate: new Date('2021-01-01').toISOString().substr(0, 10),
     endDate: new Date('2021-01-01').toISOString().substr(0, 10),
     priority: '',
@@ -113,43 +112,70 @@ export default {
     endMenu: false
   }),
   methods: {
-    ...mapActions(['updatePriorityQuata', 'addNewLeave']),
     changeEndDate() {
       return (this.endDate = this.startDate);
     },
-    onAddLeave() {
+
+    async createLeave(leave) {
+      try {
+        await firebase.leavesCollection.add(leave).then(() => {
+          console.log('A new leave created.');
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+
+    async updatePriorityQuata(updatedPriorityQuata) {
+      let anl1 = this.userProfile.anl1;
+      let anl2 = this.userProfile.anl2;
+
+      anl1 -= updatedPriorityQuata.anl1;
+      anl2 -= updatedPriorityQuata.anl2;
+
+      try {
+        await firebase.usersCollection.doc(updatedPriorityQuata.userId).update({
+          anl1: anl1,
+          anl2: anl2
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+
+    async createLeaveHandler() {
       if (this.$refs.form.validate()) {
-        let anl1Used = 0;
-        let anl2Used = 0;
+        let anl1 = 0;
+        let anl2 = 0;
         if (this.priority === 'ANL-1') {
-          anl1Used = 1;
+          anl1 = 1;
         }
         if (this.priority === 'ANL-2') {
-          anl2Used = 1;
+          anl2 = 1;
         }
 
         const updatedPriorityQuata = {
-          staffId: this.staff.id,
-          anl1Used: anl1Used,
-          anl2Used: anl2Used
+          userId: firebase.auth.currentUser.uid,
+          anl1: anl1,
+          anl2: anl2
         };
 
         const newLeave = {
-          id: Date.now(),
-          staffId: this.staff.id,
+          userId: firebase.auth.currentUser.uid,
           startDate: this.startDate,
           endDate: this.endDate,
           days: this.days(),
           priority: this.priority,
-          added: new Date().toISOString()
+          status: 'Pending'
         };
 
         const targetMonth = new Date(this.startDate);
         targetMonth.setMonth(targetMonth.getMonth() - 1);
-        this.updatePriorityQuata(updatedPriorityQuata);
-        this.addNewLeave(newLeave);
-        this.priority = null;
-        this.$router.push({
+
+        // Add a new leave in firestore
+        await this.updatePriorityQuata(updatedPriorityQuata);
+        await this.createLeave(newLeave);
+        await this.$router.push({
           name: 'Home',
           params: { focus: targetMonth.toISOString().substr(0, 10) }
         });
@@ -165,31 +191,25 @@ export default {
       this.$refs.form.validate();
     },
     disabledPriority() {
-      if (this.leaves.length > 0) {
+      if (this.getLeaves.length > 0) {
         if (
-          this.leaves.filter(leave => leave.priority === 'ANL-1').length > 0
+          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
         ) {
           this.priorityItems[0].disabled = true;
         }
         if (
-          this.leaves.filter(leave => leave.priority === 'ANL-2').length > 0
+          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
         ) {
           this.priorityItems[1].disabled = true;
         }
       }
     }
   },
-  created() {
-    this.staff = this.staffsList.find(staff => staff.id === '124430K');
-    this.leaves = this.leavesList.filter(
-      leave => leave.staffId === this.staff.id
-    );
-  },
   mounted() {
     this.disabledPriority();
   },
   computed: {
-    ...mapGetters(['staffsList', 'leavesList'])
+    ...mapGetters(['getLeaves', 'userProfile'])
   },
   filters: {
     dateFormat(value) {

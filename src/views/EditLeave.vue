@@ -13,9 +13,6 @@ export default {
     return {
       item: this.$route.params.item
     };
-  },
-  created() {
-    // console.log(JSON.stringify(this.item));
   }
 };
 </script>

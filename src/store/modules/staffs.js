@@ -1,7 +1,4 @@
-import { auth } from '../../database/firebase';
-
 const state = {
-  user: null,
   staffs: [
     {
       id: '124430K',
@@ -19,27 +16,15 @@ const getters = {
 };
 
 const actions = {
-  async userStateChanged() {
-    try {
-      await auth.onAuthStateChanged(user => {
-        if (!user) {
-          this.$router.push({ name: 'Login' });
-          alert('Please sign in.');
-        }
-      });
-    } catch (error) {
-      () => console.log(error.message);
-    }
-  },
-  updatePriorityQuata({ commit }, updatedPriorityQuata) {
-    let staffs = state.staffs;
-    let targetedStaff = staffs.find(
-      staff => staff.id === updatedPriorityQuata.staffId
-    );
-    targetedStaff.anl1 -= updatedPriorityQuata.anl1Used;
-    targetedStaff.anl2 -= updatedPriorityQuata.anl2Used;
-    commit('updatePriority', staffs);
-  }
+  // updatePriorityQuata({ commit }, updatedPriorityQuata) {
+  //   let staffs = state.staffs;
+  //   let targetedStaff = staffs.find(
+  //     staff => staff.id === updatedPriorityQuata.staffId
+  //   );
+  //   targetedStaff.anl1 -= updatedPriorityQuata.anl1Used;
+  //   targetedStaff.anl2 -= updatedPriorityQuata.anl2Used;
+  //   commit('updatePriority', staffs);
+  // }
 };
 
 const mutations = {

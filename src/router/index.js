@@ -5,39 +5,50 @@ import Profile from '@/views/Profile';
 import ApplyLeave from '@/views/ApplyLeave';
 import EditLeave from '@/views/EditLeave';
 import Login from '@/views/Login';
+import { auth } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: Home,
-    props: true
+    props: true,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/apply',
     name: 'ApplyLeave',
     component: ApplyLeave,
-    props: true
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/edit',
     name: 'EditLeave',
     component: EditLeave,
-    props: true
+    props: true,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/profile',
     name: 'Profile',
     component: Profile,
-    props: true
+    props: true,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
-    component: Login,
-    props: true
+    component: Login
   },
   {
     path: '/register'
@@ -56,5 +67,14 @@ const router = new VueRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(route => route.meta.requiresAuth);
+
+  if (requiresAuth && !auth.currentUser) {
+    next({ name: 'Login' });
+  } else {
+    next();
+  }
+});
+
 export default router;
-// Initiate

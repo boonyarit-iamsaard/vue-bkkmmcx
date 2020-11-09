@@ -4,7 +4,7 @@
     <LeaveList />
     <v-row>
       <v-col cols="12" class="text-center">
-        <v-btn color="#156665" to="/apply" dark>
+        <v-btn color="primary" to="/apply" dark>
           <span class="font-weight-regular">Apply for Leave</span>
         </v-btn>
       </v-col>

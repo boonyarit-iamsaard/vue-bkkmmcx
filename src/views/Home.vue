@@ -58,24 +58,23 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Home',
-  computed: mapGetters(['leavesList', 'staffsList']),
+  computed: {
+    ...mapGetters(['getLeaves', 'userProfile'])
+  },
   methods: {
-    // 1st - map fetchLeaves from leaves 's actions.
     ...mapActions(['fetchLeaves']),
-    getLeaves() {
-      for (let leave of this.leavesList) {
-        for (let staff of this.staffsList) {
-          if (staff.id === leave.staffId) {
-            let event = {
-              name: `${staff.firstName} : ${leave.priority}`,
-              start: `${leave.startDate}`,
-              end: `${leave.endDate}`,
-              color: this.setEventColor(leave.priority)
-            };
-            this.events.push(event);
-          }
-        }
+    addEvents() {
+      let events = [];
+      for (let leave of this.getLeaves) {
+        let event = {
+          name: `${this.userProfile.firstName} : ${leave.priority}`,
+          start: `${leave.startDate}`,
+          end: `${leave.endDate}`,
+          color: this.setEventColor(leave.priority)
+        };
+        events.push(event);
       }
+      return events;
     },
     viewDay({ date }) {
       this.focus = date;
@@ -111,13 +110,11 @@ export default {
       eventColor: ['#a51d36', '#c0b498', '#156665', 'gray']
     };
   },
-  beforeCreate() {},
   created() {
-    this.getLeaves();
-    // 2nd - call fetchLeaves in created hook.
     this.fetchLeaves();
   },
   mounted() {
+    this.events = this.addEvents();
     this.$refs.calendar.move();
   }
 };
