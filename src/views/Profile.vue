@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <Details />
-    <LeaveList />
     <v-row>
-      <v-col cols="12" class="text-center">
+      <v-col lg="8" class="text-center mx-auto">
+        <Details />
+        <LeaveList />
         <v-btn color="primary" to="/apply" dark>
           <span class="font-weight-regular">Apply for Leave</span>
         </v-btn>

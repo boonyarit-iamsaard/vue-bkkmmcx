@@ -2,7 +2,7 @@
   <v-form @submit.prevent="createLeaveHandler" v-model="valid" ref="form">
     <v-container>
       <v-row>
-        <v-col sm="6" md="4" class="mx-auto">
+        <v-col sm="8" md="4" class="mx-auto">
           <v-card class="pa-4 rounded-lg">
             <p class="display-1 font-weight-light text-center">
               Apply for Leave
@@ -93,7 +93,7 @@
 
 <script>
 import * as firebase from '../plugins/firebase';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'CreateLeave',
   data: () => ({
@@ -112,18 +112,10 @@ export default {
     endMenu: false
   }),
   methods: {
+    ...mapActions(['createLeave']),
+
     changeEndDate() {
       return (this.endDate = this.startDate);
-    },
-
-    async createLeave(leave) {
-      try {
-        await firebase.leavesCollection.add(leave).then(() => {
-          console.log('A new leave created.');
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
     },
 
     async updatePriorityQuata(updatedPriorityQuata) {
@@ -154,42 +146,42 @@ export default {
           anl2 = 1;
         }
 
-        const updatedPriorityQuata = {
+        const targetMonth = new Date(`${this.startDate}`);
+        targetMonth.setMonth(targetMonth.getMonth() - 1);
+
+        await this.updatePriorityQuata({
           userId: firebase.auth.currentUser.uid,
           anl1: anl1,
           anl2: anl2
-        };
+        });
 
-        const newLeave = {
+        await this.createLeave({
           userId: firebase.auth.currentUser.uid,
           startDate: this.startDate,
           endDate: this.endDate,
           days: this.days(),
           priority: this.priority,
           status: 'Pending'
-        };
+        });
 
-        const targetMonth = new Date(this.startDate);
-        targetMonth.setMonth(targetMonth.getMonth() - 1);
-
-        // Add a new leave in firestore
-        await this.updatePriorityQuata(updatedPriorityQuata);
-        await this.createLeave(newLeave);
         await this.$router.push({
           name: 'Home',
           params: { focus: targetMonth.toISOString().substr(0, 10) }
         });
       }
     },
+
     days() {
       let start = new Date(`${this.startDate}T00:00:00`);
       let end = new Date(`${this.endDate}T23:59:59`);
       let days = (end.getTime() - start.getTime()) / 86400000;
       return Math.round(days);
     },
+
     validate() {
       this.$refs.form.validate();
     },
+
     disabledPriority() {
       if (this.getLeaves.length > 0) {
         if (

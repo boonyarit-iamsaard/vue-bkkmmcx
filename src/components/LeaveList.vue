@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -34,15 +35,31 @@ export default {
     ...mapGetters(['getLeaves'])
   },
   methods: {
-    ...mapActions(['fetchLeaves']),
+    ...mapActions(['fetchLeaves', 'deleteLeave', 'updatePriorityQuata']),
     editItem(item) {
       this.$router.push({
         name: 'EditLeave',
         params: { item: item }
       });
     },
-    deleteItem(item) {
-      console.log(item);
+    async deleteItem(item) {
+      let anl1 = 0;
+      let anl2 = 0;
+      if (item.priority === 'ANL-1') {
+        anl1 = -1;
+      } else if (item.priority === 'ANL-2') {
+        anl2 = -1;
+      }
+
+      await this.updatePriorityQuata({
+        userId: auth.currentUser.uid,
+        anl1: anl1,
+        anl2: anl2
+      });
+
+      await this.deleteLeave(item.id);
+
+      // this.$router.push({ name: 'Home' });
     }
   },
   data() {
@@ -58,7 +75,7 @@ export default {
     };
   },
   created() {
-    this.fetchLeaves();
+    this.fetchLeaves(auth.currentUser);
   }
 };
 </script>

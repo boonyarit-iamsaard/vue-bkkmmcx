@@ -85,9 +85,10 @@
               <v-col cols="12">
                 <v-btn
                   block
+                  dark
                   type="submit"
                   color="primary"
-                  class="white--text font-weight-light"
+                  class="font-weight-light"
                   >EDIT
                 </v-btn>
               </v-col>
@@ -102,7 +103,6 @@
 <script>
 import { auth } from '@/plugins/firebase';
 import { mapActions } from 'vuex';
-import * as firebase from '@/plugins/firebase';
 
 export default {
   name: 'UpdateLeave',
@@ -129,29 +129,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['updatePriorityQuata']),
+    ...mapActions(['updatePriorityQuata', 'updateLeave']),
     changeEndDate() {
       return (this.endDate = this.startDate);
-    },
-
-    async updateLeave(updatedLeave) {
-      try {
-        await firebase.leavesCollection
-          .doc(updatedLeave.docId)
-          .update({
-            startDate: updatedLeave.startDate,
-            endDate: updatedLeave.endDate,
-            days: updatedLeave.days,
-            priority: updatedLeave.priority,
-            status: updatedLeave.status
-          })
-          .then(() => {
-            this.$store.dispatch('fetchLeaves');
-            console.log('updateLeave successful');
-          });
-      } catch (error) {
-        console.log(error.message);
-      }
     },
 
     async updateLeaveHandler() {
@@ -189,26 +169,23 @@ export default {
           anl2 = -1;
         }
 
-        const updatedPriorityQuata = {
+        const targetMonth = new Date(`${this.startDate}`);
+        targetMonth.setMonth(targetMonth.getMonth() - 1);
+
+        await this.updatePriorityQuata({
           userId: auth.currentUser.uid,
           anl1: anl1,
           anl2: anl2
-        };
+        });
 
-        const updatedLeave = {
+        await this.updateLeave({
           docId: this.item.id,
           startDate: this.startDate,
           endDate: this.endDate,
           days: this.days(),
           priority: this.priority,
           status: this.status
-        };
-
-        const targetMonth = new Date(`${this.startDate}`);
-        targetMonth.setMonth(targetMonth.getMonth() - 1);
-
-        await this.updatePriorityQuata(updatedPriorityQuata);
-        await this.updateLeave(updatedLeave);
+        });
 
         await this.$router.push({
           name: 'Home',

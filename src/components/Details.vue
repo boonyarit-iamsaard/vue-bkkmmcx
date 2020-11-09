@@ -39,39 +39,19 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col>
+      <v-col v-for="(item, index) in this.prioritySummary" :key="index">
         <v-card class="rounded-lg">
           <v-card-text>
-            <p class="title">ANL-1</p>
-            <p class="display-1" v-if="userProfile.anl1 === 1">
-              {{ userProfile.anl1 }}
+            <p class="title">{{ item.title }}</p>
+            <p
+              class="display-1 red--text text--darken-3"
+              v-if="item.value === 0"
+            >
+              {{ item.value }}
             </p>
-            <p class="display-1 red--text text--darken-3" v-else>
-              {{ userProfile.anl1 }}
+            <p class="display-1" v-else>
+              {{ item.value }}
             </p>
-            <p>remains</p>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card class="rounded-lg">
-          <v-card-text>
-            <p class="title">ANL-2</p>
-            <p class="display-1" v-if="userProfile.anl2 === 1">
-              {{ userProfile.anl2 }}
-            </p>
-            <p class="display-1 red--text text--darken-3" v-else>
-              {{ userProfile.anl2 }}
-            </p>
-            <p>remains</p>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card class="rounded-lg">
-          <v-card-text>
-            <p class="title">ANL-3</p>
-            <p class="display-1">{{ priorityRemains() }}</p>
             <p>remains</p>
           </v-card-text>
         </v-card>
@@ -86,15 +66,32 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Profile',
+  data() {
+    return {
+      prioritySummary: []
+    };
+  },
   created() {
     this.fetchLeaves();
     this.fetchUserProfile(auth.currentUser);
   },
   mounted() {
+    // this.prioritySummary = this.setPrioritySummary();
     this.leaveUsed();
+  },
+  beforeUpdate() {
+    this.prioritySummary = this.setPrioritySummary();
   },
   methods: {
     ...mapActions(['fetchLeaves', 'fetchUserProfile']),
+    setPrioritySummary() {
+      return [
+        { title: 'TYC', value: this.userProfile.tyc },
+        { title: 'ANL-1', value: this.userProfile.anl1 },
+        { title: 'ANL-2', value: this.userProfile.anl2 },
+        { title: 'ANL-3', value: this.priorityRemains() }
+      ];
+    },
     priorityRemains() {
       return this.userProfile.entitled - this.leaveUsed();
     },

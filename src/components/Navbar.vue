@@ -4,11 +4,13 @@
       ><v-btn text to="/">Cathay Pacific Airways</v-btn></v-toolbar-title
     >
     <v-spacer></v-spacer>
-    <v-btn text dark v-if="showNav" to="/profile">Profile</v-btn>
-    <v-btn text dark v-if="!showNav" to="/login">Login</v-btn>
-    <v-btn text dark v-if="showNav" @click="signOutHandler">Logout</v-btn>
-    <v-btn text dark v-if="showNav" to="/register">Register</v-btn>
-    <v-btn text dark v-if="isAdmin" to="/admin">Admin</v-btn>
+    <v-toolbar-items
+      ><v-btn text dark v-if="showNav" to="/profile">Profile</v-btn>
+      <v-btn text dark v-if="!showNav" to="/login">Login</v-btn>
+      <v-btn text dark v-if="showNav" @click="signOutHandler">Logout</v-btn>
+      <v-btn text dark v-if="showNav" to="/register">Register</v-btn>
+      <v-btn text dark v-if="isAdmin" to="/admin">Admin</v-btn></v-toolbar-items
+    >
   </v-app-bar>
 </template>
 
@@ -16,6 +18,7 @@
 import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Navbar',
+  components: {},
   methods: {
     ...mapActions(['signOut']),
     signOutHandler() {
