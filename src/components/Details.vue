@@ -9,7 +9,8 @@
             </h1>
           </v-card-title>
           <v-card-subtitle class="pb-0 pt-4">
-            <p class="subtitle-2">{{ userProfile.id }}</p>
+            <p class="subtitle-1">{{ userProfile.position }}</p>
+            <p class="subtitle-1">{{ userProfile.ern }}</p>
           </v-card-subtitle>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>

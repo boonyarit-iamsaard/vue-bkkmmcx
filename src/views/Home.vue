@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <Spinned v-if="loading" />
     <v-sheet tile height="64" class="d-flex">
       <v-toolbar flat>
         <v-btn color="#156665" to="/apply" dark>
@@ -51,10 +52,14 @@
 </template>
 
 <script>
+import Spinner from '@/components/Spinner.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Home',
+  components: {
+    Spinner
+  },
   computed: {
     ...mapGetters(['getLeaves', 'getUserDaysOff', 'getPublics', 'userProfile'])
   },
@@ -122,6 +127,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       showMonthOnFirst: false,
       type: 'month',
       typeLabel: {

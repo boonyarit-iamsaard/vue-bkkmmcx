@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <Spinner v-if="loading" />
     <v-data-table
       :headers="headers"
       :items="getLeaves"
@@ -26,11 +27,15 @@
 </template>
 
 <script>
+import Spinner from '@/components/Spinner.vue';
 import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'LeaveList',
+  components: {
+    Spinner
+  },
   computed: {
     ...mapGetters(['getLeaves'])
   },
@@ -43,6 +48,7 @@ export default {
       });
     },
     async deleteItem(item) {
+      this.loading = true;
       let anl1 = 0;
       let anl2 = 0;
       if (item.priority === 'ANL-1') {
@@ -57,13 +63,14 @@ export default {
         anl2: anl2
       });
 
-      await this.deleteLeave(item.id);
+      await this.deleteLeave(item.id).then(() => (this.loading = false));
 
       // this.$router.push({ name: 'Home' });
     }
   },
   data() {
     return {
+      loading: false,
       headers: [
         { text: 'Start Date', value: 'startDate', align: 'center' },
         { text: 'End Date', value: 'endDate', align: 'center' },

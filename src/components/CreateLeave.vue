@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="createLeaveHandler" v-model="valid" ref="form">
+    <Spinner v-if="loading" />
     <v-container>
       <v-row>
         <v-col sm="8" md="4" class="mx-auto">
@@ -33,6 +34,8 @@
                     @input="startMenu = false"
                     @change="changeEndDate"
                     color="teal darken-3"
+                    min="2021-01-01"
+                    max="2021-12-31"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -53,13 +56,15 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                      color="red darken-3"
+                      color="secondary"
                     ></v-text-field>
                   </template>
                   <v-date-picker
                     v-model="endDate"
                     @input="endMenu = false"
-                    color="red darken-3"
+                    :max="max"
+                    :min="min"
+                    color="secondary"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -93,10 +98,15 @@
 
 <script>
 import * as firebase from '../plugins/firebase';
+import Spinner from '@/components/Spinner.vue';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'CreateLeave',
+  components: {
+    Spinner
+  },
   data: () => ({
+    loading: false,
     valid: false,
     priorityRules: [v => v.length > 0 || 'Priority is required.'],
     priorityItems: [
@@ -109,13 +119,26 @@ export default {
     endDate: new Date('2021-01-01').toISOString().substr(0, 10),
     priority: '',
     startMenu: false,
-    endMenu: false
+    endMenu: false,
+    max: null,
+    min: null
   }),
   methods: {
     ...mapActions(['createLeave']),
 
     changeEndDate() {
       return (this.endDate = this.startDate);
+    },
+
+    minDate() {
+      return this.startDate;
+    },
+
+    maxDate() {
+      let start =
+        new Date(`${this.startDate}T00:00:00`).getTime() + 5 * 86400000;
+      start = new Date(start);
+      return start.toISOString().substr(0, 10);
     },
 
     async updatePriorityQuata(updatedPriorityQuata) {
@@ -136,6 +159,7 @@ export default {
     },
 
     async createLeaveHandler() {
+      this.loading = true;
       if (this.$refs.form.validate()) {
         let anl1 = 0;
         let anl2 = 0;
@@ -178,6 +202,21 @@ export default {
       return Math.round(days);
     },
 
+    disabledPriority() {
+      if (this.getLeaves.length > 0) {
+        if (
+          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
+        ) {
+          this.priorityItems[0].disabled = true;
+        }
+        if (
+          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
+        ) {
+          this.priorityItems[1].disabled = true;
+        }
+      }
+    },
+
     validate() {
       this.$refs.form.validate();
     }
@@ -185,10 +224,21 @@ export default {
 
   mounted() {
     this.disabledPriority();
+    this.max = this.maxDate();
+    this.min = this.minDate();
+  },
+
+  beforeUpdate() {
+    this.max = this.maxDate();
+    this.min = this.minDate();
   },
 
   computed: {
     ...mapGetters(['getLeaves', 'userProfile'])
+  },
+
+  watch: {
+    leaves: 'disabledPriority'
   },
 
   filters: {

@@ -1,5 +1,6 @@
 <template>
   <v-form @submit.prevent="updateLeaveHandler" v-model="valid" ref="form">
+    <Spinner v-if="loading" />
     <v-container>
       <v-row>
         <v-col sm="6" md="4" class="mx-auto">
@@ -32,6 +33,8 @@
                     v-model="startDate"
                     @input="startMenu = false"
                     @change="changeEndDate"
+                    min="2021-01-01"
+                    max="2021-12-31"
                     color="primary"
                   ></v-date-picker>
                 </v-menu>
@@ -59,6 +62,8 @@
                   <v-date-picker
                     v-model="endDate"
                     @input="endMenu = false"
+                    :max="max"
+                    :min="min"
                     color="red darken-3"
                   ></v-date-picker>
                 </v-menu>
@@ -101,6 +106,7 @@
 </template>
 
 <script>
+import Spinner from '@/components/Spinner.vue';
 import { auth } from '@/plugins/firebase';
 import { mapActions } from 'vuex';
 
@@ -109,8 +115,12 @@ export default {
   props: {
     item: Object
   },
+  components: {
+    Spinner
+  },
   data() {
     return {
+      loading: false,
       valid: false,
       priorityRules: [v => v.length > 0 || 'Priority is required.'],
       priorityItems: [
@@ -126,7 +136,9 @@ export default {
       priority: this.item.priority,
       status: this.item.status,
       startMenu: false,
-      endMenu: false
+      endMenu: false,
+      max: null,
+      min: null
     };
   },
   methods: {
@@ -135,7 +147,19 @@ export default {
       return (this.endDate = this.startDate);
     },
 
+    minDate() {
+      return this.startDate;
+    },
+
+    maxDate() {
+      let start =
+        new Date(`${this.startDate}T00:00:00`).getTime() + 5 * 86400000;
+      start = new Date(start);
+      return start.toISOString().substr(0, 10);
+    },
+
     async updateLeaveHandler() {
+      this.loading = true;
       if (this.$refs.form.validate()) {
         let anl1 = 0;
         let anl2 = 0;
@@ -228,6 +252,16 @@ export default {
     validate() {
       this.$refs.form.validate();
     }
+  },
+
+  mounted() {
+    this.max = this.maxDate();
+    this.min = this.minDate();
+  },
+
+  beforeUpdate() {
+    this.max = this.maxDate();
+    this.min = this.minDate();
   },
 
   watch: {
