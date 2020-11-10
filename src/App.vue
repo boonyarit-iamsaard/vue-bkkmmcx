@@ -26,6 +26,8 @@ export default {
       if (user) {
         this.$store.dispatch('fetchUserProfile', user);
         this.$store.dispatch('fetchLeaves');
+        this.$store.dispatch('fetchUserDaysOff');
+        this.$store.dispatch('fetchPublics');
       }
     });
   },

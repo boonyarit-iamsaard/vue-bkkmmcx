@@ -102,9 +102,9 @@ export default {
     priorityItems: [
       { text: 'ANL-1', disabled: false },
       { text: 'ANL-2', disabled: false },
-      { text: 'ANL-3', disabled: false }
+      { text: 'ANL-3', disabled: false },
+      { text: 'H', disabled: false }
     ],
-    disablePriorityItems: [],
     startDate: new Date('2021-01-01').toISOString().substr(0, 10),
     endDate: new Date('2021-01-01').toISOString().substr(0, 10),
     priority: '',
@@ -180,29 +180,17 @@ export default {
 
     validate() {
       this.$refs.form.validate();
-    },
-
-    disabledPriority() {
-      if (this.getLeaves.length > 0) {
-        if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
-        ) {
-          this.priorityItems[0].disabled = true;
-        }
-        if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
-        ) {
-          this.priorityItems[1].disabled = true;
-        }
-      }
     }
   },
+
   mounted() {
     this.disabledPriority();
   },
+
   computed: {
     ...mapGetters(['getLeaves', 'userProfile'])
   },
+
   filters: {
     dateFormat(value) {
       const months = [
@@ -226,9 +214,6 @@ export default {
 
       return `${date} ${months[month].substr(0, 3)} ${year}`;
     }
-  },
-  watch: {
-    leaves: 'disabledPriority'
   }
 };
 </script>

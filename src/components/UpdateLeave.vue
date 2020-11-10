@@ -116,7 +116,8 @@ export default {
       priorityItems: [
         { text: 'ANL-1', disabled: false },
         { text: 'ANL-2', disabled: false },
-        { text: 'ANL-3', disabled: false }
+        { text: 'ANL-3', disabled: false },
+        { text: 'H', disabled: false }
       ],
       statusItems: [{ text: 'Pending' }, { text: 'Approved' }],
       disablePriorityItems: [],
@@ -167,6 +168,14 @@ export default {
           this.item.priority === 'ANL-2'
         ) {
           anl2 = -1;
+        } else if (this.priority === 'ANL-1' && this.item.priority === 'H') {
+          anl1 = 1;
+        } else if (this.priority === 'ANL-2' && this.item.priority === 'H') {
+          anl2 = 1;
+        } else if (this.priority === 'H' && this.item.priority === 'ANL-1') {
+          anl1 = -1;
+        } else if (this.priority === 'H' && this.item.priority === 'ANL-2') {
+          anl2 = -1;
         }
 
         const targetMonth = new Date(`${this.startDate}`);
@@ -201,9 +210,28 @@ export default {
       return Math.round(days);
     },
 
+    disabledPriority() {
+      if (this.getLeaves.length > 0) {
+        if (
+          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
+        ) {
+          this.priorityItems[0].disabled = true;
+        }
+        if (
+          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
+        ) {
+          this.priorityItems[1].disabled = true;
+        }
+      }
+    },
+
     validate() {
       this.$refs.form.validate();
     }
+  },
+
+  watch: {
+    leaves: 'disabledPriority'
   }
 };
 </script>

@@ -96,7 +96,8 @@ export default {
       return this.userProfile.entitled - this.leaveUsed();
     },
     leaveUsed() {
-      return this.getLeaves.reduce((a, b) => a + b.days, 0);
+      let leave = this.getLeaves.filter(leave => leave.priority !== 'H');
+      return leave.reduce((a, b) => a + b.days, 0);
     },
     percentUsed() {
       let percent = (this.leaveUsed() / this.userProfile.entitled) * 100;

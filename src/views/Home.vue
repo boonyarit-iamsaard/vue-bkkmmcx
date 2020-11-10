@@ -26,9 +26,6 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item @click="type = 'day'">
-              <v-list-item-title>Day</v-list-item-title>
-            </v-list-item>
             <v-list-item @click="type = 'week'">
               <v-list-item-title>Week</v-list-item-title>
             </v-list-item>
@@ -59,12 +56,13 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Home',
   computed: {
-    ...mapGetters(['getLeaves', 'userProfile'])
+    ...mapGetters(['getLeaves', 'getUserDaysOff', 'getPublics', 'userProfile'])
   },
   methods: {
-    ...mapActions(['fetchLeaves']),
+    ...mapActions(['fetchLeaves', 'fetchUserDaysOff', 'fetchPublics']),
     addEvents() {
       let events = [];
+      // add leaves to events
       for (let leave of this.getLeaves) {
         let event = {
           name: `${this.userProfile.firstName} : ${leave.priority}`,
@@ -74,11 +72,35 @@ export default {
         };
         events.push(event);
       }
+
+      // add days off to events
+      for (let dayOff of this.getUserDaysOff) {
+        let event = {
+          name: 'Off',
+          start: `${dayOff.startDate}`,
+          end: `${dayOff.endDate}`,
+          color: 'grey'
+        };
+        events.push(event);
+      }
+
+      // add public holidays to events
+      for (let ph of this.getPublics) {
+        let event = {
+          name: `${ph.name}`,
+          start: `${ph.startDate}`,
+          end: `${ph.endDate}`,
+          color: `${ph.color}`
+        };
+        events.push(event);
+      }
+
+      // console.log(this.getPublics);
       return events;
     },
     viewDay({ date }) {
       this.focus = date;
-      this.type = 'day';
+      this.type = 'week';
     },
     getEventColor(event) {
       return event.color;
@@ -91,8 +113,10 @@ export default {
           return this.eventColor[1];
         case 'ANL-3':
           return this.eventColor[2];
+        case 'H':
+          return this.eventColor[3];
         default:
-          return this.eventColor[-1];
+          return this.eventColor[4];
       }
     }
   },
@@ -102,26 +126,30 @@ export default {
       type: 'month',
       typeLabel: {
         month: 'Month',
-        week: 'Week',
-        day: 'Day'
+        week: 'Week'
+        // day: 'Day'
       },
       focus: this.$route.params.focus || '2020-12-01',
       events: [],
-      eventColor: ['#a51d36', '#c0b498', '#156665', 'gray']
+      eventColor: ['secondary', 'accent', 'primary', 'indigo lighten-1', 'grey']
     };
   },
   created() {
     this.fetchLeaves();
+    this.fetchUserDaysOff();
+    this.fetchPublics();
+  },
+  beforeMount() {
+    this.events = this.addEvents();
   },
   mounted() {
-    this.events = this.addEvents();
     this.$refs.calendar.move();
   }
 };
 </script>
 
 <style scoped>
-/deep/ .v-toolbar__content {
+/* /deep/ .v-toolbar__content {
   padding: 1rem 0 !important;
-}
+} */
 </style>
