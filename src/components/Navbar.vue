@@ -1,27 +1,73 @@
 <template>
-  <v-app-bar app dark color="#156665">
-    <v-toolbar-title>
-      <v-btn text to="/">Cathay Pacific Airways</v-btn>
-    </v-toolbar-title>
-    <v-spacer></v-spacer>
-    <v-toolbar-items>
-      <v-btn text dark v-if="showNav"> {{ getFullName }} </v-btn>
-      <v-btn text dark v-if="showNav" to="/profile">Profile</v-btn>
-      <!-- <v-btn text dark v-if="!showNav" to="/login">Login</v-btn> -->
-      <v-btn text dark v-if="showNav" @click="signOutHandler">Logout</v-btn>
-      <!-- <v-btn text dark v-if="showNav" to="/register">Register</v-btn> -->
-      <!-- <v-btn text dark v-if="isAdmin" to="/admin">Admin</v-btn> -->
-    </v-toolbar-items>
-  </v-app-bar>
+  <div>
+    <v-navigation-drawer v-model="drawer" app>
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="group"
+          active-class="gray--text text--gray-4"
+        >
+          <v-list-item to="/">
+            <v-list-item-icon>
+              <v-icon>mdi-home</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/apply">
+            <v-list-item-icon>
+              <v-icon>mdi-calendar</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Apply for Leave</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/profile">
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Profile
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/admin" v-if="isAdmin">
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Admin
+            </v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+    <v-app-bar app dark color="#156665">
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        <v-btn text to="/">Cathay Pacific Airways</v-btn>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn text dark> {{ getFullName }}</v-btn>
+        <v-btn text dark to="/profile">Profile</v-btn>
+        <v-btn text dark @click="signOutHandler">Logout</v-btn>
+        <!-- <v-btn text dark v-if="!showNav" to="/login">Login</v-btn> -->
+        <!-- <v-btn text dark v-if="showNav" to="/register">Register</v-btn> -->
+        <!-- <v-btn text dark v-if="isAdmin" to="/admin">Admin</v-btn> -->
+      </v-toolbar-items>
+    </v-app-bar>
+  </div>
 </template>
 
 <script>
+import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Navbar',
-  components: {},
+  data() {
+    return {
+      drawer: false,
+      group: null
+    };
+  },
   methods: {
-    ...mapActions(['signOut']),
+    ...mapActions(['fetchUserProfile', 'signOut']),
     signOutHandler() {
       this.signOut();
     }
@@ -37,8 +83,16 @@ export default {
     getFullName() {
       return `${this.userProfile.firstName} ${this.userProfile.lastName}`;
     }
+  },
+
+  created() {
+    this.fetchUserProfile(auth.currentUser);
   }
 };
 </script>
 
-<style></style>
+<style>
+a {
+  text-decoration: none;
+}
+</style>

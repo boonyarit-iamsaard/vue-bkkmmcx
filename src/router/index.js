@@ -5,7 +5,9 @@ import Profile from '@/views/Profile';
 import ApplyLeave from '@/views/ApplyLeave';
 import EditLeave from '@/views/EditLeave';
 import Login from '@/views/Login';
+import Admin from '@/views/Admin';
 import { auth } from '@/plugins/firebase';
+import Register from '@/views/Register';
 
 Vue.use(VueRouter);
 
@@ -51,13 +53,29 @@ const routes = [
     component: Login
   },
   {
-    path: '/register'
+    path: '/register',
+    name: 'Register',
+    component: Register,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/about',
     name: 'About',
     component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue')
+      import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    meta: {
+      requiresAuth: true
+    }
   }
 ];
 

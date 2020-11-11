@@ -64,8 +64,6 @@ export default {
       });
 
       await this.deleteLeave(item.id).then(() => (this.loading = false));
-
-      // this.$router.push({ name: 'Home' });
     }
   },
   data() {

@@ -1,7 +1,8 @@
 import * as firebase from '@/plugins/firebase';
 
 const state = {
-  leaves: []
+  leaves: [],
+  allLeaves: []
 };
 
 const getters = {

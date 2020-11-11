@@ -17,12 +17,10 @@ export default {
     Navbar
   },
   data() {
-    return {
-      authUnsubscribe: null
-    };
+    return {};
   },
   created() {
-    this.authUnsubscribe = auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch('fetchUserProfile', user);
         this.$store.dispatch('fetchLeaves');
@@ -32,7 +30,7 @@ export default {
     });
   },
   beforeDestroy() {
-    this.authUnsubscribe = null;
+    auth.signOut();
   }
 };
 </script>
