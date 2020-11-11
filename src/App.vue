@@ -28,9 +28,6 @@ export default {
         this.$store.dispatch('fetchPublics');
       }
     });
-  },
-  beforeDestroy() {
-    auth.signOut();
   }
 };
 </script>

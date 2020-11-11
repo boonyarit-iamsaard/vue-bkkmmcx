@@ -44,7 +44,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn text dark> {{ getFullName }}</v-btn>
+        <v-btn text dark v-if="showNav"> {{ getFullName }}</v-btn>
         <v-btn text dark to="/profile">Profile</v-btn>
         <v-btn text dark @click="signOutHandler">Logout</v-btn>
         <!-- <v-btn text dark v-if="!showNav" to="/login">Login</v-btn> -->
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { auth } from '@/plugins/firebase';
+// import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Navbar',
@@ -86,7 +86,7 @@ export default {
   },
 
   created() {
-    this.fetchUserProfile(auth.currentUser);
+    // this.fetchUserProfile(auth.currentUser);
   }
 };
 </script>

@@ -3,7 +3,7 @@
     <v-data-table
       :headers="headers"
       :items="getAllUsers"
-      :items-per-page="5"
+      :items-per-page="50"
       :sort-by="['firstName', 'lastName']"
       class="elevation-2"
     >
