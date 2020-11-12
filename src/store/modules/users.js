@@ -24,6 +24,7 @@ const actions = {
       dispatch('fetchUserProfile', user);
     } catch (error) {
       console.log(error.message);
+      throw error;
     }
   },
 
@@ -37,6 +38,7 @@ const actions = {
       await router.push({ name: 'Login' });
     } catch (error) {
       console.log(error.message);
+      throw error;
     }
   },
 

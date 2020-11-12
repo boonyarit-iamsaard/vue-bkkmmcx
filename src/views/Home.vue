@@ -3,8 +3,8 @@
     <Spinned v-if="loading" />
     <v-sheet tile height="64" class="d-flex">
       <v-toolbar flat>
-        <v-btn color="#156665" to="/apply" dark>
-          <span class="font-weight-regular">Apply for Leave</span>
+        <v-btn color="primary" to="/apply" dark>
+          Apply for Leave
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
@@ -20,7 +20,7 @@
         <v-menu bottom right>
           <template v-slot:activator="{ on, attrs }">
             <v-btn outlined color="grey" v-bind="attrs" v-on="on">
-              <span class="font-weight-regular">{{ typeLabel[type] }}</span>
+              {{ typeLabel[type] }}
               <v-icon right>
                 mdi-menu-down
               </v-icon>
