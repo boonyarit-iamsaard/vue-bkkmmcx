@@ -3,9 +3,8 @@
     <Spinner v-if="loading" />
     <v-row>
       <v-col sm="6" lg="4" class="text-center mx-auto">
-        Admin Area is under construction.
         <v-btn block dark color="primary" to="/register"
-          >Register New User</v-btn
+          >Creat User Profile</v-btn
         >
       </v-col>
       <v-col cols="12">

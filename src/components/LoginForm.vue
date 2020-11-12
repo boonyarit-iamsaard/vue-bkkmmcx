@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Spinner v-if="loading" />
+    <Progress v-if="loading" />
     <v-form @submit.prevent="signInHandler">
       <v-container>
         <v-row>
@@ -40,13 +40,13 @@
 </template>
 
 <script>
-import Spinner from '@/components/Spinner';
+import Progress from '@/components/Progress';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'Signin',
   components: {
-    Spinner
+    Progress
   },
   methods: {
     ...mapActions(['signIn']),

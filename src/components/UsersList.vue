@@ -2,7 +2,7 @@
   <v-container>
     <v-data-table
       :headers="headers"
-      :items="getAllUsers"
+      :items="items"
       :items-per-page="50"
       :sort-by="['firstName', 'lastName']"
       class="elevation-2"
@@ -36,15 +36,44 @@ export default {
         { text: 'Firstname', value: 'firstName', align: 'left' },
         { text: 'Lastname', value: 'lastName', align: 'left' },
         { text: 'Entitled', value: 'entitled', align: 'left' },
+        { text: 'Used', value: 'used', align: 'left' },
+        { text: '%', value: 'usedPercent', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
-      ]
+      ],
+      items: []
     };
   },
   computed: {
-    ...mapGetters(['getAllUsers'])
+    ...mapGetters(['getAllUsers', 'getAllLeaves'])
   },
   methods: {
-    ...mapActions(['fetchAllUsers']),
+    ...mapActions(['fetchAllUsers', 'fetchAllLeaves']),
+
+    setItems() {
+      let items = [];
+      this.getAllUsers.forEach(user => {
+        let leavePerUser = [];
+        this.getAllLeaves.forEach(leave => {
+          if (leave.userId === user.id && leave.priority !== 'H') {
+            leavePerUser.push(leave);
+          }
+          let used = this.leaveUsed(leavePerUser);
+          items.push({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            entitled: user.entitled,
+            used: used,
+            usedPercent: (used / user.entitled) * 100
+          });
+        });
+      });
+      console.log(items);
+      return items;
+    },
+
+    leaveUsed(leavePerUser) {
+      return leavePerUser.reduce((a, b) => a + b.days, 0);
+    },
 
     editItem(item) {
       console.log(item);
@@ -60,7 +89,12 @@ export default {
   },
   created() {
     this.fetchAllUsers();
-  }
+    this.fetchAllLeaves();
+  },
+  beforeMount() {
+    this.items = this.setItems();
+  },
+  mounted() {}
 };
 </script>
 

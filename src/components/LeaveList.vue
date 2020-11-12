@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <Spinner v-if="loading" />
+    <Progress v-if="loading" />
     <v-data-table
       :headers="headers"
       :items="getLeaves"
@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import Spinner from '@/components/Spinner.vue';
+import Progress from '@/components/Progress.vue';
 import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'LeaveList',
   components: {
-    Spinner
+    Progress
   },
   computed: {
     ...mapGetters(['getLeaves'])

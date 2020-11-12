@@ -17,10 +17,12 @@ export default {
     Navbar
   },
   data() {
-    return {};
+    return {
+      unsubscribe: null
+    };
   },
   created() {
-    auth.onAuthStateChanged(user => {
+    this.unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch('fetchUserProfile', user);
         this.$store.dispatch('fetchLeaves');
@@ -28,6 +30,10 @@ export default {
         this.$store.dispatch('fetchPublics');
       }
     });
+  },
+  beforeDestroy() {
+    console.log('beforeDestroy');
+    this.unsubscribe();
   }
 };
 </script>

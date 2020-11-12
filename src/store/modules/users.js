@@ -40,41 +40,6 @@ const actions = {
     }
   },
 
-  // async signUp({ dispatch }, payload) {
-  //   try {
-  //     console.log(payload);
-  //     let userId = null;
-  //     await firebase.auth
-  //       .createUserWithEmailAndPassword(payload.email, payload.password)
-  //       .then(async result => {
-  //         if (result != null) {
-  //           userId = result.user.uid;
-  //           console.log(result.user.uid);
-  //           const userRef = firebase.usersCollection.doc(result.user.uid);
-  //           const doc = userRef.get();
-  //           if (!doc.data()) {
-  //             await userRef.set({
-  //               firstName: payload.firstName,
-  //               lastName: payload.lastName,
-  //               position: payload.position,
-  //               ern: payload.ern,
-  //               entitled: payload.entitled,
-  //               anl1: payload.anl1,
-  //               anl2: payload.anl2,
-  //               tyc: payload.tyc,
-  //               isAdmin: payload.isAdmin
-  //             });
-  //           }
-  //         }
-  //       });
-
-  //     await dispatch('initateNewUserDaysOff', payload.initiateDate, userId);
-  //     await dispatch('fetchAllUsers');
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // },
-
   async createUserProfile({ dispatch }, payload) {
     await firebase.usersCollection.doc(payload.uid).set({
       firstName: payload.firstName,
@@ -88,10 +53,10 @@ const actions = {
       isAdmin: payload.isAdmin
     });
 
-    dispatch('initateNewUserDaysOff', {
+    await dispatch('initateNewUserDaysOff', {
       date: payload.initiateDate,
       id: payload.uid
-    });
+    }).then(console.log('initateNewUserDaysOff successful.'));
   },
 
   async initateNewUserDaysOff({ dispatch }, initiateData) {

@@ -6,19 +6,19 @@
           v-model="group"
           active-class="gray--text text--gray-4"
         >
-          <v-list-item to="/">
+          <v-list-item to="/" v-if="showNav">
             <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/apply">
+          <v-list-item to="/apply" v-if="showNav">
             <v-list-item-icon>
               <v-icon>mdi-calendar</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Apply for Leave</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/profile">
+          <v-list-item to="/profile" v-if="showNav">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
@@ -45,18 +45,15 @@
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn text dark v-if="showNav"> {{ getFullName }}</v-btn>
-        <v-btn text dark to="/profile">Profile</v-btn>
-        <v-btn text dark @click="signOutHandler">Logout</v-btn>
-        <!-- <v-btn text dark v-if="!showNav" to="/login">Login</v-btn> -->
-        <!-- <v-btn text dark v-if="showNav" to="/register">Register</v-btn> -->
-        <!-- <v-btn text dark v-if="isAdmin" to="/admin">Admin</v-btn> -->
+        <v-btn text dark to="/profile" v-if="showNav">Profile</v-btn>
+        <v-btn text dark v-if="isAdmin" to="/admin">Admin</v-btn>
+        <v-btn text dark @click="signOutHandler" v-if="showNav">Logout</v-btn>
       </v-toolbar-items>
     </v-app-bar>
   </div>
 </template>
 
 <script>
-// import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Navbar',
@@ -85,9 +82,7 @@ export default {
     }
   },
 
-  created() {
-    // this.fetchUserProfile(auth.currentUser);
-  }
+  created() {}
 };
 </script>
 

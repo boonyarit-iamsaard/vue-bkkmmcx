@@ -6,10 +6,29 @@ const state = {
 };
 
 const getters = {
-  getLeaves: state => state.leaves
+  getLeaves: state => state.leaves,
+  getAllLeaves: state => state.allLeaves
 };
 
 const actions = {
+  async fetchAllLeaves({ commit }) {
+    try {
+      await firebase.leavesCollection.onSnapshot(snapshot => {
+        let allLeaves = [];
+
+        snapshot.forEach(doc => {
+          let leave = doc.data();
+          leave.id = doc.id;
+
+          allLeaves.push(leave);
+        });
+        commit('setAllLeaves', allLeaves);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  },
+
   async fetchLeaves({ commit }) {
     try {
       await firebase.leavesCollection
@@ -26,8 +45,8 @@ const actions = {
 
           commit('setLeaves', leaves);
         });
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error.message);
     }
   },
 
@@ -87,7 +106,8 @@ const actions = {
 };
 
 const mutations = {
-  setLeaves: (state, leaves) => (state.leaves = leaves)
+  setLeaves: (state, leaves) => (state.leaves = leaves),
+  setAllLeaves: (state, allLeaves) => (state.allLeaves = allLeaves)
 };
 
 export default {

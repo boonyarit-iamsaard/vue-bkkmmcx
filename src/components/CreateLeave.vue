@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="createLeaveHandler" v-model="valid" ref="form">
-    <Spinner v-if="loading" />
+    <Progress v-if="loading" />
     <v-container>
       <v-row>
         <v-col sm="8" md="4" class="mx-auto">
@@ -98,12 +98,12 @@
 
 <script>
 import * as firebase from '../plugins/firebase';
-import Spinner from '@/components/Spinner.vue';
+import Progress from '@/components/Progress.vue';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'CreateLeave',
   components: {
-    Spinner
+    Progress
   },
   data: () => ({
     loading: false,
