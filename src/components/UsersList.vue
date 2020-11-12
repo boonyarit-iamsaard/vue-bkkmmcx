@@ -18,9 +18,6 @@
         <v-icon disabled color="primary" class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
-        <v-icon disabled color="secondary" @click="deleteItem(item)">
-          mdi-delete
-        </v-icon>
       </template>
     </v-data-table>
   </v-container>
@@ -57,17 +54,16 @@ export default {
           if (leave.userId === user.id && leave.priority !== 'H') {
             leavePerUser.push(leave);
           }
-          let used = this.leaveUsed(leavePerUser);
-          items.push({
-            firstName: user.firstName,
-            lastName: user.lastName,
-            entitled: user.entitled,
-            used: used,
-            usedPercent: (used / user.entitled) * 100
-          });
+        });
+        let used = this.leaveUsed(leavePerUser);
+        items.push({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          entitled: user.entitled,
+          used: used,
+          usedPercent: (used / user.entitled) * 100
         });
       });
-      console.log(items);
       return items;
     },
 
@@ -81,10 +77,6 @@ export default {
       //   name: 'EditLeave',
       //   params: { item: item }
       // });
-    },
-
-    async deleteItem(item) {
-      console.log(item);
     }
   },
   created() {

@@ -24,6 +24,8 @@ export default {
   created() {
     this.unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
+        this.$store.dispatch('fetchAllUsers');
+        this.$store.dispatch('fetchAllLeaves');
         this.$store.dispatch('fetchUserProfile', user);
         this.$store.dispatch('fetchLeaves');
         this.$store.dispatch('fetchUserDaysOff');
