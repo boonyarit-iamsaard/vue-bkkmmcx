@@ -118,20 +118,23 @@ const actions = {
   },
 
   async updatePriorityQuata({ state, dispatch }, updatedPriorityQuata) {
-    let anl1 = state.userProfile.anl1;
-    let anl2 = state.userProfile.anl2;
+    let targetUser = state.allUsers.find(
+      user => user.id === updatedPriorityQuata.userId
+    );
+    let anl1 = targetUser.anl1;
+    let anl2 = targetUser.anl2;
 
     anl1 -= updatedPriorityQuata.anl1;
     anl2 -= updatedPriorityQuata.anl2;
     try {
       await firebase.usersCollection
-        .doc(updatedPriorityQuata.userId)
+        .doc(targetUser.id)
         .update({
           anl1: anl1,
           anl2: anl2
         })
         .then(() => {
-          dispatch('fetchUserProfile', firebase.auth.currentUser);
+          dispatch('fetchAllUsers');
         });
     } catch (error) {
       console.log(error.message);

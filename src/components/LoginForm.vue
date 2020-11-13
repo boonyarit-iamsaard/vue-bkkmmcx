@@ -44,6 +44,26 @@
         </v-row>
       </v-container>
     </v-form>
+    <v-dialog v-model="dialog" width="500">
+      <v-card>
+        <v-card-title class="headline secondary white--text">
+          Error
+        </v-card-title>
+
+        <v-card-text class="pa-4">
+          {{ error }}
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="dialog = false">
+            dismiss
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -60,6 +80,8 @@ export default {
     return {
       loading: false,
       valid: false,
+      dialog: false,
+      error: null,
       email: null,
       password: null,
       requiredRules: [
@@ -80,13 +102,10 @@ export default {
         });
       } catch (error) {
         this.loading = false;
-        console.log(error);
-        alert(error);
+        this.dialog = true;
+        this.error = error.message;
+        console.log(error.message);
       }
-      // const isValid = this.validate();
-      // if (isValid) {
-      //   this.resetValidate();
-      // }
     },
 
     validate() {

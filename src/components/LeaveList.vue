@@ -5,6 +5,7 @@
       :headers="headers"
       :items="getLeaves"
       :items-per-page="5"
+      :sort-by="['startDate']"
       class="elevation-2"
     >
       <template v-slot:top>
@@ -13,14 +14,6 @@
           <v-toolbar-title>Leave History</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
-      </template>
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-icon color="primary" class="mr-2" @click="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon color="secondary" @click="deleteItem(item)">
-          mdi-delete
-        </v-icon>
       </template>
     </v-data-table>
   </v-container>
@@ -74,8 +67,7 @@ export default {
         { text: 'End Date', value: 'endDate', align: 'center' },
         { text: 'Days', value: 'days', align: 'center' },
         { text: 'Priority', value: 'priority', align: 'center' },
-        { text: 'Status', value: 'status', align: 'center' },
-        { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
+        { text: 'Status', value: 'status', align: 'center' }
       ]
     };
   },
