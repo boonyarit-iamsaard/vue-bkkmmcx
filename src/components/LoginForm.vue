@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Progress v-if="loading" v-model="valid" ref="form" />
-    <v-form @submit.prevent="signInHandler">
+    <Progress v-if="loading" />
+    <v-form @submit.prevent="signInHandler" v-model="valid" ref="form">
       <v-container>
         <v-row>
           <v-col sm="6" md="4" class="mx-auto">
@@ -56,6 +56,19 @@ export default {
   components: {
     Progress
   },
+  data() {
+    return {
+      loading: false,
+      valid: false,
+      email: null,
+      password: null,
+      requiredRules: [
+        v => !!v || 'Required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      passwordRules: [v => !!v || 'Required']
+    };
+  },
   methods: {
     ...mapActions(['signIn']),
     async signInHandler() {
@@ -70,24 +83,19 @@ export default {
         console.log(error);
         alert(error);
       }
+      // const isValid = this.validate();
+      // if (isValid) {
+      //   this.resetValidate();
+      // }
     },
 
     validate() {
       this.$refs.form.validate();
+    },
+
+    resetValidate() {
+      this.$refs.form.resetValidate();
     }
-  },
-  data() {
-    return {
-      loading: false,
-      valid: true,
-      email: null,
-      password: null,
-      requiredRules: [
-        v => !!v || 'Required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
-      ],
-      passwordRules: [v => !!v || 'Required']
-    };
   }
 };
 </script>
