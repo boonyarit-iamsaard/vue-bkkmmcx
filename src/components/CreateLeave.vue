@@ -1,18 +1,22 @@
 <template>
-  <v-form @submit.prevent="createLeaveHandler" v-model="valid" ref="form">
-    <Progress v-if="loading" />
-    <v-container>
-      <v-row>
-        <v-col sm="8" md="6" class="mx-auto">
-          <v-alert border="top" colored-border type="warning" elevation="2">
-            Please apply minimum 50% of your 2021's entitled leave before
-            <strong><u>30</u><sup>th</sup> <u>Nevember 2020</u></strong
-            >.
-          </v-alert>
-          <v-card class="pa-4 rounded-lg" elevation="2">
-            <p class="display-1 text-center">
-              Apply for Leave
-            </p>
+  <v-container>
+    <v-row>
+      <v-col sm="8" md="6" class="mx-auto">
+        <v-alert border="top" colored-border type="warning" elevation="2">
+          Please apply minimum 50% of your 2021's entitled leave before
+          <strong><u>30</u><sup>th</sup> <u>Nevember 2020</u></strong
+          >.
+        </v-alert>
+        <v-card class="pa-4 rounded-lg" elevation="2">
+          <p class="display-1 text-center">
+            Apply for Leave
+          </p>
+          <v-form
+            @submit.prevent="createLeaveHandler"
+            v-model="valid"
+            ref="form"
+          >
+            <Progress v-if="loading" />
             <v-row>
               <v-col cols="12">
                 <v-menu
@@ -94,11 +98,11 @@
                 </v-btn>
               </v-col>
             </v-row>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-form>
+          </v-form>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -110,6 +114,7 @@ export default {
   components: {
     Progress
   },
+  props: ['dialogDate'],
   data: () => ({
     loading: false,
     valid: true,
@@ -227,6 +232,7 @@ export default {
     }
   },
 
+  created() {},
   mounted() {
     this.disabledPriority();
     this.max = this.maxDate();

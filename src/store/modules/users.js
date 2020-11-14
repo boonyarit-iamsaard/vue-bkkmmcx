@@ -47,6 +47,7 @@ const actions = {
       firstName: payload.firstName,
       lastName: payload.lastName,
       position: payload.position,
+      sortIndex: payload.sortIndex,
       ern: payload.ern,
       entitled: payload.entitled,
       anl1: payload.anl1,

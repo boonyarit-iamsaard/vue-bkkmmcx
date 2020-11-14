@@ -3,10 +3,9 @@
     <v-sheet tile height="64" class="d-flex">
       <Spinned v-if="loading" />
       <v-toolbar flat>
-        <v-toolbar-title>Admin's calendar</v-toolbar-title>
-        <!-- <v-btn color="primary" to="/admin" dark>
-          Admin
-        </v-btn> -->
+        <v-btn color="primary" dark>
+          Admin's calendar
+        </v-btn>
         <v-spacer></v-spacer>
         <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>
@@ -46,7 +45,7 @@
         :show-month-on-first="showMonthOnFirst"
         :events="events"
         :event-color="getEventColor"
-        @click:more="viewWeek"
+        @click:more="viewMore"
       ></v-calendar>
     </v-sheet>
   </v-container>
@@ -61,34 +60,43 @@ export default {
   components: {
     Spinner
   },
+  data() {
+    return {
+      loading: false,
+      showMonthOnFirst: false,
+      type: 'month',
+      typeLabel: {
+        month: 'Month',
+        week: 'Week'
+      },
+      focus: this.$route.params.focus || '2020-12-01',
+      events: [],
+      eventColor: ['secondary', 'accent', 'primary', 'indigo lighten-1', 'grey']
+    };
+  },
   computed: {
-    ...mapGetters(['getLeaves', 'getUserDaysOff', 'getPublics', 'userProfile'])
+    ...mapGetters(['getPublics', 'getAllUsers', 'getAllLeaves'])
   },
   methods: {
-    ...mapActions(['fetchLeaves', 'fetchUserDaysOff', 'fetchPublics']),
+    ...mapActions(['fetchAllLeaves', 'fetchAllUsers', 'fetchPublics']),
+
     addEvents() {
       let events = [];
-      // add leaves to events
-      for (let leave of this.getLeaves) {
-        let event = {
-          name: `${this.userProfile.firstName} : ${leave.priority}`,
-          start: `${leave.startDate}`,
-          end: `${leave.endDate}`,
-          color: this.setEventColor(leave.priority)
-        };
-        events.push(event);
-      }
 
-      // add days off to events
-      for (let dayOff of this.getUserDaysOff) {
-        let event = {
-          name: 'Off',
-          start: `${dayOff.startDate}`,
-          end: `${dayOff.endDate}`,
-          color: 'grey'
-        };
-        events.push(event);
-      }
+      this.getAllUsers.forEach(user => {
+        this.getAllLeaves.forEach(leave => {
+          let event = {};
+          if (leave.userId === user.id) {
+            event = {
+              name: `${user.firstName} : ${leave.priority}`,
+              start: `${leave.startDate}`,
+              end: `${leave.endDate}`,
+              color: this.setEventColor(leave.priority)
+            };
+            events.push(event);
+          }
+        });
+      });
 
       // add public holidays to events
       for (let ph of this.getPublics) {
@@ -103,7 +111,7 @@ export default {
 
       return events;
     },
-    viewWeek({ date }) {
+    viewMore({ date }) {
       this.focus = date;
       this.type = 'week';
     },
@@ -125,29 +133,16 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      loading: false,
-      showMonthOnFirst: false,
-      type: 'month',
-      typeLabel: {
-        month: 'Month',
-        week: 'Week'
-        // day: 'Day'
-      },
-      focus: this.$route.params.focus || '2020-12-01',
-      events: [],
-      eventColor: ['secondary', 'accent', 'primary', 'indigo lighten-1', 'grey']
-    };
-  },
   created() {
-    this.fetchLeaves();
-    this.fetchUserDaysOff();
+    this.fetchAllLeaves();
+    this.fetchAllUsers();
     this.fetchPublics();
   },
+
   beforeMount() {
     this.events = this.addEvents();
   },
+
   mounted() {
     this.$refs.calendar.move();
   }

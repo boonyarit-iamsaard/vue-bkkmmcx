@@ -12,6 +12,7 @@
 <script>
 import UserCalendar from '@/components/UserCalendar.vue';
 import AdminCalendar from '@/components/AdminCalendar.vue';
+import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -33,7 +34,7 @@ export default {
     ...mapActions(['fetchUserProfile'])
   },
   created() {
-    this.fetchUserProfile();
+    this.fetchUserProfile(auth.currentUser);
   },
   beforeMount() {
     this.isAdmin = this.userProfile.isAdmin;

@@ -119,18 +119,17 @@ export default {
       loading: false,
       valid: false,
       message: null,
-      // email: null,
-      // password: null,
       uid: null,
       firstName: null,
       lastName: null,
       position: null,
+      sortIndex: null,
       ern: null,
       entitled: null,
       isAdmin: false,
       startMenu: false,
       initiateDate: new Date('2021-01-01').toISOString().substr(0, 10),
-      positionItems: ['Manager', 'Admin', 'Engineer', 'Mechanic'],
+      positionItems: ['Engineering Manager', 'Admin', 'Engineer', 'Mechanic'],
       requiredRules: [value => !!value || 'Required.'],
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -142,14 +141,27 @@ export default {
     ...mapActions(['createUserProfile']),
 
     async createUserHandler() {
-      this.loading = false;
-      console.log(this.initiateDate);
+      this.loading = true;
+      switch (this.position) {
+        case 'Engineering Manager':
+          this.sortIndex = 0;
+          break;
+        case 'Admin':
+          this.sortIndex = 1;
+          break;
+        case 'Engineer':
+          this.sortIndex = 2;
+          break;
+        default:
+          this.sortIndex = 3;
+      }
       try {
         await this.createUserProfile({
           uid: this.uid,
           firstName: this.firstName,
           lastName: this.lastName,
           position: this.position,
+          sortIndex: this.sortIndex,
           ern: this.ern,
           entitled: parseInt(this.entitled, 10),
           isAdmin: this.isAdmin,

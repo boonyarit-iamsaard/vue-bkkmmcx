@@ -4,7 +4,7 @@
       :headers="headers"
       :items="items"
       :items-per-page="50"
-      :sort-by="['firstName', 'lastName']"
+      :sort-by="['sortIndex', 'position', 'firstName', 'lastName']"
       class="elevation-2"
     >
       <template v-slot:top>
@@ -67,6 +67,7 @@ export default {
     return {
       loading: false,
       headers: [
+        { text: 'Position', value: 'position', align: 'left' },
         { text: 'Firstname', value: 'firstName', align: 'left' },
         { text: 'Lastname', value: 'lastName', align: 'left' },
         { text: 'Entitled', value: 'entitled', align: 'left' },
@@ -105,14 +106,20 @@ export default {
       let items = [];
       this.getAllUsers.forEach(user => {
         let leavePerUser = [];
+        let anlUsed = [];
         this.getAllLeaves.forEach(leave => {
-          if (leave.userId === user.id && leave.priority !== 'H') {
+          if (leave.userId === user.id) {
             leavePerUser.push(leave);
           }
+          if (leave.userId === user.id && leave.priority !== 'H') {
+            anlUsed.push(leave);
+          }
         });
-        let used = this.leaveUsed(leavePerUser);
+        let used = this.leaveUsed(anlUsed);
         items.push({
           id: user.id,
+          sortIndex: user.sortIndex,
+          position: user.position,
           firstName: user.firstName,
           lastName: user.lastName,
           entitled: user.entitled,
