@@ -1,113 +1,106 @@
 <template>
   <v-form @submit.prevent="updateLeaveHandler" v-model="valid" ref="form">
     <Progress v-if="loading" />
-    <v-container>
+    <v-card class="pa-4 rounded-lg">
+      <p class="display-1 text-center">
+        Edit Leave
+      </p>
       <v-row>
-        <v-col sm="6" md="4" class="mx-auto">
-          <v-card class="pa-4 rounded-lg">
-            <p class="display-1 font-weight-light text-center">
-              Edit Leave
-            </p>
-            <v-row>
-              <v-col cols="12">
-                <v-menu
-                  v-model="startMenu"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="startDate"
-                      label="Start Date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      color="primary"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="startDate"
-                    @input="startMenu = false"
-                    @change="changeEndDate"
-                    min="2021-01-01"
-                    max="2021-12-31"
-                    color="primary"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="12">
-                <v-menu
-                  v-model="endMenu"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="endDate"
-                      label="End Date"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                      color="red darken-3"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="endDate"
-                    @input="endMenu = false"
-                    :max="max"
-                    :min="min"
-                    color="red darken-3"
-                  ></v-date-picker>
-                </v-menu>
-              </v-col>
-              <v-col cols="12">
-                <v-select
-                  :items="priorityItems"
-                  :rules="priorityRules"
-                  v-model="priority"
-                  label="Priority"
-                  color="primary"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-select
-                  :items="statusItems"
-                  v-model="status"
-                  label="Status"
-                  color="primary"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-btn
-                  block
-                  dark
-                  type="submit"
-                  color="primary"
-                  class="font-weight-light"
-                  >EDIT
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card>
+        <v-col cols="12">
+          <v-menu
+            v-model="startMenu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="startDate"
+                label="Start Date"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+                color="primary"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="startDate"
+              @input="startMenu = false"
+              @change="changeEndDate"
+              min="2021-01-01"
+              max="2021-12-31"
+              color="primary"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
+        <v-col cols="12">
+          <v-menu
+            v-model="endMenu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="endDate"
+                label="End Date"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+                color="red darken-3"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="endDate"
+              @input="endMenu = false"
+              :max="max"
+              :min="min"
+              color="red darken-3"
+            ></v-date-picker>
+          </v-menu>
+        </v-col>
+        <v-col cols="12">
+          <v-select
+            :items="priorityItems"
+            :rules="priorityRules"
+            v-model="priority"
+            label="Priority"
+            color="primary"
+            required
+          ></v-select>
+        </v-col>
+        <v-col cols="12">
+          <v-select
+            :items="statusItems"
+            v-model="status"
+            label="Status"
+            color="primary"
+            required
+          ></v-select>
+        </v-col>
+        <v-col cols="12">
+          <v-btn
+            block
+            :disabled="!valid"
+            class="white--text"
+            type="submit"
+            color="primary"
+            >EDIT
+          </v-btn>
         </v-col>
       </v-row>
-    </v-container>
+    </v-card>
   </v-form>
 </template>
 
 <script>
 import Progress from '@/components/Progress.vue';
-import { auth } from '@/plugins/firebase';
 import { mapActions } from 'vuex';
 
 export default {
@@ -121,7 +114,7 @@ export default {
   data() {
     return {
       loading: false,
-      valid: false,
+      valid: true,
       priorityRules: [v => v.length > 0 || 'Priority is required.'],
       priorityItems: [
         { text: 'ANL-1', disabled: false },
@@ -202,11 +195,8 @@ export default {
           anl2 = -1;
         }
 
-        const targetMonth = new Date(`${this.startDate}`);
-        targetMonth.setMonth(targetMonth.getMonth() - 1);
-
         await this.updatePriorityQuata({
-          userId: auth.currentUser.uid,
+          userId: this.item.userId,
           anl1: anl1,
           anl2: anl2
         });
@@ -219,11 +209,8 @@ export default {
           priority: this.priority,
           status: this.status
         });
-
-        await this.$router.push({
-          name: 'Home',
-          params: { focus: targetMonth.toISOString().substr(0, 10) }
-        });
+        this.loading = false;
+        this.$emit('close');
       }
     },
 

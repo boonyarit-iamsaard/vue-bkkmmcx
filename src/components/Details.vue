@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-card>
           <v-card-title class="justify-center">
-            <h1 class="display-1 font-weight-light">
+            <h1 class="display-1">
               {{ getFullName() }}
             </h1>
           </v-card-title>
@@ -45,7 +45,7 @@
           <v-card-text>
             <p class="title">{{ item.title }}</p>
             <p
-              class="display-1 red--text text--darken-3"
+              class="display-1 error--text text--darken-3"
               v-if="item.value === 0"
             >
               {{ item.value }}
@@ -81,6 +81,8 @@ export default {
     this.leaveUsed();
   },
   beforeUpdate() {
+    this.fetchLeaves();
+    this.fetchUserProfile(auth.currentUser);
     this.prioritySummary = this.setPrioritySummary();
   },
   methods: {

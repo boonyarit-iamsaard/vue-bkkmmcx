@@ -6,8 +6,8 @@ import ApplyLeave from '@/views/ApplyLeave';
 import EditLeave from '@/views/EditLeave';
 import Login from '@/views/Login';
 import Admin from '@/views/Admin';
-import { auth } from '@/plugins/firebase';
 import Register from '@/views/Register';
+import { auth } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
 

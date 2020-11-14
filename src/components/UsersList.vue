@@ -10,25 +10,62 @@
       <template v-slot:top>
         <v-toolbar flat>
           <v-spacer></v-spacer>
-          <v-toolbar-title>All Users</v-toolbar-title>
+          <v-toolbar-title>Summary</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon disabled color="primary" class="mr-2" @click="editItem(item)">
-          mdi-pencil
+        <v-icon color="gray" class="mr-2" @click="viewItem(item)">
+          mdi-eye
         </v-icon>
       </template>
     </v-data-table>
+    <v-dialog v-model="dialog" width="800">
+      <Progress v-if="loading" />
+      <v-data-table
+        :headers="headersPerUser"
+        :items="leavePerUser"
+        :items-per-page="15"
+        :sort-by="['startDate']"
+        class="elevation-2"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-spacer></v-spacer>
+            <v-toolbar-title>{{ dialogName }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+        </template>
+
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-icon color="primary" class="mr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon color="secondary" @click="deleteItem(item)">
+            mdi-delete
+          </v-icon>
+        </template>
+      </v-data-table>
+    </v-dialog>
+    <v-dialog v-model="editDialog" width="400">
+      <UpdateLeave :item="editDialogItem" v-on:close="editDialog = false" />
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
+import Progress from '@/components/Progress.vue';
+import UpdateLeave from '@/components/UpdateLeave.vue';
 import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'UsersList',
+  components: {
+    Progress,
+    UpdateLeave
+  },
   data() {
     return {
+      loading: false,
       headers: [
         { text: 'Firstname', value: 'firstName', align: 'left' },
         { text: 'Lastname', value: 'lastName', align: 'left' },
@@ -37,14 +74,32 @@ export default {
         { text: '%', value: 'usedPercent', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
       ],
-      items: []
+      headersPerUser: [
+        { text: 'Start Date', value: 'startDate', align: 'left' },
+        { text: 'End Date', value: 'endDate', align: 'left' },
+        { text: 'Days', value: 'days', align: 'left' },
+        { text: 'Priority', value: 'priority', align: 'left' },
+        { text: 'Status', value: 'status', align: 'left' },
+        { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
+      ],
+      items: [],
+      leavePerUser: [],
+      dialogName: null,
+      dialog: false,
+      editDialog: false,
+      editDialogItem: null
     };
   },
   computed: {
     ...mapGetters(['getAllUsers', 'getAllLeaves'])
   },
   methods: {
-    ...mapActions(['fetchAllUsers', 'fetchAllLeaves']),
+    ...mapActions([
+      'fetchAllUsers',
+      'fetchAllLeaves',
+      'deleteLeave',
+      'updatePriorityQuata'
+    ]),
 
     setItems() {
       let items = [];
@@ -57,9 +112,11 @@ export default {
         });
         let used = this.leaveUsed(leavePerUser);
         items.push({
+          id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
           entitled: user.entitled,
+          leavePerUser: leavePerUser,
           used: used,
           usedPercent: (used / user.entitled) * 100
         });
@@ -71,22 +128,53 @@ export default {
       return leavePerUser.reduce((a, b) => a + b.days, 0);
     },
 
+    viewItem(item) {
+      this.leavePerUser = item.leavePerUser;
+      this.dialogName = `${item.firstName} ${item.lastName}`;
+      this.dialog = true;
+    },
+
+    async deleteItem(item) {
+      this.loading = true;
+      let anl1 = 0;
+      let anl2 = 0;
+      if (item.priority === 'ANL-1') {
+        anl1 = -1;
+      } else if (item.priority === 'ANL-2') {
+        anl2 = -1;
+      }
+      console.log(item.userId);
+
+      await this.updatePriorityQuata({
+        userId: item.userId,
+        anl1: anl1,
+        anl2: anl2
+      });
+
+      await this.deleteLeave(item.id).then(() => (this.loading = false));
+      this.dialog = false;
+    },
+
     editItem(item) {
-      console.log(item);
-      // this.$router.push({
-      //   name: 'EditLeave',
-      //   params: { item: item }
-      // });
+      this.editDialog = true;
+      this.dialog = false;
+      this.editDialogItem = item;
     }
   },
+
   created() {
     this.fetchAllUsers();
     this.fetchAllLeaves();
   },
+
   beforeMount() {
     this.items = this.setItems();
   },
-  mounted() {}
+
+  beforeUpdate() {
+    this.fetchAllLeaves();
+    this.items = this.setItems();
+  }
 };
 </script>
 

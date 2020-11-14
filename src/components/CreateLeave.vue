@@ -3,9 +3,14 @@
     <Progress v-if="loading" />
     <v-container>
       <v-row>
-        <v-col sm="8" md="4" class="mx-auto">
-          <v-card class="pa-4 rounded-lg">
-            <p class="display-1 font-weight-light text-center">
+        <v-col sm="8" md="6" class="mx-auto">
+          <v-alert border="top" colored-border type="warning" elevation="2">
+            Please apply minimum 50% of your 2021's entitled leave before
+            <strong><u>30</u><sup>th</sup> <u>Nevember 2020</u></strong
+            >.
+          </v-alert>
+          <v-card class="pa-4 rounded-lg" elevation="2">
+            <p class="display-1 text-center">
               Apply for Leave
             </p>
             <v-row>
@@ -74,17 +79,17 @@
                   :rules="priorityRules"
                   v-model="priority"
                   label="Priority"
-                  color="teal darken-3"
+                  color="primary"
                   required
                 ></v-select>
               </v-col>
               <v-col cols="12">
                 <v-btn
                   block
-                  dark
+                  class="white--text"
+                  :disabled="!valid"
                   type="submit"
-                  color="#156665"
-                  class="font-weight-light"
+                  color="primary"
                   >APPLY
                 </v-btn>
               </v-col>
@@ -107,7 +112,7 @@ export default {
   },
   data: () => ({
     loading: false,
-    valid: false,
+    valid: true,
     priorityRules: [v => v.length > 0 || 'Priority is required.'],
     priorityItems: [
       { text: 'ANL-1', disabled: false },
