@@ -5,7 +5,7 @@
       <v-container>
         <v-row>
           <v-col sm="6" md="4" class="mx-auto">
-            <v-card rounded="lg" class="pa-4">
+            <v-card rounded="lg" class="pa-6">
               <p class="display-1 text-center">Login</p>
               <v-row>
                 <v-col cols="12">
@@ -38,6 +38,20 @@
                     Login
                   </v-btn>
                 </v-col>
+                <v-col>
+                  <v-checkbox
+                    label="Forget password or reset password"
+                    v-model="forgetPassword"
+                  ></v-checkbox>
+                  <v-btn
+                    block
+                    color="primary"
+                    class="white--text"
+                    :disabled="!forgetPassword"
+                    @click="reset = true"
+                    >Reset Password</v-btn
+                  >
+                </v-col>
               </v-row>
             </v-card>
           </v-col>
@@ -49,19 +63,41 @@
         <v-card-title class="headline secondary white--text">
           Error
         </v-card-title>
-
         <v-card-text class="pa-4">
           {{ error }}
         </v-card-text>
-
         <v-divider></v-divider>
-
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" text @click="dialog = false">
             dismiss
           </v-btn>
         </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="reset" width="500">
+      <v-card>
+        <v-card-title class="headline accent white--text"
+          >Please input your e-mail</v-card-title
+        >
+        <v-card-text class="pa-6">
+          <v-form
+            v-model="resetValid"
+            ref="resetForm"
+            @submit.prevent="resetHandler"
+          >
+            <v-text-field
+              filled
+              required
+              label="E-Mail"
+              v-model="resetEmail"
+              :rules="requiredRules"
+            ></v-text-field>
+            <v-btn block type="submit" color="primary" :disabled="!resetValid"
+              >Reset Password</v-btn
+            >
+          </v-form>
+        </v-card-text>
       </v-card>
     </v-dialog>
   </div>
@@ -80,7 +116,11 @@ export default {
     return {
       loading: false,
       valid: false,
+      resetValid: false,
       dialog: false,
+      reset: false,
+      resetEmail: null,
+      forgetPassword: false,
       error: null,
       email: null,
       password: null,
@@ -93,6 +133,12 @@ export default {
   },
   methods: {
     ...mapActions(['signIn']),
+
+    async resetHandler() {
+      console.log(this.resetEmail);
+      this.reset = false;
+    },
+
     async signInHandler() {
       this.loading = true;
       try {
