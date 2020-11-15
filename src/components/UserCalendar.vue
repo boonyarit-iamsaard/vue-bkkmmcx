@@ -3,8 +3,8 @@
     <v-sheet tile height="64" class="d-flex">
       <Spinned v-if="loading" />
       <v-toolbar flat>
-        <v-btn color="primary" to="/apply" dark>
-          Apply for Leave
+        <v-btn dark fab color="primary" to="/apply">
+          <v-icon>mdi-plus</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn icon class="ma-2" @click="$refs.calendar.prev()">

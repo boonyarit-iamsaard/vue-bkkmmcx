@@ -3,9 +3,7 @@
     <v-sheet tile height="64" class="d-flex">
       <Spinned v-if="loading" />
       <v-toolbar flat>
-        <v-btn color="primary" dark>
-          Admin's calendar
-        </v-btn>
+        <v-toolbar-title>Admin's calendar</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
           <v-icon>mdi-chevron-left</v-icon>

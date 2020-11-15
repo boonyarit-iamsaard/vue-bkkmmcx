@@ -104,14 +104,14 @@ export default {
     },
     percentUsed() {
       let percent = (this.leaveUsed() / this.userProfile.entitled) * 100;
-      return percent.toPrecision(4);
+      return percent.toFixed(1);
     },
     leaveRemains() {
       return this.userProfile.entitled - this.leaveUsed();
     },
     percentRemains() {
       let percent = (this.leaveRemains() / this.userProfile.entitled) * 100;
-      return percent.toPrecision(4);
+      return percent.toFixed(1);
     },
     getFullName() {
       return `${this.userProfile.firstName} ${this.userProfile.lastName}`;

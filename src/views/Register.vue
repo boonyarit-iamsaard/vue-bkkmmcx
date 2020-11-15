@@ -90,10 +90,10 @@
               <v-col cols="12">
                 <v-btn
                   block
-                  dark
+                  class="white--text"
                   type="submit"
                   color="primary"
-                  class="font-weight-light"
+                  :disabled="!valid"
                   >Register
                 </v-btn>
               </v-col>
@@ -129,7 +129,13 @@ export default {
       isAdmin: false,
       startMenu: false,
       initiateDate: new Date('2021-01-01').toISOString().substr(0, 10),
-      positionItems: ['Engineering Manager', 'Admin', 'Engineer', 'Mechanic'],
+      positionItems: [
+        'Engineering Manager',
+        'Admin',
+        'Engineer',
+        'Technician',
+        'Mechanic'
+      ],
       requiredRules: [value => !!value || 'Required.'],
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -152,8 +158,11 @@ export default {
         case 'Engineer':
           this.sortIndex = 2;
           break;
-        default:
+        case 'Technician':
           this.sortIndex = 3;
+          break;
+        default:
+          this.sortIndex = 4;
       }
       try {
         await this.createUserProfile({
@@ -171,6 +180,8 @@ export default {
           initiateDate: this.initiateDate
         }).then(() => {
           this.message = "A user's profile created.";
+          this.$refs.form.reset();
+          this.initiateDate = '2021-01-01';
         });
       } catch (error) {
         this.loading = false;

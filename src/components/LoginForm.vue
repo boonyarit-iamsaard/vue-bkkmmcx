@@ -80,7 +80,10 @@
         <v-card-title class="headline accent white--text"
           >Please input your e-mail</v-card-title
         >
-        <v-card-text class="pa-6">
+        <v-card-text class="pa-6"
+          ><v-overlay :value="resetProgress">
+            <v-progress-circular indeterminate size="64"></v-progress-circular>
+          </v-overlay>
           <v-form
             v-model="resetValid"
             ref="resetForm"
@@ -94,10 +97,27 @@
               :rules="requiredRules"
             ></v-text-field>
             <v-btn block type="submit" color="primary" :disabled="!resetValid"
-              >Reset Password</v-btn
-            >
+              >Reset Password
+            </v-btn>
           </v-form>
         </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogSuccess" width="500">
+      <v-card>
+        <v-card-title class="headline primary white--text">
+          Message
+        </v-card-title>
+        <v-card-text class="pa-4">
+          {{ message }}
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="dialogSuccess = false">
+            dismiss
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -106,6 +126,7 @@
 <script>
 import Progress from '@/components/Progress';
 import { mapActions } from 'vuex';
+import { auth } from '../plugins/firebase';
 
 export default {
   name: 'Signin',
@@ -118,8 +139,11 @@ export default {
       valid: false,
       resetValid: false,
       dialog: false,
+      dialogSuccess: false,
+      message: null,
       reset: false,
       resetEmail: null,
+      resetProgress: false,
       forgetPassword: false,
       error: null,
       email: null,
@@ -136,7 +160,21 @@ export default {
 
     async resetHandler() {
       console.log(this.resetEmail);
-      this.reset = false;
+
+      try {
+        this.resetProgress = true;
+        await auth.sendPasswordResetEmail(this.resetEmail).then(() => {
+          this.message = "Password reset's e-mail has been sent.";
+          this.resetProgress = false;
+          this.reset = false;
+          this.dialogSuccess = true;
+        });
+      } catch (error) {
+        this.error = error.message;
+        this.resetProgress = false;
+        this.reset = false;
+        this.dialog = true;
+      }
     },
 
     async signInHandler() {

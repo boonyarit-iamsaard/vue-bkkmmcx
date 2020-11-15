@@ -10,9 +10,11 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
+          <v-btn dark small fab color="primary" to="/apply">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
           <v-spacer></v-spacer>
           <v-toolbar-title>Leave History</v-toolbar-title>
-          <v-spacer></v-spacer>
         </v-toolbar>
       </template>
     </v-data-table>

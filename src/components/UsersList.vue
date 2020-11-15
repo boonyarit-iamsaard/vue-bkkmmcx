@@ -3,20 +3,36 @@
     <v-data-table
       :headers="headers"
       :items="items"
-      :items-per-page="50"
-      :sort-by="['sortIndex', 'position', 'firstName', 'lastName']"
+      :items-per-page="10"
+      :search="search"
+      :sort-by="['sortIndex', 'firstName', 'lastName']"
       class="elevation-2"
     >
       <template v-slot:top>
         <v-toolbar flat>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
           <v-spacer></v-spacer>
           <v-toolbar-title>Summary</v-toolbar-title>
-          <v-spacer></v-spacer>
         </v-toolbar>
       </template>
+      <template v-slot:[`item.usedPercent`]="{ item }">
+        <v-chip dark :color="getColor(item.used, item.entitled)">
+          {{ item.usedPercent }}
+        </v-chip>
+      </template>
+
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon color="gray" class="mr-2" @click="viewItem(item)">
-          mdi-eye
+        <v-icon disabled class="mr-2">
+          mdi-account
+        </v-icon>
+        <v-icon color="primary" class="mr-2" @click="viewItem(item)">
+          mdi-calendar
         </v-icon>
       </template>
     </v-data-table>
@@ -36,7 +52,6 @@
             <v-spacer></v-spacer>
           </v-toolbar>
         </template>
-
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon color="primary" class="mr-2" @click="editItem(item)">
             mdi-pencil
@@ -72,7 +87,7 @@ export default {
         { text: 'Lastname', value: 'lastName', align: 'left' },
         { text: 'Entitled', value: 'entitled', align: 'left' },
         { text: 'Used', value: 'used', align: 'left' },
-        { text: '%', value: 'usedPercent', align: 'left' },
+        { text: 'Used (%)', value: 'usedPercent', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
       ],
       headersPerUser: [
@@ -86,6 +101,7 @@ export default {
       items: [],
       leavePerUser: [],
       dialogName: null,
+      search: null,
       dialog: false,
       editDialog: false,
       editDialogItem: null
@@ -102,6 +118,17 @@ export default {
       'updatePriorityQuata'
     ]),
 
+    getColor(used, entitled) {
+      let result = (used / entitled) * 100;
+      if (result >= 50) {
+        return 'primary';
+      } else if (result > 0) {
+        return 'accent';
+      } else {
+        return 'secondary';
+      }
+    },
+
     setItems() {
       let items = [];
       this.getAllUsers.forEach(user => {
@@ -116,16 +143,17 @@ export default {
           }
         });
         let used = this.leaveUsed(anlUsed);
+        let usedPercent = (used / user.entitled) * 100;
         items.push({
           id: user.id,
           sortIndex: user.sortIndex,
           position: user.position,
           firstName: user.firstName,
           lastName: user.lastName,
-          entitled: user.entitled,
+          entitled: user.entitled.toFixed(1),
           leavePerUser: leavePerUser,
           used: used,
-          usedPercent: (used / user.entitled) * 100
+          usedPercent: usedPercent.toFixed(1) + ' %'
         });
       });
       return items;

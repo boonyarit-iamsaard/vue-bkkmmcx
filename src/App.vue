@@ -18,7 +18,8 @@ export default {
   },
   data() {
     return {
-      unsubscribe: null
+      unsubscribe: null,
+      loaging: true
     };
   },
   created() {
@@ -34,7 +35,6 @@ export default {
     });
   },
   beforeDestroy() {
-    console.log('beforeDestroy');
     this.unsubscribe();
   }
 };
