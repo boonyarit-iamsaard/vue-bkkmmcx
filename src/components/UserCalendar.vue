@@ -1,54 +1,87 @@
 <template>
-  <v-container>
-    <v-sheet tile height="64" class="d-flex">
-      <Spinned v-if="loading" />
-      <v-toolbar flat>
-        <v-btn dark fab color="primary" to="/apply">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <v-toolbar-title v-if="$refs.calendar">
-          {{ $refs.calendar.title }}
-        </v-toolbar-title>
-        <v-btn icon class="ma-2" @click="$refs.calendar.next()">
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-menu bottom right>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined color="grey" v-bind="attrs" v-on="on">
-              {{ typeLabel[type] }}
-              <v-icon right>
-                mdi-menu-down
-              </v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item @click="type = 'week'">
-              <v-list-item-title>Week</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="type = 'month'">
-              <v-list-item-title>Month</v-list-item-title>
-            </v-list-item>
-          </v-list>
+  <!-- <v-container> -->
+  <v-row class="fill-height">
+    <v-col class="pt-0">
+      <v-sheet tile height="64" class="d-flex">
+        <Spinned v-if="loading" />
+        <v-toolbar flat>
+          <v-btn dark fab color="primary" to="/apply">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-toolbar-title v-if="$refs.calendar">
+            {{ $refs.calendar.title }}
+          </v-toolbar-title>
+          <v-btn icon class="ma-2" @click="$refs.calendar.next()">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-menu bottom right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn outlined color="grey" v-bind="attrs" v-on="on">
+                {{ typeLabel[type] }}
+                <v-icon right>
+                  mdi-menu-down
+                </v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="type = 'week'">
+                <v-list-item-title>Week</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = 'month'">
+                <v-list-item-title>Month</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-toolbar>
+      </v-sheet>
+      <v-sheet height="600">
+        <v-calendar
+          ref="calendar"
+          v-model="focus"
+          :type="type"
+          :show-month-on-first="showMonthOnFirst"
+          :events="events"
+          :event-color="getEventColor"
+          @click:more="viewWeek"
+          @click:event="showEvent"
+        ></v-calendar>
+        <v-menu
+          v-model="selectedOpen"
+          :close-on-content-click="false"
+          :activator="selectedElement"
+          offset-x
+        >
+          <v-card color="grey lighten-4" min-width="300px" rounded="lg" flat>
+            <v-toolbar :color="selectedEvent.color" dark flat>
+              <!-- <v-btn icon>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn> -->
+              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              <v-spacer></v-spacer>
+              <!-- <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn> -->
+            </v-toolbar>
+            <v-card-text class="pb-0">
+              <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
+              <p class="mb-0"><strong>End:</strong> {{ selectedEvent.end }}</p>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn text color="secondary" @click="selectedOpen = false">
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
         </v-menu>
-      </v-toolbar>
-    </v-sheet>
-    <v-sheet height="600">
-      <v-calendar
-        ref="calendar"
-        v-model="focus"
-        :type="type"
-        :show-month-on-first="showMonthOnFirst"
-        :events="events"
-        :event-color="getEventColor"
-        @click:more="viewWeek"
-      ></v-calendar>
-    </v-sheet>
-  </v-container>
+      </v-sheet>
+    </v-col>
+  </v-row>
+  <!-- </v-container> -->
 </template>
 
 <script>
@@ -59,6 +92,23 @@ export default {
   name: 'Home',
   components: {
     Spinner
+  },
+  data() {
+    return {
+      loading: false,
+      showMonthOnFirst: false,
+      selectedOpen: false,
+      selectedElement: null,
+      selectedEvent: {},
+      type: 'month',
+      typeLabel: {
+        month: 'Month',
+        week: 'Week'
+      },
+      focus: this.$route.params.focus || '2020-12-01',
+      events: [],
+      eventColor: ['secondary', 'accent', 'primary', 'indigo lighten-1', 'grey']
+    };
   },
   computed: {
     ...mapGetters(['getLeaves', 'getUserDaysOff', 'getPublics', 'userProfile'])
@@ -122,22 +172,25 @@ export default {
         default:
           return this.eventColor[4];
       }
+    },
+    showEvent({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = event;
+        this.selectedElement = nativeEvent.target;
+        setTimeout(() => {
+          this.selectedOpen = true;
+        }, 10);
+      };
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false;
+        setTimeout(open, 10);
+      } else {
+        open();
+      }
+
+      nativeEvent.stopPropagation();
     }
-  },
-  data() {
-    return {
-      loading: false,
-      showMonthOnFirst: false,
-      type: 'month',
-      typeLabel: {
-        month: 'Month',
-        week: 'Week'
-        // day: 'Day'
-      },
-      focus: this.$route.params.focus || '2020-12-01',
-      events: [],
-      eventColor: ['secondary', 'accent', 'primary', 'indigo lighten-1', 'grey']
-    };
   },
   created() {
     this.fetchLeaves();

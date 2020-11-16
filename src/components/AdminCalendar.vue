@@ -44,7 +44,36 @@
         :events="events"
         :event-color="getEventColor"
         @click:more="viewMore"
+        @click:event="showEvent"
       ></v-calendar>
+      <v-menu
+        v-model="selectedOpen"
+        :close-on-content-click="false"
+        :activator="selectedElement"
+        offset-x
+      >
+        <v-card color="grey lighten-4" min-width="300px" rounded="lg" flat>
+          <v-toolbar :color="selectedEvent.color" dark flat>
+            <!-- <v-btn icon>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn> -->
+            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+            <v-spacer></v-spacer>
+            <!-- <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn> -->
+          </v-toolbar>
+          <v-card-text class="pb-0">
+            <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
+            <p class="mb-0"><strong>End:</strong> {{ selectedEvent.end }}</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn text color="secondary" @click="selectedOpen = false">
+              Cancel
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-menu>
     </v-sheet>
   </v-container>
 </template>
@@ -62,6 +91,9 @@ export default {
     return {
       loading: false,
       showMonthOnFirst: false,
+      selectedOpen: false,
+      selectedElement: null,
+      selectedEvent: {},
       type: 'month',
       typeLabel: {
         month: 'Month',
@@ -129,6 +161,24 @@ export default {
         default:
           return this.eventColor[4];
       }
+    },
+    showEvent({ nativeEvent, event }) {
+      const open = () => {
+        this.selectedEvent = event;
+        this.selectedElement = nativeEvent.target;
+        setTimeout(() => {
+          this.selectedOpen = true;
+        }, 10);
+      };
+
+      if (this.selectedOpen) {
+        this.selectedOpen = false;
+        setTimeout(open, 10);
+      } else {
+        open();
+      }
+
+      nativeEvent.stopPropagation();
     }
   },
   created() {
