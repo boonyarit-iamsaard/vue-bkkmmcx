@@ -29,7 +29,7 @@
 
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon disabled class="mr-2">
-          mdi-account
+          mdi-gift
         </v-icon>
         <v-icon color="primary" class="mr-2" @click="viewItem(item)">
           mdi-calendar

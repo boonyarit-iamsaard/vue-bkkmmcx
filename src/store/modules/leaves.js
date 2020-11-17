@@ -59,7 +59,8 @@ const actions = {
           endDate: leave.endDate,
           days: leave.days,
           priority: leave.priority,
-          status: leave.status
+          status: leave.status,
+          phase: 'A'
         })
         .then(() => {
           dispatch('fetchLeaves', firebase.auth.currentUser);

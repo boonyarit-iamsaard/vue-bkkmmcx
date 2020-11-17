@@ -56,26 +56,26 @@
           :activator="selectedElement"
           offset-x
         >
-          <v-card color="grey lighten-4" min-width="300px" rounded="lg" flat>
+          <v-card min-width="300px" rounded="lg" flat>
             <v-toolbar :color="selectedEvent.color" dark flat>
               <!-- <v-btn icon>
                 <v-icon>mdi-pencil</v-icon>
               </v-btn> -->
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
-              <!-- <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn> -->
+              <v-btn icon @click="selectedOpen = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
             </v-toolbar>
-            <v-card-text class="pb-0">
+            <v-card-text>
               <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
               <p class="mb-0"><strong>End:</strong> {{ selectedEvent.end }}</p>
             </v-card-text>
-            <v-card-actions>
+            <!-- <v-card-actions>
               <v-btn text color="secondary" @click="selectedOpen = false">
                 Cancel
               </v-btn>
-            </v-card-actions>
+            </v-card-actions> -->
           </v-card>
         </v-menu>
       </v-sheet>
@@ -120,7 +120,7 @@ export default {
       // add leaves to events
       for (let leave of this.getLeaves) {
         let event = {
-          name: `${this.userProfile.firstName} : ${leave.priority}`,
+          name: `${leave.phase} | ${this.userProfile.firstName} : ${leave.priority}`,
           start: `${leave.startDate}`,
           end: `${leave.endDate}`,
           color: this.setEventColor(leave.priority)
@@ -131,7 +131,7 @@ export default {
       // add days off to events
       for (let dayOff of this.getUserDaysOff) {
         let event = {
-          name: 'Off',
+          name: 'Day Off',
           start: `${dayOff.startDate}`,
           end: `${dayOff.endDate}`,
           color: 'grey'
