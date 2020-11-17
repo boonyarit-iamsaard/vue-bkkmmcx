@@ -107,7 +107,13 @@ export default {
       },
       focus: this.$route.params.focus || '2020-12-01',
       events: [],
-      eventColor: ['secondary', 'accent', 'primary', 'indigo lighten-1', 'grey']
+      eventColor: [
+        'secondary',
+        'accent',
+        'primary',
+        'indigo lighten-1',
+        'pink darken-1'
+      ]
     };
   },
   computed: {

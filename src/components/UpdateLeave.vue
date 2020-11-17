@@ -117,6 +117,7 @@ export default {
       valid: true,
       priorityRules: [v => v.length > 0 || 'Priority is required.'],
       priorityItems: [
+        { text: 'TYC', disabled: false },
         { text: 'ANL-1', disabled: false },
         { text: 'ANL-2', disabled: false },
         { text: 'ANL-3', disabled: false },
@@ -156,6 +157,8 @@ export default {
       if (this.$refs.form.validate()) {
         let anl1 = 0;
         let anl2 = 0;
+        let tyc = 0;
+
         if (this.priority === 'ANL-1' && this.item.priority === 'ANL-2') {
           anl1 = 1;
           anl2 = -1;
@@ -193,12 +196,33 @@ export default {
           anl1 = -1;
         } else if (this.priority === 'H' && this.item.priority === 'ANL-2') {
           anl2 = -1;
+        } else if (this.priority === 'TYC' && this.item.priority === 'ANL-1') {
+          anl1 = -1;
+          tyc = 1;
+        } else if (this.priority === 'TYC' && this.item.priority === 'ANL-2') {
+          anl2 = -1;
+          tyc = 1;
+        } else if (this.priority === 'TYC' && this.item.priority === 'ANL-3') {
+          tyc = 1;
+        } else if (this.priority === 'TYC' && this.item.priority === 'H') {
+          tyc = 1;
+        } else if (this.priority === 'ANL-1' && this.item.priority === 'TYC') {
+          tyc = -1;
+          anl1 = 1;
+        } else if (this.priority === 'ANL-2' && this.item.priority === 'TYC') {
+          tyc = -1;
+          anl2 = 1;
+        } else if (this.priority === 'ANL-3' && this.item.priority === 'TYC') {
+          tyc = -1;
+        } else if (this.priority === 'H' && this.item.priority === 'TYC') {
+          tyc = -1;
         }
 
         await this.updatePriorityQuata({
           userId: this.item.userId,
           anl1: anl1,
-          anl2: anl2
+          anl2: anl2,
+          tyc: tyc
         });
 
         await this.updateLeave({

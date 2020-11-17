@@ -120,6 +120,7 @@ export default {
     valid: true,
     priorityRules: [v => v.length > 0 || 'Priority is required.'],
     priorityItems: [
+      { text: 'TYC', disabled: false },
       { text: 'ANL-1', disabled: false },
       { text: 'ANL-2', disabled: false },
       { text: 'ANL-3', disabled: false },
@@ -134,7 +135,7 @@ export default {
     min: null
   }),
   methods: {
-    ...mapActions(['createLeave']),
+    ...mapActions(['createLeave', 'updatePriorityQuata']),
 
     changeEndDate() {
       return (this.endDate = this.startDate);
@@ -151,43 +152,51 @@ export default {
       return start.toISOString().substr(0, 10);
     },
 
-    async updatePriorityQuata(updatedPriorityQuata) {
-      let anl1 = this.userProfile.anl1;
-      let anl2 = this.userProfile.anl2;
+    // async updatePriorityQuata(updatedPriorityQuata) {
+    //   let anl1 = this.userProfile.anl1;
+    //   let anl2 = this.userProfile.anl2;
 
-      anl1 -= updatedPriorityQuata.anl1;
-      anl2 -= updatedPriorityQuata.anl2;
+    //   anl1 -= updatedPriorityQuata.anl1;
+    //   anl2 -= updatedPriorityQuata.anl2;
 
-      try {
-        await firebase.usersCollection.doc(updatedPriorityQuata.userId).update({
-          anl1: anl1,
-          anl2: anl2
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
-    },
+    //   try {
+    //     await firebase.usersCollection.doc(updatedPriorityQuata.userId).update({
+    //       anl1: anl1,
+    //       anl2: anl2
+    //     });
+    //   } catch (error) {
+    //     console.log(error.message);
+    //   }
+    // },
 
     async createLeaveHandler() {
       this.loading = true;
       if (this.$refs.form.validate()) {
         let anl1 = 0;
         let anl2 = 0;
+        let tyc = 0;
+
         if (this.priority === 'ANL-1') {
           anl1 = 1;
-        }
-        if (this.priority === 'ANL-2') {
+        } else if (this.priority === 'ANL-2') {
           anl2 = 1;
+        } else if (this.priority === 'TYC') {
+          tyc = 1;
         }
 
         const targetMonth = new Date(`${this.startDate}`);
         targetMonth.setMonth(targetMonth.getMonth() - 1);
 
-        await this.updatePriorityQuata({
-          userId: firebase.auth.currentUser.uid,
-          anl1: anl1,
-          anl2: anl2
-        });
+        try {
+          await this.updatePriorityQuata({
+            userId: firebase.auth.currentUser.uid,
+            anl1: anl1,
+            anl2: anl2,
+            tyc: tyc
+          }).then(() => console.log('success'));
+        } catch (error) {
+          console.log(error.message);
+        }
 
         await this.createLeave({
           userId: firebase.auth.currentUser.uid,
@@ -215,14 +224,20 @@ export default {
     disabledPriority() {
       if (this.getLeaves.length > 0) {
         if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
+          this.getLeaves.filter(leave => leave.priority === 'TYC').length > 0 ||
+          this.userProfile.tyc === 0
         ) {
           this.priorityItems[0].disabled = true;
         }
         if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
+          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
         ) {
           this.priorityItems[1].disabled = true;
+        }
+        if (
+          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
+        ) {
+          this.priorityItems[2].disabled = true;
         }
       }
     },

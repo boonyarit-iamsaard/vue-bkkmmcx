@@ -28,11 +28,14 @@
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon disabled class="mr-2">
+        <v-icon color="accent" class="mr-2" @click="clickGift(item)">
           mdi-gift
         </v-icon>
-        <v-icon color="primary" class="mr-2" @click="viewItem(item)">
+        <v-icon color="primary" @click="viewItem(item)">
           mdi-calendar
+        </v-icon>
+        <v-icon disabled class="mr-2">
+          mdi-account
         </v-icon>
       </template>
     </v-data-table>
@@ -65,6 +68,23 @@
     <v-dialog v-model="editDialog" width="400">
       <UpdateLeave :item="editDialogItem" v-on:close="editDialog = false" />
     </v-dialog>
+    <v-dialog v-model="giftDialog" width="400">
+      <v-card>
+        <v-card-title>{{ giftDialogName }}</v-card-title>
+        <v-card-text>
+          <v-form @submit.prevent="addGift">
+            <v-text-field
+              name="gift"
+              label="Thank You Card"
+              type="number"
+              min="0"
+              v-model="gift"
+            ></v-text-field>
+            <v-btn block color="accent" type="submit">Submit</v-btn>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -88,7 +108,7 @@ export default {
         { text: 'Entitled', value: 'entitled', align: 'left' },
         { text: 'Used', value: 'used', align: 'left' },
         { text: 'Used (%)', value: 'usedPercent', align: 'left' },
-        { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
+        { text: 'Actions', value: 'actions', sortable: false, align: 'right' }
       ],
       headersPerUser: [
         { text: 'Start Date', value: 'startDate', align: 'left' },
@@ -104,6 +124,11 @@ export default {
       search: null,
       dialog: false,
       editDialog: false,
+      valid: true,
+      giftDialog: false,
+      giftDialogName: null,
+      giftDialogItem: null,
+      gift: null,
       editDialogItem: null
     };
   },
@@ -127,6 +152,12 @@ export default {
       } else {
         return 'secondary';
       }
+    },
+
+    clickGift(item) {
+      this.giftDialog = true;
+      this.giftDialogName = `${item.firstName} ${item.lastName}`;
+      this.giftDialogItem = item;
     },
 
     setItems() {
@@ -169,21 +200,41 @@ export default {
       this.dialog = true;
     },
 
+    async addGift() {
+      this.giftDialog = false;
+      this.loading = true;
+      let tyc = parseInt(this.gift, 10);
+      console.log(-tyc);
+      await this.updatePriorityQuata({
+        userId: this.giftDialogItem.id,
+        anl1: 0,
+        anl2: 0,
+        tyc: -tyc
+      }).then(() => {
+        this.loading = false;
+        console.log('TYC added');
+      });
+    },
+
     async deleteItem(item) {
       this.loading = true;
       let anl1 = 0;
       let anl2 = 0;
+      let tyc = 0;
       if (item.priority === 'ANL-1') {
         anl1 = -1;
       } else if (item.priority === 'ANL-2') {
         anl2 = -1;
+      } else if (item.priority === 'TYC') {
+        tyc = -1;
       }
       console.log(item.userId);
 
       await this.updatePriorityQuata({
         userId: item.userId,
         anl1: anl1,
-        anl2: anl2
+        anl2: anl2,
+        tyc: tyc
       });
 
       await this.deleteLeave(item.id).then(() => (this.loading = false));
@@ -208,6 +259,7 @@ export default {
 
   beforeUpdate() {
     this.fetchAllLeaves();
+    this.fetchAllUsers();
     this.items = this.setItems();
   }
 };
