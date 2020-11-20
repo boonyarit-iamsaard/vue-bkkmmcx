@@ -108,7 +108,7 @@ export default {
         { text: 'Entitled', value: 'entitled', align: 'left' },
         { text: 'Used', value: 'used', align: 'left' },
         { text: 'Used (%)', value: 'usedPercent', align: 'left' },
-        { text: 'Actions', value: 'actions', sortable: false, align: 'right' }
+        { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
       ],
       headersPerUser: [
         { text: 'Start Date', value: 'startDate', align: 'left' },
