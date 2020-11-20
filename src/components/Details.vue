@@ -81,8 +81,8 @@ export default {
     this.leaveUsed();
   },
   beforeUpdate() {
-    this.fetchLeaves();
-    this.fetchUserProfile(auth.currentUser);
+    // this.fetchLeaves();
+    // this.fetchUserProfile(auth.currentUser);
     this.prioritySummary = this.setPrioritySummary();
   },
   methods: {

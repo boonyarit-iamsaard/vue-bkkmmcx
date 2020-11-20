@@ -24,34 +24,6 @@ const actions = {
           });
           commit('setUserDaysOff', daysOff);
         });
-
-      // Try filter days off starte here.
-      await firebase.daysOffCollection
-        .where('userId', '==', 'IEmKpQ544YTZ5DiEQIG073TAVgF2')
-        .onSnapshot(snapshot => {
-          let srisuphan = [];
-          snapshot.forEach(async doc => {
-            let off = doc.data();
-            off.id = doc.id;
-            // await firebase.daysOffCollection.doc(doc.id).delete();
-            srisuphan.push(off);
-          });
-          const januaryDaysOff = srisuphan.filter(
-            off => off.startDate <= '2021-01-31'
-          );
-          console.log(
-            januaryDaysOff.sort((a, b) => {
-              if (a.startDate < b.startDate) {
-                return -1;
-              }
-              if (a.startDate > b.startDate) {
-                return 1;
-              }
-              return 0;
-            })
-          );
-        });
-      // Try filter days off end here.
     } catch (err) {
       console.error(err);
     }
