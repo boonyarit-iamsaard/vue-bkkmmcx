@@ -140,7 +140,7 @@ export default {
       'fetchAllUsers',
       'fetchAllLeaves',
       'deleteLeave',
-      'updatePriorityQuata'
+      'updatePriorityQuota'
     ]),
 
     getColor(used, entitled) {
@@ -205,7 +205,7 @@ export default {
       this.loading = true;
       let tyc = parseInt(this.gift, 10);
       console.log(-tyc);
-      await this.updatePriorityQuata({
+      await this.updatePriorityQuota({
         userId: this.giftDialogItem.id,
         anl1: 0,
         anl2: 0,
@@ -230,7 +230,7 @@ export default {
       }
       console.log(item.userId);
 
-      await this.updatePriorityQuata({
+      await this.updatePriorityQuota({
         userId: item.userId,
         anl1: anl1,
         anl2: anl2,

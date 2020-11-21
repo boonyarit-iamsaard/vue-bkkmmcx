@@ -126,10 +126,10 @@
 <script>
 import Progress from '@/components/Progress';
 import { mapActions } from 'vuex';
-import { auth } from '../plugins/firebase';
+import { auth } from '@/plugins/firebase';
 
 export default {
-  name: 'Signin',
+  name: 'SignIn',
   components: {
     Progress
   },
@@ -203,8 +203,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.inactive {
-  color: #fff;
-}
-</style>
+<style scoped></style>

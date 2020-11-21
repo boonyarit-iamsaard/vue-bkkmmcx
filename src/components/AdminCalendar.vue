@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-sheet tile height="64" class="d-flex">
-      <Spinned v-if="loading" />
+      <Spinner v-if="loading" />
       <v-toolbar flat>
         <v-toolbar-title>Admin's calendar</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -111,10 +111,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getPublics', 'getAllUsers', 'getAllLeaves'])
+    ...mapGetters(['getPublic', 'getAllUsers', 'getAllLeaves'])
   },
   methods: {
-    ...mapActions(['fetchAllLeaves', 'fetchAllUsers', 'fetchPublics']),
+    ...mapActions(['fetchAllLeaves', 'fetchAllUsers', 'fetchPublic']),
 
     addEvents() {
       let events = [];
@@ -135,7 +135,7 @@ export default {
       });
 
       // add public holidays to events
-      for (let ph of this.getPublics) {
+      for (let ph of this.getPublic) {
         let event = {
           name: `${ph.name}`,
           start: `${ph.startDate}`,
@@ -190,7 +190,7 @@ export default {
   created() {
     this.fetchAllLeaves();
     this.fetchAllUsers();
-    this.fetchPublics();
+    this.fetchPublic();
   },
 
   beforeMount() {

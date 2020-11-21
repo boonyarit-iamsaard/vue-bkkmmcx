@@ -4,7 +4,7 @@
       <v-col sm="8" md="6" class="mx-auto">
         <v-alert border="top" colored-border type="warning" elevation="2">
           Please apply minimum 50% of your 2021's entitled leave before
-          <strong><u>30</u><sup>th</sup> <u>Nevember 2020</u></strong
+          <strong><u>30</u><sup>th</sup> <u>November 2020</u></strong
           >.
         </v-alert>
         <v-card class="pa-4 rounded-lg" elevation="2">
@@ -135,7 +135,7 @@ export default {
     min: null
   }),
   methods: {
-    ...mapActions(['createLeave', 'updatePriorityQuata']),
+    ...mapActions(['createLeave', 'updatePriorityQuota']),
 
     changeEndDate() {
       return (this.endDate = this.startDate);
@@ -151,23 +151,6 @@ export default {
       start = new Date(start);
       return start.toISOString().substr(0, 10);
     },
-
-    // async updatePriorityQuata(updatedPriorityQuata) {
-    //   let anl1 = this.userProfile.anl1;
-    //   let anl2 = this.userProfile.anl2;
-
-    //   anl1 -= updatedPriorityQuata.anl1;
-    //   anl2 -= updatedPriorityQuata.anl2;
-
-    //   try {
-    //     await firebase.usersCollection.doc(updatedPriorityQuata.userId).update({
-    //       anl1: anl1,
-    //       anl2: anl2
-    //     });
-    //   } catch (error) {
-    //     console.log(error.message);
-    //   }
-    // },
 
     async createLeaveHandler() {
       this.loading = true;
@@ -188,7 +171,7 @@ export default {
         targetMonth.setMonth(targetMonth.getMonth() - 1);
 
         try {
-          await this.updatePriorityQuata({
+          await this.updatePriorityQuota({
             userId: firebase.auth.currentUser.uid,
             anl1: anl1,
             anl2: anl2,
@@ -271,7 +254,7 @@ export default {
     dateFormat(value) {
       const months = [
         'January',
-        'Febuary',
+        'February',
         'March',
         'April',
         'May',

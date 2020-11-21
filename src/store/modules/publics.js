@@ -1,26 +1,26 @@
 import * as firebase from '@/plugins/firebase';
 
 const state = {
-  publics: []
+  public: []
 };
 
 const getters = {
-  getPublics: state => state.publics
+  getPublic: state => state.public
 };
 
 const actions = {
-  async fetchPublics({ commit }) {
+  async fetchPublic({ commit }) {
     try {
       await firebase.publicsCollection.onSnapshot(snapshot => {
-        let publics = [];
+        let publicList = [];
 
         snapshot.forEach(doc => {
           let ph = doc.data();
           ph.id = doc.id;
 
-          publics.push(ph);
+          publicList.push(ph);
         });
-        commit('setPublics', publics);
+        commit('setPublic', publicList);
       });
     } catch (err) {
       console.error(err);
@@ -29,7 +29,7 @@ const actions = {
 };
 
 const mutations = {
-  setPublics: (state, publics) => (state.publics = publics)
+  setPublic: (state, publicList) => (state.public = publicList)
 };
 
 export default {

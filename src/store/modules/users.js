@@ -56,13 +56,13 @@ const actions = {
       isAdmin: payload.isAdmin
     });
 
-    await dispatch('initateNewUserDaysOff', {
+    await dispatch('initiateNewUserDaysOff', {
       date: payload.initiateDate,
       id: payload.uid
-    }).then(console.log('initateNewUserDaysOff successful.'));
+    }).then(console.log('initiateNewUserDaysOff successful.'));
   },
 
-  async initateNewUserDaysOff({ dispatch }, initiateData) {
+  async initiateNewUserDaysOff({ dispatch }, initiateData) {
     try {
       console.log(initiateData.date);
       let limit = new Date('2021-12-31').getTime();
@@ -88,8 +88,9 @@ const actions = {
   async fetchUserProfile({ commit }, user) {
     try {
       const userProfile = await firebase.usersCollection.doc(user.uid).get();
+      let profile = { ...userProfile.data(), id: user.uid };
 
-      commit('setUserProfile', userProfile.data());
+      commit('setUserProfile', profile);
 
       if (router.currentRoute.name === 'Login') {
         await router.push({ name: 'Home' });
@@ -118,7 +119,7 @@ const actions = {
     }
   },
 
-  async updatePriorityQuata({ state, dispatch }, payload) {
+  async updatePriorityQuota({ state, dispatch }, payload) {
     let targetUser = state.allUsers.find(user => user.id === payload.userId);
     let anl1 = targetUser.anl1;
     let anl2 = targetUser.anl2;

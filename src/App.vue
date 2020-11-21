@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       unsubscribe: null,
-      loaging: true
+      loading: true
     };
   },
   created() {
@@ -30,7 +30,7 @@ export default {
         this.$store.dispatch('fetchUserProfile', user);
         this.$store.dispatch('fetchLeaves');
         this.$store.dispatch('fetchUserDaysOff');
-        this.$store.dispatch('fetchPublics');
+        this.$store.dispatch('fetchPublic');
       }
     });
   },

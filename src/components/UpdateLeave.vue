@@ -136,7 +136,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['updatePriorityQuata', 'updateLeave']),
+    ...mapActions(['updatePriorityQuota', 'updateLeave']),
     changeEndDate() {
       return (this.endDate = this.startDate);
     },
@@ -218,7 +218,7 @@ export default {
           tyc = -1;
         }
 
-        await this.updatePriorityQuata({
+        await this.updatePriorityQuota({
           userId: this.item.userId,
           anl1: anl1,
           anl2: anl2,

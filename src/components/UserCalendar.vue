@@ -3,7 +3,7 @@
   <v-row class="fill-height">
     <v-col class="pt-0">
       <v-sheet tile height="64" class="d-flex">
-        <Spinned v-if="loading" />
+        <Spinner v-if="loading" />
         <v-toolbar flat>
           <v-btn dark fab color="primary" to="/apply">
             <v-icon>mdi-plus</v-icon>
@@ -117,10 +117,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getLeaves', 'getUserDaysOff', 'getPublics', 'userProfile'])
+    ...mapGetters(['getLeaves', 'getUserDaysOff', 'getPublic', 'userProfile'])
   },
   methods: {
-    ...mapActions(['fetchLeaves', 'fetchUserDaysOff', 'fetchPublics']),
+    ...mapActions(['fetchLeaves', 'fetchUserDaysOff', 'fetchPublic']),
     addEvents() {
       let events = [];
       // add leaves to events
@@ -146,7 +146,7 @@ export default {
       }
 
       // add public holidays to events
-      for (let ph of this.getPublics) {
+      for (let ph of this.getPublic) {
         let event = {
           name: `${ph.name}`,
           start: `${ph.startDate}`,
@@ -201,7 +201,7 @@ export default {
   created() {
     this.fetchLeaves();
     this.fetchUserDaysOff();
-    this.fetchPublics();
+    this.fetchPublic();
   },
   beforeMount() {
     this.events = this.addEvents();

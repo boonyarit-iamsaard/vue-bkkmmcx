@@ -9,15 +9,15 @@
             </h1>
           </v-card-title>
           <v-card-subtitle class="pb-0 pt-4">
-            <p class="subtitle-1">{{ userProfile.position }}</p>
-            <p class="subtitle-1">{{ userProfile.ern }}</p>
+            <p class="subtitle-1">{{ profile.position }}</p>
+            <p class="subtitle-1">{{ profile.ern }}</p>
           </v-card-subtitle>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>
             <v-row>
               <v-col>
                 <p class="title">Entitled</p>
-                <p class="display-1">{{ userProfile.entitled }}</p>
+                <p class="display-1">{{ profile.entitled }}</p>
                 <p>days</p>
               </v-col>
               <v-col>
@@ -62,63 +62,70 @@
 </template>
 
 <script>
-import { auth } from '@/plugins/firebase';
+// import { auth } from '@/plugins/firebase';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Profile',
   data() {
     return {
-      prioritySummary: []
+      prioritySummary: [],
+      profile: this.$route.params.profile
     };
   },
   created() {
+    console.log('Created');
     this.fetchLeaves();
-    this.fetchUserProfile(auth.currentUser);
-  },
-  mounted() {
-    // this.prioritySummary = this.setPrioritySummary();
-    this.leaveUsed();
-  },
-  beforeUpdate() {
-    // this.fetchLeaves();
     // this.fetchUserProfile(auth.currentUser);
     this.prioritySummary = this.setPrioritySummary();
   },
+  mounted() {
+    // this.prioritySummary = this.setPrioritySummary();
+    // this.profile = this.$route.params.profile;
+    this.leaveUsed();
+  },
+  beforeUpdate() {
+    // this.prioritySummary = this.setPrioritySummary();
+    //   console.log('Before update');
+    // this.fetchLeaves();
+    // this.fetchUserProfile(this.profile.id);
+  },
   methods: {
+    // ...mapActions(['fetchLeaves']),
     ...mapActions(['fetchLeaves', 'fetchUserProfile']),
     setPrioritySummary() {
       return [
-        { title: 'TYC', value: this.userProfile.tyc },
-        { title: 'ANL-1', value: this.userProfile.anl1 },
-        { title: 'ANL-2', value: this.userProfile.anl2 },
+        { title: 'TYC', value: this.profile.tyc },
+        { title: 'ANL-1', value: this.profile.anl1 },
+        { title: 'ANL-2', value: this.profile.anl2 },
         { title: 'ANL-3', value: this.priorityRemains() }
       ];
     },
     priorityRemains() {
-      return this.userProfile.entitled - this.leaveUsed();
+      return this.profile.entitled - this.leaveUsed();
     },
     leaveUsed() {
       let leave = this.getLeaves.filter(leave => leave.priority !== 'H');
       return leave.reduce((a, b) => a + b.days, 0);
     },
     percentUsed() {
-      let percent = (this.leaveUsed() / this.userProfile.entitled) * 100;
+      let percent = (this.leaveUsed() / this.profile.entitled) * 100;
       return percent.toFixed(1);
     },
     leaveRemains() {
-      return this.userProfile.entitled - this.leaveUsed();
+      return this.profile.entitled - this.leaveUsed();
     },
     percentRemains() {
-      let percent = (this.leaveRemains() / this.userProfile.entitled) * 100;
+      let percent = (this.leaveRemains() / this.profile.entitled) * 100;
       return percent.toFixed(1);
     },
     getFullName() {
-      return `${this.userProfile.firstName} ${this.userProfile.lastName}`;
+      return `${this.profile.firstName} ${this.profile.lastName}`;
     }
   },
   computed: {
-    ...mapGetters(['getLeaves', 'userProfile'])
+    // ...mapGetters(['getLeaves', 'userProfile'])
+    ...mapGetters(['getLeaves'])
   }
 };
 </script>
