@@ -18,13 +18,7 @@
             </v-list-item-icon>
             <v-list-item-title>Apply Leave</v-list-item-title>
           </v-list-item>
-          <v-list-item
-            :to="{
-              name: 'Profile',
-              params: { id: userProfile.id, profile: userProfile }
-            }"
-            v-if="showNav"
-          >
+          <v-list-item to="/profile" v-if="showNav">
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
@@ -71,16 +65,7 @@
         </v-tooltip>
         <v-tooltip bottom v-if="showNav">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              dark
-              text
-              v-bind="attrs"
-              v-on="on"
-              :to="{
-                name: 'Profile',
-                params: { id: userProfile.id, profile: userProfile }
-              }"
-            >
+            <v-btn dark text v-bind="attrs" v-on="on" to="/profile">
               <v-icon>
                 mdi-account
               </v-icon>

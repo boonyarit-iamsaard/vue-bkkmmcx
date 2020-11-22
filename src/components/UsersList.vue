@@ -21,6 +21,16 @@
           <v-toolbar-title>Summary</v-toolbar-title>
         </v-toolbar>
       </template>
+      <template v-slot:[`item.position`]="{ item }">
+        <span class="d-inline-block text-truncate" style="max-width: 100px;">{{
+          item.position
+        }}</span>
+      </template>
+      <template v-slot:[`item.lastName`]="{ item }">
+        <span class="d-inline-block text-truncate" style="max-width: 100px;">{{
+          item.lastName
+        }}</span>
+      </template>
       <template v-slot:[`item.usedPercent`]="{ item }">
         <v-chip dark :color="getColor(item.used, item.entitled)">
           {{ item.usedPercent }}
@@ -32,6 +42,9 @@
           mdi-gift
         </v-icon>
         <v-icon color="primary" @click="viewItem(item)">
+          mdi-calendar
+        </v-icon>
+        <v-icon color="gray" @click="viewItem(item)">
           mdi-calendar
         </v-icon>
         <v-icon disabled class="mr-2">
@@ -107,8 +120,8 @@ export default {
         { text: 'Lastname', value: 'lastName', align: 'left' },
         { text: 'Entitled', value: 'entitled', align: 'left' },
         { text: 'Used', value: 'used', align: 'left' },
-        { text: 'Used (%)', value: 'usedPercent', align: 'left' },
-        { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
+        { text: 'Used (%)', value: 'usedPercent', align: 'right' },
+        { text: 'Actions', value: 'actions', sortable: false, align: 'right' }
       ],
       headersPerUser: [
         { text: 'Start Date', value: 'startDate', align: 'left' },
@@ -116,7 +129,7 @@ export default {
         { text: 'Days', value: 'days', align: 'left' },
         { text: 'Priority', value: 'priority', align: 'left' },
         { text: 'Status', value: 'status', align: 'left' },
-        { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
+        { text: 'Actions', value: 'actions', sortable: false, align: 'right' }
       ],
       items: [],
       leavePerUser: [],
