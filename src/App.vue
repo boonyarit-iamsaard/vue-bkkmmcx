@@ -2,7 +2,7 @@
   <v-app>
     <Navbar />
     <v-main>
-      <router-view />
+      <router-view :key="$route.path" />
     </v-main>
   </v-app>
 </template>
@@ -30,6 +30,7 @@ export default {
         this.$store.dispatch('fetchUserProfile', user);
         this.$store.dispatch('fetchLeaves');
         this.$store.dispatch('fetchUserDaysOff');
+        this.$store.dispatch('fetchAllDaysOff');
         this.$store.dispatch('fetchPublic');
       }
     });
@@ -43,5 +44,8 @@ export default {
 <style scoped>
 a {
   text-decoration: none;
+}
+.v-application {
+  background-color: #eeeeee !important;
 }
 </style>

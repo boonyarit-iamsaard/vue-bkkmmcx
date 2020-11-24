@@ -63,7 +63,7 @@ const actions = {
           phase: 'A'
         })
         .then(() => {
-          dispatch('fetchLeaves', firebase.auth.currentUser);
+          dispatch('fetchAllLeaves');
           console.log('A new leave created.');
         });
     } catch (error) {
@@ -83,7 +83,7 @@ const actions = {
           status: leave.status
         })
         .then(() => {
-          dispatch('fetchLeaves', firebase.auth.currentUser);
+          dispatch('fetchAllLeaves');
           console.log('updateLeave successful');
         });
     } catch (error) {
@@ -97,11 +97,12 @@ const actions = {
         .doc(id)
         .delete()
         .then(() => {
-          dispatch('fetchLeaves', firebase.auth.currentUser);
+          dispatch('fetchAllLeaves');
           console.log('Deleted');
         });
     } catch (error) {
       console.log(error.message);
+      throw error;
     }
   }
 };

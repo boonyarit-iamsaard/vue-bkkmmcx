@@ -1,9 +1,15 @@
 <template>
   <v-container>
     <v-row>
-      <v-col sm="8" md="6" class="mx-auto">
-        <v-alert border="top" colored-border type="warning" elevation="2">
-          Please apply minimum 50% of your 2021's entitled leave before
+      <v-col md="6" lg="4" class="mx-auto">
+        <v-alert
+          text
+          outlined
+          color="deep-orange"
+          icon="mdi-fire"
+          elevation="2"
+        >
+          Please apply minimum 50% of your 2021's entitled leave before <br />
           <strong><u>30</u><sup>th</sup> <u>November 2020</u></strong
           >.
         </v-alert>
@@ -114,7 +120,6 @@ export default {
   components: {
     Progress
   },
-  props: ['dialogDate'],
   data: () => ({
     loading: false,
     valid: true,
@@ -207,8 +212,8 @@ export default {
     disabledPriority() {
       if (this.getLeaves.length > 0) {
         if (
-          this.getLeaves.filter(leave => leave.priority === 'TYC').length > 0 ||
-          this.userProfile.tyc === 0
+          // this.getLeaves.filter(leave => leave.priority === 'TYC').length > 0 ||
+          this.getUserProfile.tyc === 0
         ) {
           this.priorityItems[0].disabled = true;
         }
@@ -243,7 +248,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getLeaves', 'userProfile'])
+    ...mapGetters(['getLeaves', 'getUserProfile'])
   },
 
   watch: {

@@ -1,11 +1,13 @@
 import * as firebase from '../../plugins/firebase';
 
 const state = {
-  userDaysOff: []
+  userDaysOff: [],
+  allDaysOff: []
 };
 
 const getters = {
-  getUserDaysOff: state => state.userDaysOff
+  getUserDaysOff: state => state.userDaysOff,
+  getAllDaysOff: state => state.allDaysOff
 };
 
 const actions = {
@@ -27,12 +29,34 @@ const actions = {
     } catch (err) {
       console.error(err);
     }
+  },
+
+  async fetchAllDaysOff({ commit }) {
+    try {
+      await firebase.daysOffCollection.onSnapshot(snapshot => {
+        let allDaysOff = [];
+
+        snapshot.forEach(doc => {
+          let off = doc.data();
+          off.id = doc.id;
+
+          allDaysOff.push(off);
+        });
+
+        commit('setAllDaysOff', allDaysOff);
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 };
 
 const mutations = {
   setUserDaysOff: (state, daysOff) => {
     state.userDaysOff = daysOff;
+  },
+  setAllDaysOff: (state, allDaysOff) => {
+    state.allDaysOff = allDaysOff;
   }
 };
 

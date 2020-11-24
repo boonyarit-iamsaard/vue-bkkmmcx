@@ -7,7 +7,7 @@ const state = {
 };
 
 const getters = {
-  userProfile: state => state.userProfile,
+  getUserProfile: state => state.userProfile,
   getAllUsers: state => state.allUsers
 };
 
@@ -32,7 +32,6 @@ const actions = {
     try {
       await firebase.auth.signOut();
 
-      // Clear userProfile and redirect to /signIn
       commit('setUserProfile', {});
 
       await router.push({ name: 'Login' });

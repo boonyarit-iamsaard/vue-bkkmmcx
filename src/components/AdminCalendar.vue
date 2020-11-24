@@ -1,81 +1,78 @@
 <template>
-  <v-container>
-    <v-sheet tile height="64" class="d-flex">
-      <Spinner v-if="loading" />
-      <v-toolbar flat>
-        <v-toolbar-title>Admin's calendar</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <v-toolbar-title v-if="$refs.calendar">
-          {{ $refs.calendar.title }}
-        </v-toolbar-title>
-        <v-btn icon class="ma-2" @click="$refs.calendar.next()">
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-menu bottom right>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn outlined color="grey" v-bind="attrs" v-on="on">
-              {{ typeLabel[type] }}
-              <v-icon right>
-                mdi-menu-down
-              </v-icon>
-            </v-btn>
-          </template>
-          <v-list>
-            <v-list-item @click="type = 'week'">
-              <v-list-item-title>Week</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="type = 'month'">
-              <v-list-item-title>Month</v-list-item-title>
-            </v-list-item>
-          </v-list>
+  <v-row class="fill-height">
+    <v-col class="pt-0">
+      <v-sheet tile height="64" class="d-flex">
+        <Spinner v-if="loading" />
+        <v-toolbar flat>
+          <v-toolbar-title>Admin's calendar</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
+            <v-icon>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-toolbar-title v-if="$refs.calendar">
+            {{ $refs.calendar.title }}
+          </v-toolbar-title>
+          <v-btn icon class="ma-2" @click="$refs.calendar.next()">
+            <v-icon>mdi-chevron-right</v-icon>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-menu bottom right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn outlined color="grey" v-bind="attrs" v-on="on">
+                {{ typeLabel[type] }}
+                <v-icon right>
+                  mdi-menu-down
+                </v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="type = 'week'">
+                <v-list-item-title>Week</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = 'month'">
+                <v-list-item-title>Month</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-toolbar>
+      </v-sheet>
+      <v-sheet height="600">
+        <v-calendar
+          ref="calendar"
+          v-model="focus"
+          :type="type"
+          :show-month-on-first="showMonthOnFirst"
+          :events="events"
+          :event-color="getEventColor"
+          @click:more="viewMore"
+          @click:event="showEvent"
+        ></v-calendar>
+        <v-menu
+          v-model="selectedOpen"
+          :close-on-content-click="false"
+          :activator="selectedElement"
+          offset-x
+        >
+          <v-card min-width="300px" rounded="lg" flat>
+            <v-toolbar :color="selectedEvent.color" dark flat>
+              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon @click="selectedOpen = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text>
+              <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
+              <p><strong>End:</strong> {{ selectedEvent.end }}</p>
+              <p class="mb-0">
+                <strong>Days:</strong> {{ selectedEvent.days }}
+              </p>
+            </v-card-text>
+          </v-card>
         </v-menu>
-      </v-toolbar>
-    </v-sheet>
-    <v-sheet height="600">
-      <v-calendar
-        ref="calendar"
-        v-model="focus"
-        :type="type"
-        :show-month-on-first="showMonthOnFirst"
-        :events="events"
-        :event-color="getEventColor"
-        @click:more="viewMore"
-        @click:event="showEvent"
-      ></v-calendar>
-      <v-menu
-        v-model="selectedOpen"
-        :close-on-content-click="false"
-        :activator="selectedElement"
-        offset-x
-      >
-        <v-card min-width="300px" rounded="lg" flat>
-          <v-toolbar :color="selectedEvent.color" dark flat>
-            <!-- <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn> -->
-            <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="selectedOpen = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-toolbar>
-          <v-card-text>
-            <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
-            <p class="mb-0"><strong>End:</strong> {{ selectedEvent.end }}</p>
-          </v-card-text>
-          <!-- <v-card-actions>
-            <v-btn text color="secondary" @click="selectedOpen = false">
-              Cancel
-            </v-btn>
-          </v-card-actions> -->
-        </v-card>
-      </v-menu>
-    </v-sheet>
-  </v-container>
+      </v-sheet>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -127,6 +124,7 @@ export default {
               name: `${leave.phase} | ${user.firstName} : ${leave.priority}`,
               start: `${leave.startDate}`,
               end: `${leave.endDate}`,
+              days: `${leave.days}`,
               color: this.setEventColor(leave.priority)
             };
             events.push(event);

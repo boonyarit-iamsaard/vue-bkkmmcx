@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col md="10" class="text-center mx-auto">
+      <v-col lg="8" class="text-center mx-auto">
         <Details />
         <LeaveList />
       </v-col>

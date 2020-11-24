@@ -1,11 +1,10 @@
 <template>
-  <!-- <v-container> -->
   <v-row class="fill-height">
     <v-col class="pt-0">
       <v-sheet tile height="64" class="d-flex">
         <Spinner v-if="loading" />
         <v-toolbar flat>
-          <v-btn dark fab color="primary" to="/apply">
+          <v-btn dark fab small color="primary" to="/apply">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
@@ -58,9 +57,6 @@
         >
           <v-card min-width="300px" rounded="lg" flat>
             <v-toolbar :color="selectedEvent.color" dark flat>
-              <!-- <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn> -->
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon @click="selectedOpen = false">
@@ -71,17 +67,11 @@
               <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
               <p class="mb-0"><strong>End:</strong> {{ selectedEvent.end }}</p>
             </v-card-text>
-            <!-- <v-card-actions>
-              <v-btn text color="secondary" @click="selectedOpen = false">
-                Cancel
-              </v-btn>
-            </v-card-actions> -->
           </v-card>
         </v-menu>
       </v-sheet>
     </v-col>
   </v-row>
-  <!-- </v-container> -->
 </template>
 
 <script>
@@ -117,7 +107,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getLeaves', 'getUserDaysOff', 'getPublic', 'userProfile'])
+    ...mapGetters([
+      'getLeaves',
+      'getUserDaysOff',
+      'getPublic',
+      'getUserProfile'
+    ])
   },
   methods: {
     ...mapActions(['fetchLeaves', 'fetchUserDaysOff', 'fetchPublic']),
@@ -126,7 +121,7 @@ export default {
       // add leaves to events
       for (let leave of this.getLeaves) {
         let event = {
-          name: `${leave.phase} | ${this.userProfile.firstName} : ${leave.priority}`,
+          name: `${leave.phase} | ${this.getUserProfile.firstName} : ${leave.priority}`,
           start: `${leave.startDate}`,
           end: `${leave.endDate}`,
           color: this.setEventColor(leave.priority)

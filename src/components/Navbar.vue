@@ -18,7 +18,10 @@
             </v-list-item-icon>
             <v-list-item-title>Apply Leave</v-list-item-title>
           </v-list-item>
-          <v-list-item to="/profile" v-if="showNav">
+          <v-list-item
+            :to="{ name: 'Profile', params: { id: getUserProfile.id } }"
+            v-if="showNav"
+          >
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
@@ -65,7 +68,13 @@
         </v-tooltip>
         <v-tooltip bottom v-if="showNav">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn dark text v-bind="attrs" v-on="on" to="/profile">
+            <v-btn
+              dark
+              text
+              v-bind="attrs"
+              v-on="on"
+              :to="{ name: 'Profile', params: { id: getUserProfile.id } }"
+            >
               <v-icon>
                 mdi-account
               </v-icon>
@@ -105,7 +114,8 @@ export default {
   data() {
     return {
       drawer: false,
-      group: null
+      group: null,
+      public: null
     };
   },
   methods: {
@@ -115,19 +125,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userProfile']),
+    ...mapGetters(['getUserProfile']),
     showNav() {
-      return Object.keys(this.userProfile).length > 1;
+      return Object.keys(this.getUserProfile).length > 1;
     },
     isAdmin() {
-      return this.userProfile.isAdmin;
+      return this.getUserProfile.isAdmin;
     },
     getFullName() {
-      return `${this.userProfile.firstName} ${this.userProfile.lastName}`;
+      return `${this.getUserProfile.firstName} ${this.getUserProfile.lastName}`;
     }
-  },
-
-  created() {}
+  }
 };
 </script>
 

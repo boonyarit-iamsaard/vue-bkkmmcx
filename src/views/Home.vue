@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-toolbar flat v-if="isAdmin">
+    <v-toolbar flat v-if="isAdmin" height="64">
       <v-spacer></v-spacer>
-      <v-switch inset v-model="switchCalendar"></v-switch>
+      <v-switch inset v-model="switchCalendar" class="mt-4"></v-switch>
     </v-toolbar>
     <UserCalendar v-if="!switchCalendar" />
     <AdminCalendar v-if="switchCalendar" />
@@ -28,7 +28,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userProfile'])
+    ...mapGetters(['getUserProfile'])
   },
   methods: {
     ...mapActions(['fetchUserProfile'])
@@ -37,7 +37,7 @@ export default {
     this.fetchUserProfile(auth.currentUser);
   },
   beforeMount() {
-    this.isAdmin = this.userProfile.isAdmin;
+    this.isAdmin = this.getUserProfile.isAdmin;
   }
 };
 </script>
