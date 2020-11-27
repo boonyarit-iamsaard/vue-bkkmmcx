@@ -15,7 +15,8 @@ const actions = {
     try {
       await firebase.daysOffCollection
         .where('userId', '==', firebase.auth.currentUser.uid)
-        .onSnapshot(snapshot => {
+        .get()
+        .then(snapshot => {
           let daysOff = [];
 
           snapshot.forEach(doc => {
@@ -33,7 +34,7 @@ const actions = {
 
   async fetchAllDaysOff({ commit }) {
     try {
-      await firebase.daysOffCollection.onSnapshot(snapshot => {
+      await firebase.daysOffCollection.get().then(snapshot => {
         let allDaysOff = [];
 
         snapshot.forEach(doc => {

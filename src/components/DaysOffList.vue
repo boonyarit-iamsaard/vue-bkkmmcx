@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'DaysOffList',
   props: ['userId'],
@@ -36,11 +36,17 @@ export default {
       ]
     };
   },
+  methods: {
+    ...mapActions(['fetchAllDaysOff'])
+  },
   computed: {
     ...mapGetters(['getAllDaysOff']),
     setDaysOff() {
       return this.getAllDaysOff.filter(off => off.userId === this.userId);
     }
+  },
+  created() {
+    this.fetchAllDaysOff();
   }
 };
 </script>

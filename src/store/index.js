@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 
 import users from './modules/users';
 import leaves from './modules/leaves';
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   state: {},
   actions: {},
   mutations: {},
+  plugins: [createPersistedState({ storage: window.sessionStorage })],
   modules: {
     users,
     leaves,

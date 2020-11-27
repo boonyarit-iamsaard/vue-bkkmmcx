@@ -184,6 +184,9 @@ export default {
 
       this.loading = false;
     }
+  },
+  created() {
+    this.fetchAllLeaves();
   }
 };
 </script>

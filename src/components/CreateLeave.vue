@@ -140,7 +140,7 @@ export default {
     min: null
   }),
   methods: {
-    ...mapActions(['createLeave', 'updatePriorityQuota']),
+    ...mapActions(['createLeave', 'updatePriorityQuota', 'fetchLeaves']),
 
     changeEndDate() {
       return (this.endDate = this.startDate);
@@ -235,7 +235,9 @@ export default {
     }
   },
 
-  created() {},
+  created() {
+    this.fetchLeaves();
+  },
   mounted() {
     this.disabledPriority();
     this.max = this.maxDate();

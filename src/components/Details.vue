@@ -112,7 +112,7 @@
       </v-card>
     </v-dialog>
     <v-dialog v-model="daysOffDialog" width="600">
-      <DaysOffList :userId="userId" />
+      <DaysOffList :userId="this.$route.params.id" />
     </v-dialog>
   </v-container>
 </template>
@@ -128,13 +128,17 @@ export default {
   },
   data() {
     return {
-      userId: this.$route.params.id,
+      // userId: this.$route.params.id,
       valid: true,
       giftDialog: false,
       giftDialogItem: null,
       gift: null,
       daysOffDialog: false
     };
+  },
+  created() {
+    this.fetchAllLeaves();
+    this.fetchAllUsers();
   },
   mounted() {
     this.leaveUsed();
@@ -184,7 +188,7 @@ export default {
   computed: {
     ...mapGetters(['getAllUsers', 'getAllLeaves', 'getUserProfile']),
     profile() {
-      return this.getAllUsers.find(user => user.id === this.userId);
+      return this.getAllUsers.find(user => user.id === this.$route.params.id);
     },
     isAdmin() {
       return this.getUserProfile.isAdmin;
@@ -223,12 +227,6 @@ export default {
         { title: 'ANL-3', value: this.priorityRemains() }
       ];
     }
-    // getFullName() {
-    //   return `${this.profile.firstName} ${this.profile.lastName.slice(0, 1)}.`;
-    // }
   }
-  // watch: {
-  //   $route: 'profile'
-  // }
 };
 </script>

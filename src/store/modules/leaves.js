@@ -13,7 +13,7 @@ const getters = {
 const actions = {
   async fetchAllLeaves({ commit }) {
     try {
-      await firebase.leavesCollection.onSnapshot(snapshot => {
+      await firebase.leavesCollection.get().then(snapshot => {
         let allLeaves = [];
 
         snapshot.forEach(doc => {
@@ -33,10 +33,11 @@ const actions = {
     try {
       await firebase.leavesCollection
         .where('userId', '==', firebase.auth.currentUser.uid)
-        .onSnapshot(snapshot => {
+        .get()
+        .then(result => {
           let leaves = [];
 
-          snapshot.forEach(doc => {
+          result.forEach(doc => {
             let leave = doc.data();
             leave.id = doc.id;
 

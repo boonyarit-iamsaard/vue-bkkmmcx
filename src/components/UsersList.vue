@@ -5,7 +5,7 @@
       :items="items"
       :items-per-page="10"
       :search="search"
-      :sort-by="['sortIndex', 'firstName', 'lastName']"
+      :sort-by="['sortIndex', 'name']"
       class="elevation-2"
     >
       <template v-slot:top>

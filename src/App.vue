@@ -21,22 +21,6 @@ export default {
       unsubscribe: null,
       loading: true
     };
-  },
-  created() {
-    // this.unsubscribe = auth.onAuthStateChanged(user => {
-    //   if (user) {
-    //     this.$store.dispatch('fetchUserProfile', user);
-    //     this.$store.dispatch('fetchAllUsers');
-    //     this.$store.dispatch('fetchAllLeaves');
-    //     this.$store.dispatch('fetchUserDaysOff');
-    //     this.$store.dispatch('fetchPublic');
-    //     this.$store.dispatch('fetchLeaves');
-    //     this.$store.dispatch('fetchAllDaysOff');
-    //   }
-    // });
-  },
-  beforeDestroy() {
-    // this.unsubscribe();
   }
 };
 </script>
