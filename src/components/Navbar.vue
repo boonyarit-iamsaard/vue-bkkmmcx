@@ -133,7 +133,9 @@ export default {
       return this.getUserProfile.isAdmin;
     },
     getFullName() {
-      return `${this.getUserProfile.firstName} ${this.getUserProfile.lastName}`;
+      return `${
+        this.getUserProfile.firstName
+      } ${this.getUserProfile.lastName.slice(0, 1)}.`;
     }
   }
 };

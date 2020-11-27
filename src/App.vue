@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { auth } from '@/plugins/firebase';
+// import { auth } from '@/plugins/firebase';
 import Navbar from '@/components/Navbar.vue';
 
 export default {
@@ -23,20 +23,20 @@ export default {
     };
   },
   created() {
-    this.unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        this.$store.dispatch('fetchAllUsers');
-        this.$store.dispatch('fetchAllLeaves');
-        this.$store.dispatch('fetchUserProfile', user);
-        this.$store.dispatch('fetchLeaves');
-        this.$store.dispatch('fetchUserDaysOff');
-        this.$store.dispatch('fetchAllDaysOff');
-        this.$store.dispatch('fetchPublic');
-      }
-    });
+    // this.unsubscribe = auth.onAuthStateChanged(user => {
+    //   if (user) {
+    //     this.$store.dispatch('fetchUserProfile', user);
+    //     this.$store.dispatch('fetchAllUsers');
+    //     this.$store.dispatch('fetchAllLeaves');
+    //     this.$store.dispatch('fetchUserDaysOff');
+    //     this.$store.dispatch('fetchPublic');
+    //     this.$store.dispatch('fetchLeaves');
+    //     this.$store.dispatch('fetchAllDaysOff');
+    //   }
+    // });
   },
   beforeDestroy() {
-    this.unsubscribe();
+    // this.unsubscribe();
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col md="6" lg="4" class="mx-auto">
+      <v-col sm="8" md="6" lg="4" class="mx-auto">
         <v-alert
           text
           outlined
@@ -253,31 +253,6 @@ export default {
 
   watch: {
     leaves: 'disabledPriority'
-  },
-
-  filters: {
-    dateFormat(value) {
-      const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'Jun',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-      ];
-      let d = new Date(value);
-      let year = d.getFullYear();
-      let month = d.getMonth();
-      let date = d.getDate();
-
-      return `${date} ${months[month].substr(0, 3)} ${year}`;
-    }
   }
 };
 </script>

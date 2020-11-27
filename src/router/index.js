@@ -6,7 +6,7 @@ import ApplyLeave from '@/views/ApplyLeave';
 import EditLeave from '@/views/EditLeave';
 import Login from '@/views/Login';
 import Admin from '@/views/Admin';
-import Register from '@/views/Register';
+// import Register from '@/views/Register';
 import { auth } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
@@ -55,7 +55,7 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: Register,
+    component: () => import('../views/Register.vue'),
     meta: {
       requiresAuth: true
     }
