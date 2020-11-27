@@ -42,7 +42,7 @@
           v-model="focus"
           :type="type"
           :show-month-on-first="showMonthOnFirst"
-          :events="events"
+          :events="addEvents"
           :event-color="getEventColor"
           @click:more="viewMore"
           @click:event="showEvent"
@@ -97,7 +97,6 @@ export default {
         week: 'Week'
       },
       focus: this.$route.params.focus || '2020-12-01',
-      events: [],
       eventColor: [
         'secondary',
         'accent',
@@ -108,11 +107,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getPublic', 'getAllUsers', 'getAllLeaves'])
-  },
-  methods: {
-    ...mapActions(['fetchAllLeaves', 'fetchAllUsers', 'fetchPublic']),
-
+    ...mapGetters(['getPublic', 'getAllUsers', 'getAllLeaves']),
     addEvents() {
       let events = [];
 
@@ -144,7 +139,11 @@ export default {
       }
 
       return events;
-    },
+    }
+  },
+  methods: {
+    ...mapActions(['fetchAllLeaves', 'fetchAllUsers', 'fetchPublic']),
+
     viewMore({ date }) {
       this.focus = date;
       this.type = 'week';
@@ -191,9 +190,9 @@ export default {
     this.fetchPublic();
   },
 
-  beforeMount() {
-    this.events = this.addEvents();
-  },
+  // beforeMount() {
+  //   this.events = this.addEvents();
+  // },
 
   mounted() {
     this.$refs.calendar.move();

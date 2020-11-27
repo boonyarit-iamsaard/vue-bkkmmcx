@@ -8,7 +8,8 @@
               class="display-1 d-inline-block text-truncate"
               style="max-width: 400px"
             >
-              {{ getFullName() }}
+              {{ profile.firstName }} {{ profile.lastName.slice(0, 1) }}.
+              <!-- {{ getFullName }} -->
             </h1>
           </v-card-title>
           <v-card-subtitle class="pb-0 pt-4">
@@ -19,7 +20,7 @@
           <v-card-text>
             <v-row>
               <v-col
-                v-for="(item, index) in this.profileDetails"
+                v-for="(item, index) in this.setProfileDetails"
                 :key="index"
                 class="py-0"
               >
@@ -41,7 +42,7 @@
               <v-card-text>
                 <v-row>
                   <v-col
-                    v-for="(item, index) in this.prioritySummary"
+                    v-for="(item, index) in this.setPrioritySummary"
                     :key="index"
                     class="py-0"
                   >
@@ -92,7 +93,10 @@
     </v-row>
     <v-dialog v-model="giftDialog" width="400">
       <v-card>
-        <v-card-title>{{ getFullName() }}</v-card-title>
+        <v-card-title
+          >{{ profile.firstName }}
+          {{ profile.lastName.slice(0, 1) }}.</v-card-title
+        >
         <v-card-text>
           <v-form @submit.prevent="addGift">
             <v-text-field
@@ -129,21 +133,11 @@ export default {
       giftDialog: false,
       giftDialogItem: null,
       gift: null,
-      daysOffDialog: false,
-      profileDetails: [],
-      prioritySummary: []
+      daysOffDialog: false
     };
-  },
-  created() {
-    this.profileDetails = this.setProfileDetails();
-    this.prioritySummary = this.setPrioritySummary();
   },
   mounted() {
     this.leaveUsed();
-  },
-  beforeUpdate() {
-    this.profileDetails = this.setProfileDetails();
-    this.prioritySummary = this.setPrioritySummary();
   },
   methods: {
     ...mapActions([
@@ -166,14 +160,41 @@ export default {
         console.log('TYC added');
       });
     },
-
-    setPrioritySummary() {
-      return [
-        { title: 'TYC', value: this.profile.tyc },
-        { title: 'ANL-1', value: this.profile.anl1 },
-        { title: 'ANL-2', value: this.profile.anl2 },
-        { title: 'ANL-3', value: this.priorityRemains() }
-      ];
+    priorityRemains() {
+      return this.profile.entitled - this.leaveUsed();
+    },
+    leaveUsed() {
+      let leave = this.getAllLeaves.filter(
+        leave => leave.priority !== 'H' && leave.userId === this.profile.id
+      );
+      return leave.reduce((a, b) => a + b.days, 0);
+    },
+    percentUsed() {
+      let percent = (this.leaveUsed() / this.profile.entitled) * 100;
+      return percent.toFixed(1);
+    },
+    leaveRemains() {
+      return this.profile.entitled - this.leaveUsed();
+    },
+    percentRemains() {
+      let percent = (this.leaveRemains() / this.profile.entitled) * 100;
+      return percent.toFixed(1);
+    }
+  },
+  computed: {
+    ...mapGetters(['getAllUsers', 'getAllLeaves', 'getUserProfile']),
+    profile() {
+      return this.getAllUsers.find(user => user.id === this.userId);
+    },
+    isAdmin() {
+      return this.getUserProfile.isAdmin;
+    },
+    isSuperUser() {
+      let superUser = false;
+      if (this.getUserProfile.firstName === 'Boonyarit') {
+        superUser = true;
+      }
+      return superUser;
     },
     setProfileDetails() {
       return [
@@ -194,45 +215,20 @@ export default {
         }
       ];
     },
-    priorityRemains() {
-      return this.profile.entitled - this.leaveUsed();
-    },
-    leaveUsed() {
-      let leave = this.getAllLeaves.filter(
-        leave => leave.priority !== 'H' && leave.userId === this.profile.id
-      );
-      return leave.reduce((a, b) => a + b.days, 0);
-    },
-    percentUsed() {
-      let percent = (this.leaveUsed() / this.profile.entitled) * 100;
-      return percent.toFixed(1);
-    },
-    leaveRemains() {
-      return this.profile.entitled - this.leaveUsed();
-    },
-    percentRemains() {
-      let percent = (this.leaveRemains() / this.profile.entitled) * 100;
-      return percent.toFixed(1);
-    },
-    getFullName() {
-      return `${this.profile.firstName} ${this.profile.lastName.slice(0, 1)}.`;
+    setPrioritySummary() {
+      return [
+        { title: 'TYC', value: this.profile.tyc },
+        { title: 'ANL-1', value: this.profile.anl1 },
+        { title: 'ANL-2', value: this.profile.anl2 },
+        { title: 'ANL-3', value: this.priorityRemains() }
+      ];
     }
-  },
-  computed: {
-    ...mapGetters(['getAllUsers', 'getAllLeaves', 'getUserProfile']),
-    profile() {
-      return this.getAllUsers.find(user => user.id === this.userId);
-    },
-    isAdmin() {
-      return this.getUserProfile.isAdmin;
-    },
-    isSuperUser() {
-      let superUser = false;
-      if (this.getUserProfile.firstName === 'Boonyarit') {
-        superUser = true;
-      }
-      return superUser;
-    }
+    // getFullName() {
+    //   return `${this.profile.firstName} ${this.profile.lastName.slice(0, 1)}.`;
+    // }
   }
+  // watch: {
+  //   $route: 'profile'
+  // }
 };
 </script>
