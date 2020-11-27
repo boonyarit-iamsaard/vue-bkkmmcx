@@ -23,12 +23,14 @@ export default {
   },
   data() {
     return {
-      switchCalendar: false,
-      isAdmin: null
+      switchCalendar: false
     };
   },
   computed: {
-    ...mapGetters(['getUserProfile'])
+    ...mapGetters(['getUserProfile']),
+    isAdmin() {
+      return this.getUserProfile.isAdmin;
+    }
   },
   methods: {
     ...mapActions(['fetchUserProfile'])
@@ -36,9 +38,7 @@ export default {
   created() {
     this.fetchUserProfile(auth.currentUser);
   },
-  beforeMount() {
-    this.isAdmin = this.getUserProfile.isAdmin;
-  }
+  beforeMount() {}
 };
 </script>
 

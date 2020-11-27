@@ -13,7 +13,7 @@
           </v-card-title>
           <v-card-subtitle class="pb-0 pt-4">
             <p class="subtitle-1">{{ profile.position }}</p>
-            <p class="subtitle-1">{{ profile.ern }}</p>
+            <!-- <p class="subtitle-1">{{ profile.ern }}</p> -->
           </v-card-subtitle>
           <v-divider class="mx-4"></v-divider>
           <v-card-text>
@@ -215,7 +215,7 @@ export default {
       return percent.toFixed(1);
     },
     getFullName() {
-      return `${this.profile.firstName} ${this.profile.lastName}`;
+      return `${this.profile.firstName} ${this.profile.lastName.slice(0, 1)}.`;
     }
   },
   computed: {
