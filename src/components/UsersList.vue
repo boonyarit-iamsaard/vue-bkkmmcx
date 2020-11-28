@@ -73,7 +73,6 @@ export default {
       headers: [
         { text: 'Position', value: 'position', align: 'left' },
         { text: 'Name', value: 'name', align: 'left' },
-        // { text: 'Lastname', value: 'lastName', align: 'left' },
         { text: 'Entitled', value: 'entitled', align: 'left' },
         { text: 'Used', value: 'used', align: 'left' },
         { text: 'Used (%)', value: 'usedPercent', align: 'left' },
@@ -135,36 +134,6 @@ export default {
       }
     },
 
-    // setItems() {
-    //   let items = [];
-    //   this.getAllUsers.forEach(user => {
-    //     let leavePerUser = [];
-    //     let anlUsed = [];
-    //     this.getAllLeaves.forEach(leave => {
-    //       if (leave.userId === user.id) {
-    //         leavePerUser.push(leave);
-    //       }
-    //       if (leave.userId === user.id && leave.priority !== 'H') {
-    //         anlUsed.push(leave);
-    //       }
-    //     });
-    //     let used = this.leaveUsed(anlUsed);
-    //     let usedPercent = (used / user.entitled) * 100;
-    //     items.push({
-    //       id: user.id,
-    //       sortIndex: user.sortIndex,
-    //       position: user.position,
-    //       name: `${user.firstName} ${user.lastName.slice(0, 1)}.`,
-    //       lastName: user.lastName,
-    //       entitled: user.entitled.toFixed(1),
-    //       leavePerUser: leavePerUser,
-    //       used: used,
-    //       usedPercent: usedPercent.toFixed(1) + ' %'
-    //     });
-    //   });
-    //   return items;
-    // },
-
     leaveUsed(leavePerUser) {
       return leavePerUser.reduce((a, b) => a + b.days, 0);
     },
@@ -179,14 +148,9 @@ export default {
     this.fetchAllLeaves();
   },
 
-  beforeMount() {
-    // this.items = this.setItems();
-  },
-
   beforeUpdate() {
     this.fetchAllLeaves();
     this.fetchAllUsers();
-    // this.items = this.setItems();
   }
 };
 </script>
