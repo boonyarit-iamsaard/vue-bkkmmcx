@@ -2,7 +2,7 @@
   <v-container>
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="setItems"
       :items-per-page="10"
       :search="search"
       :sort-by="['sortIndex', 'name']"
@@ -85,27 +85,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getAllUsers', 'getAllLeaves'])
-  },
-  methods: {
-    ...mapActions([
-      'fetchAllUsers',
-      'fetchAllLeaves',
-      'deleteLeave',
-      'updatePriorityQuota'
-    ]),
-
-    getColor(used, entitled) {
-      let result = (used / entitled) * 100;
-      if (result >= 50) {
-        return 'primary';
-      } else if (result > 0) {
-        return 'accent';
-      } else {
-        return 'secondary';
-      }
-    },
-
+    ...mapGetters(['getAllUsers', 'getAllLeaves']),
     setItems() {
       let items = [];
       this.getAllUsers.forEach(user => {
@@ -134,7 +114,56 @@ export default {
         });
       });
       return items;
+    }
+  },
+  methods: {
+    ...mapActions([
+      'fetchAllUsers',
+      'fetchAllLeaves',
+      'deleteLeave',
+      'updatePriorityQuota'
+    ]),
+
+    getColor(used, entitled) {
+      let result = (used / entitled) * 100;
+      if (result >= 50) {
+        return 'primary';
+      } else if (result > 0) {
+        return 'accent';
+      } else {
+        return 'secondary';
+      }
     },
+
+    // setItems() {
+    //   let items = [];
+    //   this.getAllUsers.forEach(user => {
+    //     let leavePerUser = [];
+    //     let anlUsed = [];
+    //     this.getAllLeaves.forEach(leave => {
+    //       if (leave.userId === user.id) {
+    //         leavePerUser.push(leave);
+    //       }
+    //       if (leave.userId === user.id && leave.priority !== 'H') {
+    //         anlUsed.push(leave);
+    //       }
+    //     });
+    //     let used = this.leaveUsed(anlUsed);
+    //     let usedPercent = (used / user.entitled) * 100;
+    //     items.push({
+    //       id: user.id,
+    //       sortIndex: user.sortIndex,
+    //       position: user.position,
+    //       name: `${user.firstName} ${user.lastName.slice(0, 1)}.`,
+    //       lastName: user.lastName,
+    //       entitled: user.entitled.toFixed(1),
+    //       leavePerUser: leavePerUser,
+    //       used: used,
+    //       usedPercent: usedPercent.toFixed(1) + ' %'
+    //     });
+    //   });
+    //   return items;
+    // },
 
     leaveUsed(leavePerUser) {
       return leavePerUser.reduce((a, b) => a + b.days, 0);
@@ -151,13 +180,13 @@ export default {
   },
 
   beforeMount() {
-    this.items = this.setItems();
+    // this.items = this.setItems();
   },
 
   beforeUpdate() {
     this.fetchAllLeaves();
     this.fetchAllUsers();
-    this.items = this.setItems();
+    // this.items = this.setItems();
   }
 };
 </script>
