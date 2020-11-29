@@ -12,9 +12,10 @@ const getters = {
 
 const actions = {
   async fetchUserDaysOff({ commit }, payload) {
+    let id = payload || firebase.auth.currentUser.uid;
     try {
       await firebase.daysOffCollection
-        .where('userId', '==', payload)
+        .where('userId', '==', id)
         .get()
         .then(snapshot => {
           let daysOff = [];

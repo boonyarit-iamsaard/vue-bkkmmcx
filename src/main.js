@@ -26,9 +26,9 @@ auth.onAuthStateChanged(user => {
 
   if (user) {
     store.dispatch('fetchUserProfile', user);
+    store.dispatch('fetchUserDaysOff');
     // store.dispatch('fetchAllUsers');
     // store.dispatch('fetchAllLeaves');
-    // store.dispatch('fetchUserDaysOff');
     // store.dispatch('fetchPublic');
     // store.dispatch('fetchLeaves');
     // store.dispatch('fetchAllDaysOff');
