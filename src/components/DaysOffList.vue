@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    :items="setDaysOff"
+    :items="getUserDaysOff"
     :sort-by="['startDate']"
     :headers="headers"
     class="elevation-2 rounded-lg mb-0"
@@ -37,16 +37,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchAllDaysOff'])
+    ...mapActions(['fetchUserDaysOff'])
   },
   computed: {
-    ...mapGetters(['getAllDaysOff']),
-    setDaysOff() {
-      return this.getAllDaysOff.filter(off => off.userId === this.userId);
-    }
+    ...mapGetters(['getUserDaysOff'])
   },
   created() {
-    this.fetchAllDaysOff();
+    this.fetchUserDaysOff(this.userId);
   }
 };
 </script>

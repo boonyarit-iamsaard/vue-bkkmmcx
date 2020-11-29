@@ -3,10 +3,8 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import Profile from '@/views/Profile';
 import ApplyLeave from '@/views/ApplyLeave';
-import EditLeave from '@/views/EditLeave';
+// import EditLeave from '@/views/EditLeave';
 import Login from '@/views/Login';
-import Admin from '@/views/Admin';
-// import Register from '@/views/Register';
 import { auth } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
@@ -29,15 +27,15 @@ const routes = [
       requiresAuth: true
     }
   },
-  {
-    path: '/edit',
-    name: 'EditLeave',
-    component: EditLeave,
-    props: true,
-    meta: {
-      requiresAuth: true
-    }
-  },
+  // {
+  //   path: '/edit',
+  //   name: 'EditLeave',
+  //   component: EditLeave,
+  //   props: true,
+  //   meta: {
+  //     requiresAuth: true
+  //   }
+  // },
   {
     path: '/profile/:id',
     name: 'Profile',
@@ -63,16 +61,7 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    component: Admin,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: () => import('../views/Admin.vue'),
     meta: {
       requiresAuth: true
     }

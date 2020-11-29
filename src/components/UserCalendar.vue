@@ -195,7 +195,7 @@ export default {
   },
   created() {
     this.fetchLeaves();
-    this.fetchUserDaysOff();
+    this.fetchUserDaysOff(this.getUserProfile.id);
     this.fetchPublic();
   },
   mounted() {
