@@ -7,12 +7,6 @@ import store from './store';
 
 Vue.config.productionTip = false;
 
-// new Vue({
-//   store,
-//   router,
-//   vuetify,
-//   render: h => h(App)
-// }).$mount('#app');
 let app;
 auth.onAuthStateChanged(user => {
   if (!app) {
@@ -27,10 +21,5 @@ auth.onAuthStateChanged(user => {
   if (user) {
     store.dispatch('fetchUserProfile', user);
     store.dispatch('fetchUserDaysOff');
-    // store.dispatch('fetchAllUsers');
-    // store.dispatch('fetchAllLeaves');
-    // store.dispatch('fetchPublic');
-    // store.dispatch('fetchLeaves');
-    // store.dispatch('fetchAllDaysOff');
   }
 });
