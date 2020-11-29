@@ -85,7 +85,7 @@
               </v-col>
               <v-col cols="12">
                 <v-select
-                  :items="priorityItems"
+                  :items="disabledPriority"
                   :rules="priorityRules"
                   v-model="priority"
                   label="Priority"
@@ -124,13 +124,6 @@ export default {
     loading: false,
     valid: true,
     priorityRules: [v => v.length > 0 || 'Priority is required.'],
-    priorityItems: [
-      { text: 'TYC', disabled: false },
-      { text: 'ANL-1', disabled: false },
-      { text: 'ANL-2', disabled: false },
-      { text: 'ANL-3', disabled: false },
-      { text: 'H', disabled: false }
-    ],
     startDate: new Date('2021-01-01').toISOString().substr(0, 10),
     endDate: new Date('2021-01-01').toISOString().substr(0, 10),
     priority: '',
@@ -209,27 +202,6 @@ export default {
       return Math.round(days);
     },
 
-    disabledPriority() {
-      if (this.getLeaves.length > 0) {
-        if (
-          // this.getLeaves.filter(leave => leave.priority === 'TYC').length > 0 ||
-          this.getUserProfile.tyc === 0
-        ) {
-          this.priorityItems[0].disabled = true;
-        }
-        if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
-        ) {
-          this.priorityItems[1].disabled = true;
-        }
-        if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
-        ) {
-          this.priorityItems[2].disabled = true;
-        }
-      }
-    },
-
     validate() {
       this.$refs.form.validate();
     }
@@ -239,7 +211,6 @@ export default {
     this.fetchLeaves();
   },
   mounted() {
-    this.disabledPriority();
     this.max = this.maxDate();
     this.min = this.minDate();
   },
@@ -250,11 +221,33 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getLeaves', 'getUserProfile'])
-  },
+    ...mapGetters(['getLeaves', 'getUserProfile']),
 
-  watch: {
-    leaves: 'disabledPriority'
+    disabledPriority() {
+      let priorityItems = [
+        { text: 'TYC', disabled: false },
+        { text: 'ANL-1', disabled: false },
+        { text: 'ANL-2', disabled: false },
+        { text: 'ANL-3', disabled: false },
+        { text: 'H', disabled: false }
+      ];
+
+      if (this.getUserProfile.tyc === 0) {
+        priorityItems[0].disabled = true;
+      }
+      if (
+        this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
+      ) {
+        priorityItems[1].disabled = true;
+      }
+      if (
+        this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
+      ) {
+        priorityItems[2].disabled = true;
+      }
+
+      return priorityItems;
+    }
   }
 };
 </script>
