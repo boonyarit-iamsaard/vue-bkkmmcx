@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import Profile from '@/views/Profile';
 import ApplyLeave from '@/views/ApplyLeave';
-// import EditLeave from '@/views/EditLeave';
 import Login from '@/views/Login';
 import { auth } from '@/plugins/firebase';
 
@@ -27,15 +26,6 @@ const routes = [
       requiresAuth: true
     }
   },
-  // {
-  //   path: '/edit',
-  //   name: 'EditLeave',
-  //   component: EditLeave,
-  //   props: true,
-  //   meta: {
-  //     requiresAuth: true
-  //   }
-  // },
   {
     path: '/profile/:id',
     name: 'Profile',
@@ -79,9 +69,6 @@ router.beforeEach((to, form, next) => {
     if (!auth.currentUser) {
       next({
         path: '/login'
-        // query: {
-        //   redirect: to.fullPath
-        // }
       });
     } else {
       next();
@@ -90,14 +77,5 @@ router.beforeEach((to, form, next) => {
     next();
   }
 });
-// router.beforeEach((to, from, next) => {
-//   const requiresAuth = to.matched.some(route => route.meta.requiresAuth);
-
-//   if (requiresAuth && !auth.currentUser) {
-//     next({ name: 'Login' });
-//   } else {
-//     next();
-//   }
-// });
 
 export default router;
