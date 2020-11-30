@@ -183,12 +183,19 @@ export default {
     percentRemains() {
       let percent = (this.leaveRemains() / this.profile.entitled) * 100;
       return percent.toFixed(1);
+    },
+    setProfile() {
+      return this.getAllUsers.find(user => user.id === this.$route.params.id);
     }
   },
   computed: {
     ...mapGetters(['getAllUsers', 'getAllLeaves', 'getUserProfile']),
     profile() {
-      return this.getAllUsers.find(user => user.id === this.$route.params.id);
+      if (this.getUserProfile.id === this.$route.params.id) {
+        return this.getUserProfile;
+      } else {
+        return this.getAllUsers.find(user => user.id === this.$route.params.id);
+      }
     },
     isAdmin() {
       return this.getUserProfile.isAdmin;

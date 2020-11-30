@@ -159,14 +159,13 @@ export default {
 
         if (this.priority === 'ANL-1') {
           anl1 = 1;
-        } else if (this.priority === 'ANL-2') {
+        }
+        if (this.priority === 'ANL-2') {
           anl2 = 1;
-        } else if (this.priority === 'TYC') {
+        }
+        if (this.priority === 'TYC') {
           tyc = 1;
         }
-
-        const targetMonth = new Date(`${this.startDate}`);
-        targetMonth.setMonth(targetMonth.getMonth() - 1);
 
         try {
           await this.updatePriorityQuota({
@@ -187,6 +186,9 @@ export default {
           priority: this.priority,
           status: 'Pending'
         });
+
+        const targetMonth = new Date(`${this.startDate}`);
+        targetMonth.setMonth(targetMonth.getMonth() - 1);
 
         await this.$router.push({
           name: 'Home',

@@ -10,7 +10,14 @@
     >
       <template v-slot:top>
         <v-toolbar flat class="rounded-t-lg">
-          <v-btn dark small fab color="primary" to="/apply" v-if="!isAdmin">
+          <v-btn
+            dark
+            small
+            fab
+            color="primary"
+            to="/apply"
+            v-if="isCurrentUser"
+          >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
@@ -118,6 +125,13 @@ export default {
     },
     isAdmin() {
       return this.getUserProfile.isAdmin;
+    },
+    isCurrentUser() {
+      if (this.getUserProfile.id === this.$route.params.id) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   methods: {
