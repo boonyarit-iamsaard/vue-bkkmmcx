@@ -120,20 +120,20 @@ const actions = {
 
   async updatePriorityQuota({ state, dispatch }, payload) {
     let targetUser = state.allUsers.find(user => user.id === payload.userId);
-    let anl1 = targetUser.anl1;
-    let anl2 = targetUser.anl2;
+    // let anl1 = targetUser.anl1;
+    // let anl2 = targetUser.anl2;
     let tyc = targetUser.tyc;
 
-    anl1 -= payload.anl1;
-    anl2 -= payload.anl2;
+    // anl1 -= payload.anl1;
+    // anl2 -= payload.anl2;
     tyc -= payload.tyc;
 
     try {
       await firebase.usersCollection
         .doc(targetUser.id)
         .update({
-          anl1: anl1,
-          anl2: anl2,
+          // anl1: anl1,
+          // anl2: anl2,
           tyc: tyc
         })
         .then(() => {

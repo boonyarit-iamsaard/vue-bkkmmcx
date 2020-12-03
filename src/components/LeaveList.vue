@@ -147,7 +147,7 @@ export default {
     },
     editItem(item) {
       this.editDialog = true;
-      this.editDialogItem = item;
+      this.editDialogItem = Object.assign({}, item);
     },
     deleteItem(item) {
       this.deleteDialog = true;
@@ -165,27 +165,27 @@ export default {
       this.loading = true;
       this.deleteDialog = false;
 
-      let anl1 = 0;
-      let anl2 = 0;
-      let tyc = 0;
-      if (this.deleteDialogItem.priority === 'ANL-1') {
-        anl1 = -1;
-      } else if (this.deleteDialogItem.priority === 'ANL-2') {
-        anl2 = -1;
-      } else if (this.deleteDialogItem.priority === 'TYC') {
-        tyc = -1;
-      }
+      // let anl1 = 0;
+      // let anl2 = 0;
+      // let tyc = 0;
+      // if (this.deleteDialogItem.priority === 'ANL-1') {
+      //   anl1 = -1;
+      // } else if (this.deleteDialogItem.priority === 'ANL-2') {
+      //   anl2 = -1;
+      // } else if (this.deleteDialogItem.priority === 'TYC') {
+      //   tyc = -1;
+      // }
 
-      try {
-        await this.updatePriorityQuota({
-          userId: this.deleteDialogItem.userId,
-          anl1: anl1,
-          anl2: anl2,
-          tyc: tyc
-        });
-      } catch (error) {
-        console.log(error.message);
-      }
+      // try {
+      //   await this.updatePriorityQuota({
+      //     userId: this.deleteDialogItem.userId,
+      //     anl1: anl1,
+      //     anl2: anl2,
+      //     tyc: tyc
+      //   });
+      // } catch (error) {
+      //   console.log(error.message);
+      // }
 
       try {
         await this.deleteLeave(this.deleteDialogItem.id).then(() => {

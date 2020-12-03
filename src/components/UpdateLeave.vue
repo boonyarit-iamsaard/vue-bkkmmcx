@@ -17,7 +17,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="startDate"
+                v-model="item.startDate"
                 label="Start Date"
                 prepend-icon="mdi-calendar"
                 readonly
@@ -27,7 +27,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="startDate"
+              v-model="item.startDate"
               @input="startMenu = false"
               @change="changeEndDate"
               min="2021-01-01"
@@ -47,7 +47,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
-                v-model="endDate"
+                v-model="item.endDate"
                 label="End Date"
                 prepend-icon="mdi-calendar"
                 readonly
@@ -57,10 +57,10 @@
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="endDate"
+              v-model="item.endDate"
               @input="endMenu = false"
-              :max="max"
-              :min="min"
+              :max="maxDate"
+              :min="minDate"
               color="red darken-3"
             ></v-date-picker>
           </v-menu>
@@ -69,7 +69,7 @@
           <v-select
             :items="priorityItems"
             :rules="priorityRules"
-            v-model="priority"
+            v-model="item.priority"
             label="Priority"
             color="primary"
             required
@@ -78,7 +78,7 @@
         <v-col cols="12">
           <v-select
             :items="statusItems"
-            v-model="status"
+            v-model="item.status"
             label="Status"
             color="primary"
             required
@@ -124,159 +124,129 @@ export default {
         { text: 'H', disabled: false }
       ],
       statusItems: [{ text: 'Pending' }, { text: 'Approved' }],
-      disablePriorityItems: [],
-      startDate: this.item.startDate,
-      endDate: this.item.endDate,
-      priority: this.item.priority,
-      status: this.item.status,
       startMenu: false,
-      endMenu: false,
-      max: null,
-      min: null
+      endMenu: false
+      // priority: this.item.priority
+      // disablePriorityItems: [],
+      // status: this.item.status,
     };
   },
-  methods: {
-    ...mapActions(['updatePriorityQuota', 'updateLeave']),
-    changeEndDate() {
-      return (this.endDate = this.startDate);
-    },
 
+  computed: {
     minDate() {
-      return this.startDate;
+      return this.item.startDate;
     },
 
     maxDate() {
       let start =
-        new Date(`${this.startDate}T00:00:00`).getTime() + 5 * 86400000;
+        new Date(`${this.item.startDate}T00:00:00`).getTime() + 5 * 86400000;
       start = new Date(start);
       return start.toISOString().substr(0, 10);
+    }
+  },
+  methods: {
+    ...mapActions(['updatePriorityQuota', 'updateLeave']),
+    changeEndDate() {
+      return (this.item.endDate = this.item.startDate);
     },
 
     async updateLeaveHandler() {
       this.loading = true;
       if (this.$refs.form.validate()) {
-        let anl1 = 0;
-        let anl2 = 0;
-        let tyc = 0;
+        // let anl1 = 0;
+        // let anl2 = 0;
+        // let tyc = 0;
+        // console.log(this.priority, this.item.priority);
 
-        if (this.priority === 'ANL-1' && this.item.priority === 'ANL-2') {
-          anl1 = 1;
-          anl2 = -1;
-        } else if (
-          this.priority === 'ANL-1' &&
-          this.item.priority === 'ANL-3'
-        ) {
-          anl1 = 1;
-        } else if (
-          this.priority === 'ANL-2' &&
-          this.item.priority === 'ANL-1'
-        ) {
-          anl1 = -1;
-          anl2 = 1;
-        } else if (
-          this.priority === 'ANL-2' &&
-          this.item.priority === 'ANL-3'
-        ) {
-          anl2 = 1;
-        } else if (
-          this.priority === 'ANL-3' &&
-          this.item.priority === 'ANL-1'
-        ) {
-          anl1 = -1;
-        } else if (
-          this.priority === 'ANL-3' &&
-          this.item.priority === 'ANL-2'
-        ) {
-          anl2 = -1;
-        } else if (this.priority === 'ANL-1' && this.item.priority === 'H') {
-          anl1 = 1;
-        } else if (this.priority === 'ANL-2' && this.item.priority === 'H') {
-          anl2 = 1;
-        } else if (this.priority === 'H' && this.item.priority === 'ANL-1') {
-          anl1 = -1;
-        } else if (this.priority === 'H' && this.item.priority === 'ANL-2') {
-          anl2 = -1;
-        } else if (this.priority === 'TYC' && this.item.priority === 'ANL-1') {
-          anl1 = -1;
-          tyc = 1;
-        } else if (this.priority === 'TYC' && this.item.priority === 'ANL-2') {
-          anl2 = -1;
-          tyc = 1;
-        } else if (this.priority === 'TYC' && this.item.priority === 'ANL-3') {
-          tyc = 1;
-        } else if (this.priority === 'TYC' && this.item.priority === 'H') {
-          tyc = 1;
-        } else if (this.priority === 'ANL-1' && this.item.priority === 'TYC') {
-          tyc = -1;
-          anl1 = 1;
-        } else if (this.priority === 'ANL-2' && this.item.priority === 'TYC') {
-          tyc = -1;
-          anl2 = 1;
-        } else if (this.priority === 'ANL-3' && this.item.priority === 'TYC') {
-          tyc = -1;
-        } else if (this.priority === 'H' && this.item.priority === 'TYC') {
-          tyc = -1;
-        }
-
-        await this.updatePriorityQuota({
-          userId: this.item.userId,
-          anl1: anl1,
-          anl2: anl2,
-          tyc: tyc
-        });
+        // if (this.priority === 'ANL-1' && this.item.priority === 'ANL-2') {
+        //   anl1 = -1;
+        //   anl2 = 1;
+        // } else if (
+        //   this.priority === 'ANL-1' &&
+        //   this.item.priority === 'ANL-3'
+        // ) {
+        //   anl1 = -1;
+        // } else if (
+        //   this.priority === 'ANL-2' &&
+        //   this.item.priority === 'ANL-1'
+        // ) {
+        //   anl1 = 1;
+        //   anl2 = -1;
+        // } else if (
+        //   this.priority === 'ANL-2' &&
+        //   this.item.priority === 'ANL-3'
+        // ) {
+        //   anl2 = -1;
+        // } else if (
+        //   this.priority === 'ANL-3' &&
+        //   this.item.priority === 'ANL-1'
+        // ) {
+        //   anl1 = 1;
+        // } else if (
+        //   this.priority === 'ANL-3' &&
+        //   this.item.priority === 'ANL-2'
+        // ) {
+        //   anl2 = 1;
+        // } else if (this.priority === 'ANL-1' && this.item.priority === 'H') {
+        //   anl1 = -1;
+        // } else if (this.priority === 'ANL-2' && this.item.priority === 'H') {
+        //   anl2 = -1;
+        // } else if (this.priority === 'H' && this.item.priority === 'ANL-1') {
+        //   anl1 = 1;
+        // } else if (this.priority === 'H' && this.item.priority === 'ANL-2') {
+        //   anl2 = 1;
+        // } else if (this.priority === 'TYC' && this.item.priority === 'ANL-1') {
+        //   anl1 = 1;
+        //   tyc = -1;
+        // } else if (this.priority === 'TYC' && this.item.priority === 'ANL-2') {
+        //   anl2 = 1;
+        //   tyc = -1;
+        // } else if (this.priority === 'TYC' && this.item.priority === 'ANL-3') {
+        //   tyc = -1;
+        // } else if (this.priority === 'TYC' && this.item.priority === 'H') {
+        //   tyc = -1;
+        // } else if (this.priority === 'ANL-1' && this.item.priority === 'TYC') {
+        //   tyc = 1;
+        //   anl1 = -1;
+        // } else if (this.priority === 'ANL-2' && this.item.priority === 'TYC') {
+        //   tyc = 1;
+        //   anl2 = -1;
+        // } else if (this.priority === 'ANL-3' && this.item.priority === 'TYC') {
+        //   tyc = 1;
+        // } else if (this.priority === 'H' && this.item.priority === 'TYC') {
+        //   tyc = 1;
+        // }
 
         await this.updateLeave({
           docId: this.item.id,
-          startDate: this.startDate,
-          endDate: this.endDate,
+          startDate: this.item.startDate,
+          endDate: this.item.endDate,
           days: this.days(),
-          priority: this.priority,
-          status: this.status
+          priority: this.item.priority,
+          status: this.item.status
         });
+
+        // await this.updatePriorityQuota({
+        //   userId: this.item.userId,
+        //   anl1: anl1,
+        //   anl2: anl2,
+        //   tyc: tyc
+        // });
         this.loading = false;
         this.$emit('close');
       }
     },
 
     days() {
-      let start = new Date(`${this.startDate}T00:00:00`);
-      let end = new Date(`${this.endDate}T23:59:59`);
+      let start = new Date(`${this.item.startDate}T00:00:00`);
+      let end = new Date(`${this.item.endDate}T23:59:59`);
       let days = (end.getTime() - start.getTime()) / 86400000;
       return Math.round(days);
-    },
-
-    disabledPriority() {
-      if (this.getLeaves.length > 0) {
-        if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-1').length > 0
-        ) {
-          this.priorityItems[0].disabled = true;
-        }
-        if (
-          this.getLeaves.filter(leave => leave.priority === 'ANL-2').length > 0
-        ) {
-          this.priorityItems[1].disabled = true;
-        }
-      }
     },
 
     validate() {
       this.$refs.form.validate();
     }
-  },
-
-  mounted() {
-    this.max = this.maxDate();
-    this.min = this.minDate();
-  },
-
-  beforeUpdate() {
-    this.max = this.maxDate();
-    this.min = this.minDate();
-  },
-
-  watch: {
-    leaves: 'disabledPriority'
   }
 };
 </script>

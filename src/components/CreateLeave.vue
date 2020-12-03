@@ -153,30 +153,30 @@ export default {
     async createLeaveHandler() {
       this.loading = true;
       if (this.$refs.form.validate()) {
-        let anl1 = 0;
-        let anl2 = 0;
-        let tyc = 0;
+        // let anl1 = 0;
+        // let anl2 = 0;
+        // let tyc = 0;
 
-        if (this.priority === 'ANL-1') {
-          anl1 = 1;
-        }
-        if (this.priority === 'ANL-2') {
-          anl2 = 1;
-        }
-        if (this.priority === 'TYC') {
-          tyc = 1;
-        }
+        // if (this.priority === 'ANL-1') {
+        //   anl1 = 1;
+        // }
+        // if (this.priority === 'ANL-2') {
+        //   anl2 = 1;
+        // }
+        // if (this.priority === 'TYC') {
+        //   tyc = 1;
+        // }
 
-        try {
-          await this.updatePriorityQuota({
-            userId: firebase.auth.currentUser.uid,
-            anl1: anl1,
-            anl2: anl2,
-            tyc: tyc
-          }).then(() => console.log('success'));
-        } catch (error) {
-          console.log(error.message);
-        }
+        // try {
+        //   await this.updatePriorityQuota({
+        //     userId: firebase.auth.currentUser.uid,
+        //     anl1: anl1,
+        //     anl2: anl2,
+        //     tyc: tyc
+        //   }).then(() => console.log('success'));
+        // } catch (error) {
+        //   console.log(error.message);
+        // }
 
         await this.createLeave({
           userId: firebase.auth.currentUser.uid,

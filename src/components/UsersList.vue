@@ -116,12 +116,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'fetchAllUsers',
-      'fetchAllLeaves',
-      'deleteLeave',
-      'updatePriorityQuota'
-    ]),
+    ...mapActions(['fetchAllUsers', 'fetchAllLeaves', 'deleteLeave']),
 
     getColor(used, entitled) {
       let result = (used / entitled) * 100;

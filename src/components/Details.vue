@@ -103,7 +103,6 @@
               name="gift"
               label="Thank You Card"
               type="number"
-              min="0"
               v-model="gift"
             ></v-text-field>
             <v-btn block color="accent" type="submit">Submit</v-btn>
@@ -128,7 +127,6 @@ export default {
   },
   data() {
     return {
-      // userId: this.$route.params.id,
       valid: true,
       giftDialog: false,
       giftDialogItem: null,
@@ -156,8 +154,8 @@ export default {
       let tyc = parseInt(this.gift, 10);
       await this.updatePriorityQuota({
         userId: this.profile.id,
-        anl1: 0,
-        anl2: 0,
+        // anl1: 0,
+        // anl2: 0,
         tyc: -tyc
       }).then(() => {
         this.loading = false;
@@ -165,20 +163,26 @@ export default {
       });
     },
     priorityRemains() {
-      return this.profile.entitled - this.leaveUsed();
+      return this.profile.entitled - this.leaveUsed().used;
     },
     leaveUsed() {
       let leave = this.getAllLeaves.filter(
         leave => leave.priority !== 'H' && leave.userId === this.profile.id
       );
-      return leave.reduce((a, b) => a + b.days, 0);
+
+      let used = leave.reduce((a, b) => a + b.days, 0);
+      let anl1 = leave.filter(result => result.priority === 'ANL-1').length;
+      let anl2 = leave.filter(result => result.priority === 'ANL-2').length;
+      let tyc = leave.filter(result => result.priority === 'TYC').length;
+
+      return { used: used, anl1: anl1, anl2: anl2, tyc: tyc };
     },
     percentUsed() {
-      let percent = (this.leaveUsed() / this.profile.entitled) * 100;
+      let percent = (this.leaveUsed().used / this.profile.entitled) * 100;
       return percent.toFixed(1);
     },
     leaveRemains() {
-      return this.profile.entitled - this.leaveUsed();
+      return this.profile.entitled - this.leaveUsed().used;
     },
     percentRemains() {
       let percent = (this.leaveRemains() / this.profile.entitled) * 100;
@@ -216,7 +220,7 @@ export default {
         },
         {
           title: 'Used',
-          value: this.leaveUsed(),
+          value: this.leaveUsed().used,
           percent: this.percentUsed()
         },
         {
@@ -228,9 +232,9 @@ export default {
     },
     setPrioritySummary() {
       return [
-        { title: 'TYC', value: this.profile.tyc },
-        { title: 'ANL-1', value: this.profile.anl1 },
-        { title: 'ANL-2', value: this.profile.anl2 },
+        { title: 'TYC', value: this.profile.tyc - this.leaveUsed().tyc },
+        { title: 'ANL-1', value: this.profile.anl1 - this.leaveUsed().anl1 },
+        { title: 'ANL-2', value: this.profile.anl2 - this.leaveUsed().anl2 },
         { title: 'ANL-3', value: this.priorityRemains() }
       ];
     }
