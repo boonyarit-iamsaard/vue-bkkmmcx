@@ -123,12 +123,13 @@ export default {
         { text: 'ANL-3', disabled: false },
         { text: 'H', disabled: false }
       ],
-      statusItems: [{ text: 'Pending' }, { text: 'Approved' }],
+      statusItems: [
+        { text: 'Pending' },
+        { text: 'Approved' },
+        { text: 'Rejected' }
+      ],
       startMenu: false,
       endMenu: false
-      // priority: this.item.priority
-      // disablePriorityItems: [],
-      // status: this.item.status,
     };
   },
 

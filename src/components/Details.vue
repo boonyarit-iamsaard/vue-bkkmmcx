@@ -154,8 +154,6 @@ export default {
       let tyc = parseInt(this.gift, 10);
       await this.updatePriorityQuota({
         userId: this.profile.id,
-        // anl1: 0,
-        // anl2: 0,
         tyc: -tyc
       }).then(() => {
         this.loading = false;
@@ -167,13 +165,22 @@ export default {
     },
     leaveUsed() {
       let leave = this.getAllLeaves.filter(
-        leave => leave.priority !== 'H' && leave.userId === this.profile.id
+        leave =>
+          leave.priority !== 'H' &&
+          leave.userId === this.profile.id &&
+          leave.status !== 'Rejected'
       );
 
       let used = leave.reduce((a, b) => a + b.days, 0);
-      let anl1 = leave.filter(result => result.priority === 'ANL-1').length;
-      let anl2 = leave.filter(result => result.priority === 'ANL-2').length;
-      let tyc = leave.filter(result => result.priority === 'TYC').length;
+      let anl1 = leave.filter(
+        result => result.priority === 'ANL-1' && leave.status !== 'Rejected'
+      ).length;
+      let anl2 = leave.filter(
+        result => result.priority === 'ANL-2' && leave.status !== 'Rejected'
+      ).length;
+      let tyc = leave.filter(
+        result => result.priority === 'TYC' && leave.status !== 'Rejected'
+      ).length;
 
       return { used: used, anl1: anl1, anl2: anl2, tyc: tyc };
     },
