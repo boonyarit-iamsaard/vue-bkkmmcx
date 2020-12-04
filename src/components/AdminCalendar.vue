@@ -114,7 +114,7 @@ export default {
       this.getAllUsers.forEach(user => {
         this.getAllLeaves.forEach(leave => {
           let event = {};
-          if (leave.userId === user.id) {
+          if (leave.userId === user.id && leave.status !== 'Rejected') {
             event = {
               name: `${leave.phase} | ${user.firstName} : ${leave.priority}`,
               start: `${leave.startDate}`,

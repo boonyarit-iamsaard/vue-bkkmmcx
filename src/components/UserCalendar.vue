@@ -117,13 +117,15 @@ export default {
       let events = [];
       // add leaves to events
       for (let leave of this.getLeaves) {
-        let event = {
-          name: `${leave.phase} | ${this.getUserProfile.firstName} : ${leave.priority}`,
-          start: `${leave.startDate}`,
-          end: `${leave.endDate}`,
-          color: this.setEventColor(leave.priority)
-        };
-        events.push(event);
+        if (leave.status !== 'Rejected') {
+          let event = {
+            name: `${leave.phase} | ${this.getUserProfile.firstName} : ${leave.priority}`,
+            start: `${leave.startDate}`,
+            end: `${leave.endDate}`,
+            color: this.setEventColor(leave.priority)
+          };
+          events.push(event);
+        }
       }
 
       // add days off to events

@@ -94,7 +94,11 @@ export default {
           if (leave.userId === user.id) {
             leavePerUser.push(leave);
           }
-          if (leave.userId === user.id && leave.priority !== 'H') {
+          if (
+            leave.userId === user.id &&
+            leave.priority !== 'H' &&
+            leave.status !== 'Rejected'
+          ) {
             anlUsed.push(leave);
           }
         });
@@ -129,8 +133,8 @@ export default {
       }
     },
 
-    leaveUsed(leavePerUser) {
-      return leavePerUser.reduce((a, b) => a + b.days, 0);
+    leaveUsed(anlUsed) {
+      return anlUsed.reduce((a, b) => a + b.days, 0);
     },
 
     viewProfile(item) {
