@@ -144,7 +144,7 @@ export default {
     leaveTypeItems: ['ANL', 'SLS', 'H'],
     phaseItems: ['A', 'B'],
     leaveType: '',
-    phase: 'B',
+    phase: 'A',
     priority: '',
     startMenu: false,
     endMenu: false,
