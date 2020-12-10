@@ -85,7 +85,6 @@
           <v-select
             :items="disabledPriority"
             :rules="priorityRules"
-            :readonly="isPhaseB"
             v-model="item.priority"
             label="Priority"
             color="primary"
@@ -135,7 +134,6 @@ export default {
       priorityRules: [v => v.length > 0 || 'Priority is required.'],
       priorityItems: [
         { text: 'TYC', disabled: false },
-        { text: 'ANL', disabled: false },
         { text: 'ANL-1', disabled: false },
         { text: 'ANL-2', disabled: false },
         { text: 'ANL-3', disabled: false },
@@ -156,12 +154,6 @@ export default {
   },
 
   computed: {
-    isPhaseB() {
-      if (this.item.phase === 'B') {
-        return true;
-      } else return false;
-    },
-
     minDate() {
       return this.item.startDate;
     },
@@ -191,12 +183,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateLeave']),
+    ...mapActions(['updatePriorityQuota', 'updateLeave']),
 
     onChangeLeaveType() {
       if (this.item.type === 'ANL' || this.item.type === 'H') {
         this.item.phase = this.phase;
-        this.item.priority = this.item.type;
       }
     },
 
