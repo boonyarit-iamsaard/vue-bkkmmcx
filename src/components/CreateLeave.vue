@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col sm="8" md="6" lg="4" class="mx-auto">
-        <v-alert
+      <v-col sm="6" md="6" lg="4" class="mx-auto">
+        <!-- <v-alert
           text
           outlined
           color="deep-orange"
@@ -12,11 +12,9 @@
           Please apply minimum 50% of your 2021's entitled leave before <br />
           <strong><u>30</u><sup>th</sup> <u>November 2020</u></strong
           >.
-        </v-alert>
+        </v-alert> -->
         <v-card class="pa-4 rounded-lg" elevation="2">
-          <p class="display-1 text-center">
-            Apply for Leave
-          </p>
+          <p class="display-1 text-center">Apply for Leave</p>
           <v-form
             @submit.prevent="createLeaveHandler"
             v-model="valid"
@@ -85,8 +83,25 @@
               </v-col>
               <v-col cols="12">
                 <v-select
+                  :items="leaveTypeItems"
+                  @change="onLeaveTypeChange"
+                  v-model="leaveType"
+                  label="Leave Type"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" v-if="leaveType === 'ANL'">
+                <v-select
+                  :items="phaseItems"
+                  v-model="phase"
+                  label="Phase"
+                  readonly
+                ></v-select>
+              </v-col>
+              <v-col cols="12" v-if="leaveType === 'ANL' && phase !== 'B'">
+                <v-select
                   :items="disabledPriority"
                   :rules="priorityRules"
+                  :disabled="isANL"
                   v-model="priority"
                   label="Priority"
                   color="primary"
@@ -126,6 +141,10 @@ export default {
     priorityRules: [v => v.length > 0 || 'Priority is required.'],
     startDate: new Date('2021-01-01').toISOString().substr(0, 10),
     endDate: new Date('2021-01-01').toISOString().substr(0, 10),
+    leaveTypeItems: ['ANL', 'SLS', 'H'],
+    phaseItems: ['A', 'B'],
+    leaveType: '',
+    phase: 'B',
     priority: '',
     startMenu: false,
     endMenu: false,
@@ -137,6 +156,11 @@ export default {
 
     changeEndDate() {
       return (this.endDate = this.startDate);
+    },
+
+    onLeaveTypeChange() {
+      this.priority = '';
+      this.$refs.form.resetValidation();
     },
 
     minDate() {
@@ -153,12 +177,25 @@ export default {
     async createLeaveHandler() {
       this.loading = true;
       if (this.$refs.form.validate()) {
+        let priority;
+
+        if (this.leaveType === 'ANL' && this.phase === 'B') {
+          priority = 'ANL';
+        } else if (this.leaveType === 'H') {
+          priority = 'H';
+        } else if (this.leaveType === 'SLS') {
+          priority = 'SLS';
+          this.phase = 'None';
+        } else priority = this.priority;
+
         await this.createLeave({
           userId: firebase.auth.currentUser.uid,
           startDate: this.startDate,
           endDate: this.endDate,
           days: this.days(),
-          priority: this.priority,
+          type: this.leaveType,
+          phase: this.phase,
+          priority: priority,
           status: 'Pending'
         });
 
@@ -200,13 +237,20 @@ export default {
   computed: {
     ...mapGetters(['getLeaves', 'getUserProfile']),
 
+    isANL() {
+      if (this.leaveType === 'ANL' && this.phase !== 'B') {
+        return false;
+      } else {
+        return true;
+      }
+    },
+
     disabledPriority() {
       let priorityItems = [
         { text: 'TYC', disabled: false },
         { text: 'ANL-1', disabled: false },
         { text: 'ANL-2', disabled: false },
-        { text: 'ANL-3', disabled: false },
-        { text: 'H', disabled: false }
+        { text: 'ANL-3', disabled: false }
       ];
 
       if (this.getUserProfile.tyc === 0) {

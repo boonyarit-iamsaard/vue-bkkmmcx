@@ -67,6 +67,22 @@
         </v-col>
         <v-col cols="12">
           <v-select
+            :items="leaveTypeItems"
+            @change="onChangeLeaveType"
+            v-model="item.type"
+            label="Leave Type"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" v-if="item.type === 'ANL' || item.type === 'H'">
+          <v-select
+            :items="phaseItems"
+            v-model="item.phase"
+            label="Phase"
+            readonly
+          ></v-select>
+        </v-col>
+        <v-col cols="12" v-if="item.type === 'ANL' || item.type === 'H'">
+          <v-select
             :items="priorityItems"
             :rules="priorityRules"
             v-model="item.priority"
@@ -128,6 +144,10 @@ export default {
         { text: 'Approved' },
         { text: 'Rejected' }
       ],
+      leaveTypeItems: ['ANL', 'SLS', 'H'],
+      phaseItems: ['A', 'B'],
+      leaveType: '',
+      phase: 'B',
       startMenu: false,
       endMenu: false
     };
@@ -147,6 +167,13 @@ export default {
   },
   methods: {
     ...mapActions(['updatePriorityQuota', 'updateLeave']),
+
+    onChangeLeaveType() {
+      if (this.item.type === 'ANL' || this.item.type === 'H') {
+        this.item.phase = this.phase;
+      }
+    },
+
     changeEndDate() {
       return (this.item.endDate = this.item.startDate);
     },
@@ -154,70 +181,6 @@ export default {
     async updateLeaveHandler() {
       this.loading = true;
       if (this.$refs.form.validate()) {
-        // let anl1 = 0;
-        // let anl2 = 0;
-        // let tyc = 0;
-        // console.log(this.priority, this.item.priority);
-
-        // if (this.priority === 'ANL-1' && this.item.priority === 'ANL-2') {
-        //   anl1 = -1;
-        //   anl2 = 1;
-        // } else if (
-        //   this.priority === 'ANL-1' &&
-        //   this.item.priority === 'ANL-3'
-        // ) {
-        //   anl1 = -1;
-        // } else if (
-        //   this.priority === 'ANL-2' &&
-        //   this.item.priority === 'ANL-1'
-        // ) {
-        //   anl1 = 1;
-        //   anl2 = -1;
-        // } else if (
-        //   this.priority === 'ANL-2' &&
-        //   this.item.priority === 'ANL-3'
-        // ) {
-        //   anl2 = -1;
-        // } else if (
-        //   this.priority === 'ANL-3' &&
-        //   this.item.priority === 'ANL-1'
-        // ) {
-        //   anl1 = 1;
-        // } else if (
-        //   this.priority === 'ANL-3' &&
-        //   this.item.priority === 'ANL-2'
-        // ) {
-        //   anl2 = 1;
-        // } else if (this.priority === 'ANL-1' && this.item.priority === 'H') {
-        //   anl1 = -1;
-        // } else if (this.priority === 'ANL-2' && this.item.priority === 'H') {
-        //   anl2 = -1;
-        // } else if (this.priority === 'H' && this.item.priority === 'ANL-1') {
-        //   anl1 = 1;
-        // } else if (this.priority === 'H' && this.item.priority === 'ANL-2') {
-        //   anl2 = 1;
-        // } else if (this.priority === 'TYC' && this.item.priority === 'ANL-1') {
-        //   anl1 = 1;
-        //   tyc = -1;
-        // } else if (this.priority === 'TYC' && this.item.priority === 'ANL-2') {
-        //   anl2 = 1;
-        //   tyc = -1;
-        // } else if (this.priority === 'TYC' && this.item.priority === 'ANL-3') {
-        //   tyc = -1;
-        // } else if (this.priority === 'TYC' && this.item.priority === 'H') {
-        //   tyc = -1;
-        // } else if (this.priority === 'ANL-1' && this.item.priority === 'TYC') {
-        //   tyc = 1;
-        //   anl1 = -1;
-        // } else if (this.priority === 'ANL-2' && this.item.priority === 'TYC') {
-        //   tyc = 1;
-        //   anl2 = -1;
-        // } else if (this.priority === 'ANL-3' && this.item.priority === 'TYC') {
-        //   tyc = 1;
-        // } else if (this.priority === 'H' && this.item.priority === 'TYC') {
-        //   tyc = 1;
-        // }
-
         await this.updateLeave({
           docId: this.item.id,
           startDate: this.item.startDate,
@@ -227,12 +190,6 @@ export default {
           status: this.item.status
         });
 
-        // await this.updatePriorityQuota({
-        //   userId: this.item.userId,
-        //   anl1: anl1,
-        //   anl2: anl2,
-        //   tyc: tyc
-        // });
         this.loading = false;
         this.$emit('close');
       }

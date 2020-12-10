@@ -102,7 +102,9 @@ export default {
         'accent',
         'primary',
         'indigo lighten-1',
-        'pink darken-1'
+        'pink darken-1',
+        'amber darken-4',
+        'blue-grey darken-1'
       ]
     };
   },
@@ -172,8 +174,12 @@ export default {
           return this.eventColor[2];
         case 'H':
           return this.eventColor[3];
-        default:
+        case 'TYC':
           return this.eventColor[4];
+        case 'SLS':
+          return this.eventColor[5];
+        default:
+          return this.eventColor[6];
       }
     },
     showEvent({ nativeEvent, event }) {

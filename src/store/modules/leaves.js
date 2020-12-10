@@ -61,7 +61,9 @@ const actions = {
           days: leave.days,
           priority: leave.priority,
           status: leave.status,
-          phase: 'A'
+          phase: leave.phase,
+          type: leave.type,
+          added: Date.now()
         })
         .then(() => {
           dispatch('fetchAllLeaves');

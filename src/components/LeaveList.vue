@@ -5,7 +5,7 @@
       :headers="headers"
       :items="leaves"
       :items-per-page="5"
-      :sort-by="['startDate']"
+      :sort-by="['startDate', 'phase']"
       class="elevation-2 rounded-lg"
     >
       <template v-slot:top>
@@ -38,7 +38,7 @@
         </v-icon>
       </template>
     </v-data-table>
-    <v-dialog v-model="editDialog" width="400">
+    <v-dialog v-model="editDialog" width="435">
       <UpdateLeave :item="editDialogItem" v-on:close="editDialog = false" />
     </v-dialog>
     <v-dialog v-model="deleteDialog" width="400">
@@ -109,7 +109,9 @@ export default {
         { text: 'Start Date', value: 'startDate', align: 'center' },
         { text: 'End Date', value: 'endDate', align: 'center' },
         { text: 'Days', value: 'days', align: 'center' },
+        { text: 'Type', value: 'type', align: 'center' },
         { text: 'Priority', value: 'priority', align: 'center' },
+        { text: 'Phase', value: 'phase', align: 'center' },
         { text: 'Status', value: 'status', align: 'center' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
       ]
@@ -118,7 +120,20 @@ export default {
   computed: {
     ...mapGetters(['getUserProfile', 'getAllLeaves', 'getAllUsers']),
     leaves() {
-      return this.getAllLeaves.filter(leave => leave.userId === this.userId);
+      const leaves = this.getAllLeaves.filter(
+        leave => leave.userId === this.userId
+      );
+
+      leaves.forEach(leave => {
+        if (!leave.type && leave.priority !== 'H') {
+          leave.type = 'ANL';
+        } else if (!leave.type && leave.priority === 'H') {
+          leave.type = 'H';
+        }
+      });
+
+      // return this.getAllLeaves.filter(leave => leave.userId === this.userId);
+      return leaves;
     },
     profile() {
       return this.getAllUsers.find(user => user.id === this.userId);
