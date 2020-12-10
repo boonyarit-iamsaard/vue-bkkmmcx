@@ -83,7 +83,7 @@
         </v-col>
         <v-col cols="12" v-if="item.type === 'ANL' || item.type === 'H'">
           <v-select
-            :items="priorityItems"
+            :items="disabledPriority"
             :rules="priorityRules"
             :readonly="isPhaseB"
             v-model="item.priority"
@@ -171,6 +171,23 @@ export default {
         new Date(`${this.item.startDate}T00:00:00`).getTime() + 5 * 86400000;
       start = new Date(start);
       return start.toISOString().substr(0, 10);
+    },
+
+    disabledPriority() {
+      let priorityItems = [
+        { text: 'TYC', disabled: false },
+        { text: 'H', disabled: false },
+        { text: 'ANL', disabled: false },
+        { text: 'ANL-1', disabled: false },
+        { text: 'ANL-2', disabled: false },
+        { text: 'ANL-3', disabled: false }
+      ];
+
+      if (this.item.phase === 'A') {
+        priorityItems[1].disabled = true;
+        priorityItems[2].disabled = true;
+      }
+      return priorityItems;
     }
   },
   methods: {
@@ -189,13 +206,28 @@ export default {
 
     async updateLeaveHandler() {
       this.loading = true;
+      let priority;
+      let phase;
+
+      if (this.item.type === 'SLS') {
+        priority = 'SLS';
+        phase = 'None';
+      } else {
+        priority = this.item.priority;
+        phase = this.item.phase;
+      }
+
+      console.log(this.item.type);
+
       if (this.$refs.form.validate()) {
         await this.updateLeave({
           docId: this.item.id,
           startDate: this.item.startDate,
           endDate: this.item.endDate,
           days: this.days(),
-          priority: this.item.priority,
+          type: this.item.type,
+          phase: phase,
+          priority: priority,
           status: this.item.status
         });
 
@@ -217,5 +249,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

@@ -6,7 +6,7 @@
       :items-per-page="10"
       :search="search"
       :sort-by="['sortIndex', 'name']"
-      class="elevation-2"
+      class="elevation-0"
     >
       <template v-slot:top>
         <v-toolbar flat class="rounded-t-lg">

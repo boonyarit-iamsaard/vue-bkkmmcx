@@ -132,7 +132,6 @@ export default {
         }
       });
 
-      // return this.getAllLeaves.filter(leave => leave.userId === this.userId);
       return leaves;
     },
     profile() {

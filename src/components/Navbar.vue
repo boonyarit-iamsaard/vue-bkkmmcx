@@ -40,7 +40,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app dark color="#156665">
+    <v-app-bar app dark dense color="primary">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title v-if="showNav">{{ getFullName }}</v-toolbar-title>
       <v-toolbar-title v-else

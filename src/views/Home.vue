@@ -1,11 +1,27 @@
 <template>
   <v-container>
-    <v-toolbar flat v-if="isAdmin" height="64">
-      <v-spacer></v-spacer>
-      <v-switch inset v-model="switchCalendar" class="mt-4"></v-switch>
+    <v-toolbar flat dense>
+      <template>
+        <v-tabs v-model="tab">
+          <v-tabs-slider color="primary"></v-tabs-slider>
+          <v-tab>
+            User
+            <!-- {{ getFullName() }} -->
+          </v-tab>
+          <v-tab>
+            All
+          </v-tab>
+        </v-tabs>
+      </template>
     </v-toolbar>
-    <UserCalendar v-if="!switchCalendar" />
-    <AdminCalendar v-if="switchCalendar" />
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <UserCalendar />
+      </v-tab-item>
+      <v-tab-item>
+        <AdminCalendar />
+      </v-tab-item>
+    </v-tabs-items>
   </v-container>
 </template>
 
@@ -23,7 +39,8 @@ export default {
   },
   data() {
     return {
-      switchCalendar: false
+      switchCalendar: false,
+      tab: null
     };
   },
   computed: {
@@ -33,13 +50,22 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchUserProfile'])
+    ...mapActions(['fetchUserProfile']),
+
+    getFullName() {
+      return `${
+        this.getUserProfile.firstName
+      } ${this.getUserProfile.lastName.slice(0, 1)}.`;
+    }
   },
   created() {
     this.fetchUserProfile(auth.currentUser);
-  },
-  beforeMount() {}
+  }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-tab.v-tab--active {
+  background-color: #eeeeee;
+}
+</style>

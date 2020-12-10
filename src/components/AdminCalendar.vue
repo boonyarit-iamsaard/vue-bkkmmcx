@@ -1,10 +1,10 @@
 <template>
   <v-row class="fill-height">
-    <v-col class="pt-0">
-      <v-sheet tile height="64" class="d-flex">
+    <v-col class="py-0">
+      <v-sheet tile class="d-flex">
         <Spinner v-if="loading" />
         <v-toolbar flat>
-          <v-toolbar-title>Admin's calendar</v-toolbar-title>
+          <v-toolbar-items>Admin's calendar</v-toolbar-items>
           <v-spacer></v-spacer>
           <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
             <v-icon>mdi-chevron-left</v-icon>
@@ -36,10 +36,11 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet height="700">
         <v-calendar
           ref="calendar"
           v-model="focus"
+          color="primary"
           :type="type"
           :show-month-on-first="showMonthOnFirst"
           :events="addEvents"
@@ -102,7 +103,9 @@ export default {
         'accent',
         'primary',
         'indigo lighten-1',
-        'pink darken-1'
+        'pink darken-1',
+        'amber darken-4',
+        'blue-grey darken-1'
       ]
     };
   },
@@ -161,8 +164,12 @@ export default {
           return this.eventColor[2];
         case 'H':
           return this.eventColor[3];
-        default:
+        case 'TYC':
           return this.eventColor[4];
+        case 'SLS':
+          return this.eventColor[5];
+        default:
+          return this.eventColor[6];
       }
     },
     showEvent({ nativeEvent, event }) {
@@ -190,14 +197,15 @@ export default {
     this.fetchPublic();
   },
 
-  // beforeMount() {
-  //   this.events = this.addEvents();
-  // },
-
   mounted() {
     this.$refs.calendar.move();
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-toolbar__items {
+  align-items: center;
+  color: white;
+}
+</style>

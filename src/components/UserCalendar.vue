@@ -1,7 +1,7 @@
 <template>
   <v-row class="fill-height">
-    <v-col class="pt-0">
-      <v-sheet tile height="64" class="d-flex">
+    <v-col class="py-0">
+      <v-sheet tile class="d-flex">
         <Spinner v-if="loading" />
         <v-toolbar flat>
           <v-btn dark fab small color="primary" to="/apply">
@@ -38,10 +38,11 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="600">
+      <v-sheet height="700">
         <v-calendar
           ref="calendar"
           v-model="focus"
+          color="primary"
           :type="type"
           :show-month-on-first="showMonthOnFirst"
           :events="addEvents"
@@ -211,5 +212,3 @@ export default {
   }
 };
 </script>
-
-<style scoped></style>

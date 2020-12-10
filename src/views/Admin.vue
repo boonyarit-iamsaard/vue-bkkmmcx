@@ -27,7 +27,8 @@ export default {
   data() {
     return {
       loading: false,
-      isBoonyarit: false
+      isBoonyarit: false,
+      tab: null
     };
   },
   created() {
