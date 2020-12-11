@@ -8,7 +8,6 @@
 </template>
 
 <script>
-// import { auth } from '@/plugins/firebase';
 import Navbar from '@/components/Navbar.vue';
 
 export default {

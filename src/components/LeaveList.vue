@@ -4,7 +4,7 @@
     <v-data-table
       :headers="headers"
       :items="leaves"
-      :items-per-page="5"
+      :items-per-page="10"
       :sort-by="['startDate', 'phase']"
       class="elevation-2 rounded-lg"
     >

@@ -1,16 +1,25 @@
 <template>
   <v-container>
     <Spinner v-if="loading" />
-    <v-row>
-      <v-col sm="6" lg="4" class="text-center mx-auto" v-if="!isBoonyarit">
-        <v-btn block dark color="primary" to="/register"
-          >Creat User Profile</v-btn
-        >
-      </v-col>
-      <v-col cols="12">
+    <v-toolbar flat>
+      <template>
+        <v-tabs v-model="tab">
+          <v-tabs-slider color="primary"></v-tabs-slider>
+          <v-tab v-for="item in items" :key="item">
+            {{ item }}
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-toolbar>
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
         <UsersList />
-      </v-col>
-    </v-row>
+      </v-tab-item>
+      <v-tab-item>
+        <AdminLeaveList />
+      </v-tab-item>
+    </v-tabs-items>
   </v-container>
 </template>
 
@@ -18,16 +27,20 @@
 import { auth } from '@/plugins/firebase';
 import Spinner from '@/components/Spinner';
 import UsersList from '@/components/UsersList';
+import AdminLeaveList from '@/components/AdminLeaveList';
+
 export default {
   name: 'Admin',
   components: {
     Spinner,
-    UsersList
+    UsersList,
+    AdminLeaveList
   },
   data() {
     return {
       loading: false,
       isBoonyarit: false,
+      items: ['USERS', 'LEAVES'],
       tab: null
     };
   },

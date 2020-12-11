@@ -65,8 +65,9 @@
             <v-card-text>
               <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
               <p><strong>End:</strong> {{ selectedEvent.end }}</p>
+              <p><strong>Days:</strong> {{ selectedEvent.days }}</p>
               <p class="mb-0">
-                <strong>Days:</strong> {{ selectedEvent.days }}
+                <strong>Status:</strong> {{ selectedEvent.status }}
               </p>
             </v-card-text>
           </v-card>
@@ -123,6 +124,7 @@ export default {
               start: `${leave.startDate}`,
               end: `${leave.endDate}`,
               days: `${leave.days}`,
+              status: `${leave.status}`,
               color: this.setEventColor(leave.priority)
             };
             events.push(event);

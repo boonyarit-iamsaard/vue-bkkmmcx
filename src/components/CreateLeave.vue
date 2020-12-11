@@ -89,7 +89,7 @@
                   label="Leave Type"
                 ></v-select>
               </v-col>
-              <v-col cols="12" v-if="leaveType === 'ANL'">
+              <v-col cols="12" v-if="leaveType === 'ANL' || leaveType === 'H'">
                 <v-select
                   :items="phaseItems"
                   v-model="phase"

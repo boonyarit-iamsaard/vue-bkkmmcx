@@ -5,8 +5,7 @@
         <v-tabs v-model="tab">
           <v-tabs-slider color="primary"></v-tabs-slider>
           <v-tab>
-            <!-- User -->
-            {{ getFullName }}
+            User
           </v-tab>
           <v-tab>
             All
@@ -28,7 +27,6 @@
 <script>
 import UserCalendar from '@/components/UserCalendar.vue';
 import AdminCalendar from '@/components/AdminCalendar.vue';
-// import { auth } from '@/plugins/firebase';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -48,21 +46,12 @@ export default {
     ...mapGetters(['getUserProfile']),
     isAdmin() {
       return this.getUserProfile.isAdmin;
-    },
-    getFullName() {
-      return `${
-        this.getUserProfile.firstName
-      } ${this.getUserProfile.lastName.slice(0, 1)}.`;
     }
   },
 
   methods: {
     ...mapActions(['fetchUserProfile'])
   }
-
-  // created() {
-  //   this.fetchUserProfile(auth.currentUser);
-  // }
 };
 </script>
 

@@ -66,7 +66,11 @@
             </v-toolbar>
             <v-card-text>
               <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
-              <p class="mb-0"><strong>End:</strong> {{ selectedEvent.end }}</p>
+              <p><strong>End:</strong> {{ selectedEvent.end }}</p>
+              <p><strong>Days:</strong> {{ selectedEvent.days }}</p>
+              <p class="mb-0">
+                <strong>Status:</strong> {{ selectedEvent.status }}
+              </p>
             </v-card-text>
           </v-card>
         </v-menu>
@@ -97,7 +101,6 @@ export default {
         week: 'Week'
       },
       focus: this.$route.params.focus || '2020-12-01',
-      // events: [],
       eventColor: [
         'secondary',
         'accent',
@@ -125,6 +128,8 @@ export default {
             name: `${leave.phase} | ${this.getUserProfile.firstName} : ${leave.priority}`,
             start: `${leave.startDate}`,
             end: `${leave.endDate}`,
+            days: `${leave.days}`,
+            status: `${leave.status}`,
             color: this.setEventColor(leave.priority)
           };
           events.push(event);
