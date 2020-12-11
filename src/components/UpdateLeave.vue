@@ -68,7 +68,7 @@
         <v-col cols="12">
           <v-select
             :items="leaveTypeItems"
-            @change="onChangeLeaveType"
+            @change="onLeaveTypeChanged"
             v-model="item.type"
             label="Leave Type"
           ></v-select>
@@ -85,6 +85,7 @@
           <v-select
             :items="disabledPriority"
             :rules="priorityRules"
+            :read="isPhaseB"
             v-model="item.priority"
             label="Priority"
             color="primary"
@@ -154,6 +155,12 @@ export default {
   },
 
   computed: {
+    isPhaseB() {
+      if (this.item.phase === 'B') {
+        return true;
+      } else return false;
+    },
+
     minDate() {
       return this.item.startDate;
     },
@@ -185,9 +192,10 @@ export default {
   methods: {
     ...mapActions(['updatePriorityQuota', 'updateLeave']),
 
-    onChangeLeaveType() {
+    onLeaveTypeChanged() {
       if (this.item.type === 'ANL' || this.item.type === 'H') {
         this.item.phase = this.phase;
+        this.item.priority = this.item.type;
       }
     },
 

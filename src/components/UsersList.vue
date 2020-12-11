@@ -145,11 +145,6 @@ export default {
   created() {
     this.fetchAllUsers();
     this.fetchAllLeaves();
-  },
-
-  beforeUpdate() {
-    this.fetchAllLeaves();
-    this.fetchAllUsers();
   }
 };
 </script>
