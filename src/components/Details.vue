@@ -65,6 +65,15 @@
         </v-row>
         <v-row>
           <v-col cols="12">
+            <v-card>
+              <v-card-text>
+                SLS
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
             <v-btn
               outlined
               block

@@ -92,7 +92,11 @@ const actions = {
       commit('setUserProfile', profile);
 
       if (router.currentRoute.name === 'Login') {
-        await router.push({ name: 'Home' });
+        // await router.push({ name: 'Home' });
+        await router.push({
+          name: 'Profile',
+          params: { id: profile.id }
+        });
       }
     } catch (error) {
       console.log(error.message);
