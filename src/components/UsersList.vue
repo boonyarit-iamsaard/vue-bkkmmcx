@@ -73,13 +73,15 @@ export default {
       headers: [
         { text: 'Position', value: 'position', align: 'left' },
         { text: 'Name', value: 'name', align: 'left' },
-        { text: 'Entitled', value: 'entitled', align: 'left' },
-        { text: 'Used', value: 'used', align: 'left' },
-        { text: 'Used (%)', value: 'usedPercent', align: 'left' },
+        { text: 'ANL', value: 'entitled', align: 'left' },
+        { text: 'ANL-Used', value: 'used', align: 'left' },
+        { text: 'ANL-Used (%)', value: 'usedPercent', align: 'left' },
+        { text: 'SLS3', value: 'slsEntitled', align: 'left' },
+        { text: 'SLS3-Used', value: 'sls', align: 'left' },
+        { text: 'SLS3-Remains', value: 'slsRemains', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
       ],
-      items: [],
-      leavePerUser: [],
+      // items: [],
       search: null
     };
   },
@@ -88,22 +90,19 @@ export default {
     setItems() {
       let items = [];
       this.getAllUsers.forEach(user => {
-        let leavePerUser = [];
-        let anlUsed = [];
-        this.getAllLeaves.forEach(leave => {
-          if (leave.userId === user.id) {
-            leavePerUser.push(leave);
-          }
-          if (
+        let sls = this.getAllLeaves.filter(
+          leave => leave.type === 'SLS' && leave.userId === user.id
+        );
+        let anl = this.getAllLeaves.filter(
+          leave =>
             leave.userId === user.id &&
             leave.priority !== 'H' &&
-            leave.status !== 'Rejected'
-          ) {
-            anlUsed.push(leave);
-          }
-        });
-        let used = this.leaveUsed(anlUsed);
-        let usedPercent = (used / user.entitled) * 100;
+            leave.status !== 'Rejected' &&
+            leave.type !== 'SLS'
+        );
+        let anlUsed = this.leaveUsed(anl);
+        let slsUsed = this.leaveUsed(sls);
+        let usedPercent = (anlUsed / user.entitled) * 100;
         items.push({
           id: user.id,
           sortIndex: user.sortIndex,
@@ -111,9 +110,11 @@ export default {
           name: `${user.firstName} ${user.lastName.slice(0, 1)}.`,
           lastName: user.lastName,
           entitled: user.entitled.toFixed(1),
-          leavePerUser: leavePerUser,
-          used: used,
-          usedPercent: usedPercent.toFixed(1) + ' %'
+          used: anlUsed,
+          usedPercent: usedPercent.toFixed(1) + ' %',
+          slsEntitled: user.sls || 0,
+          sls: slsUsed,
+          slsRemains: user.sls - slsUsed || 0
         });
       });
       return items;
@@ -133,8 +134,8 @@ export default {
       }
     },
 
-    leaveUsed(anlUsed) {
-      return anlUsed.reduce((a, b) => a + b.days, 0);
+    leaveUsed(leave) {
+      return leave.reduce((a, b) => a + b.days, 0);
     },
 
     viewProfile(item) {

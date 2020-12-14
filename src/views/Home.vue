@@ -57,6 +57,6 @@ export default {
 
 <style scoped>
 .v-tab.v-tab--active {
-  background-color: #eeeeee;
+  background-color: #e0e0e0;
 }
 </style>

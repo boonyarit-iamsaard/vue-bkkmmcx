@@ -84,7 +84,7 @@
             </v-card>
           </v-col>
         </v-row>
-        <!-- <v-row>
+        <v-row>
           <v-col cols="12">
             <v-btn
               outlined
@@ -109,7 +109,7 @@
               <v-icon class="ml-4">mdi-calendar</v-icon>
             </v-btn>
           </v-col>
-        </v-row> -->
+        </v-row>
       </v-col>
     </v-row>
     <v-dialog v-model="giftDialog" width="400">
@@ -268,8 +268,11 @@ export default {
     },
     setSLS() {
       return [
-        { title: 'SLS-3', value: this.profile.sls },
-        { title: 'Remains', value: this.profile.sls - this.leaveUsed().sls }
+        { title: 'SLS-3', value: this.profile.sls || 0 },
+        {
+          title: 'Remains',
+          value: this.profile.sls - this.leaveUsed().sls || 0
+        }
       ];
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <Spinner v-if="loading" />
-    <v-toolbar flat>
+    <v-toolbar flat dense>
       <template>
         <v-tabs v-model="tab">
           <v-tabs-slider color="primary"></v-tabs-slider>
@@ -52,4 +52,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-tab.v-tab--active {
+  background-color: #e0e0e0;
+}
+</style>

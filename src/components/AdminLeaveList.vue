@@ -103,7 +103,6 @@ export default {
   },
   data() {
     return {
-      // userId: this.$route.params.id,
       search: null,
       loading: false,
       yearFilter: 2021,
@@ -162,12 +161,10 @@ export default {
       }
     },
     editItem(item) {
-      console.log(item);
       this.editDialog = true;
       this.editDialogItem = Object.assign({}, item);
     },
     deleteItem(item) {
-      console.log(item);
       this.deleteDialog = true;
       this.deleteDialogItem = {
         id: item.id,
