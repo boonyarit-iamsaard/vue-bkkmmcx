@@ -64,15 +64,27 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12">
-            <v-card>
+          <v-col class="pt-0">
+            <v-card class="rounded-lg">
               <v-card-text>
-                SLS
+                <v-row>
+                  <v-col
+                    v-for="(item, index) in this.setSLS"
+                    :key="index"
+                    class="py-0"
+                  >
+                    <p class="subtitle-1">{{ item.title }}</p>
+                    <p class="title">
+                      {{ item.value }}
+                    </p>
+                    <p class="caption mb-0">days</p>
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
-        <v-row>
+        <!-- <v-row>
           <v-col cols="12">
             <v-btn
               outlined
@@ -97,7 +109,7 @@
               <v-icon class="ml-4">mdi-calendar</v-icon>
             </v-btn>
           </v-col>
-        </v-row>
+        </v-row> -->
       </v-col>
     </v-row>
     <v-dialog v-model="giftDialog" width="400">
@@ -180,19 +192,19 @@ export default {
           leave.status !== 'Rejected'
       );
 
-      let used = leave.reduce((a, b) => a + b.days, 0);
-      let anl1 = leave.filter(
-        result => result.priority === 'ANL-1' && leave.status !== 'Rejected'
-      ).length;
-      let anl2 = leave.filter(
-        result => result.priority === 'ANL-2' && leave.status !== 'Rejected'
-      ).length;
-      let tyc = leave.filter(
-        result => result.priority === 'TYC' && leave.status !== 'Rejected'
-      ).length;
+      let used = leave
+        .filter(result => result.type !== 'SLS')
+        .reduce((a, b) => a + b.days, 0);
+      let anl1 = leave.filter(result => result.priority === 'ANL-1').length;
+      let anl2 = leave.filter(result => result.priority === 'ANL-2').length;
+      let tyc = leave.filter(result => result.priority === 'TYC').length;
+      let sls = leave
+        .filter(result => result.type === 'SLS')
+        .reduce((a, b) => a + b.days, 0);
 
-      return { used: used, anl1: anl1, anl2: anl2, tyc: tyc };
+      return { used: used, anl1: anl1, anl2: anl2, tyc: tyc, sls: sls };
     },
+
     percentUsed() {
       let percent = (this.leaveUsed().used / this.profile.entitled) * 100;
       return percent.toFixed(1);
@@ -252,6 +264,12 @@ export default {
         { title: 'ANL-1', value: this.profile.anl1 - this.leaveUsed().anl1 },
         { title: 'ANL-2', value: this.profile.anl2 - this.leaveUsed().anl2 },
         { title: 'ANL-3', value: this.priorityRemains() }
+      ];
+    },
+    setSLS() {
+      return [
+        { title: 'SLS-3', value: this.profile.sls },
+        { title: 'Remains', value: this.profile.sls - this.leaveUsed().sls }
       ];
     }
   }
