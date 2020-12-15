@@ -84,6 +84,7 @@
               <v-col cols="12">
                 <v-select
                   :items="leaveTypeItems"
+                  :rules="priorityRules"
                   @change="onLeaveTypeChange"
                   v-model="leaveType"
                   label="Leave Type"
