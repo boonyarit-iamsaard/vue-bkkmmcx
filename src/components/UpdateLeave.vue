@@ -78,14 +78,13 @@
             :items="phaseItems"
             v-model="item.phase"
             label="Phase"
-            readonly
           ></v-select>
         </v-col>
         <v-col cols="12" v-if="item.type === 'ANL' || item.type === 'H'">
           <v-select
             :items="disabledPriority"
             :rules="priorityRules"
-            :read="isPhaseB"
+            :readonly="isPhaseB"
             v-model="item.priority"
             label="Priority"
             color="primary"
