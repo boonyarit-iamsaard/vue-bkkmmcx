@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-toolbar flat dense>
+    <v-toolbar flat dense class="pb-4">
       <template>
         <v-tabs v-model="tab">
           <v-tabs-slider color="primary"></v-tabs-slider>
@@ -9,6 +9,9 @@
           </v-tab>
           <v-tab>
             All
+          </v-tab>
+          <v-tab v-if="isAdmin">
+            Admin
           </v-tab>
         </v-tabs>
       </template>
@@ -20,12 +23,16 @@
       <v-tab-item>
         <AdminCalendar />
       </v-tab-item>
+      <v-tab-item>
+        <DaysOffCalendar />
+      </v-tab-item>
     </v-tabs-items>
   </v-container>
 </template>
 
 <script>
 import UserCalendar from '@/components/UserCalendar.vue';
+import DaysOffCalendar from '@/components/DaysOffCalendar.vue';
 import AdminCalendar from '@/components/AdminCalendar.vue';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -33,6 +40,7 @@ export default {
   name: 'Home',
   components: {
     UserCalendar,
+    DaysOffCalendar,
     AdminCalendar
   },
   data() {

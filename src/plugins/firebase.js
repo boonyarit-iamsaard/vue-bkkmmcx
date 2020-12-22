@@ -20,7 +20,7 @@ const auth = firebase.auth();
 // Collection references
 const usersCollection = firestore.collection('users');
 const leavesCollection = firestore.collection('leaves');
-const daysOffCollection = firestore.collection('daysoff');
+const daysOffCollection = firestore.collection('ab');
 const publicsCollection = firestore.collection('publics');
 
 export {

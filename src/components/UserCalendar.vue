@@ -3,7 +3,7 @@
     <v-col class="py-0">
       <v-sheet tile class="d-flex">
         <Spinner v-if="loading" />
-        <v-toolbar flat>
+        <v-toolbar flat class="mt-4">
           <v-btn dark fab small color="primary" to="/apply">
             <v-icon>mdi-plus</v-icon>
           </v-btn>

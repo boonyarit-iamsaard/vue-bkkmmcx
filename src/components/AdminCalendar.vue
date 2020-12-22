@@ -3,7 +3,7 @@
     <v-col class="py-0">
       <v-sheet tile class="d-flex">
         <Spinner v-if="loading" />
-        <v-toolbar flat>
+        <v-toolbar flat class="mt-4">
           <v-toolbar-items>Admin's calendar</v-toolbar-items>
           <v-spacer></v-spacer>
           <v-btn icon class="ma-2" @click="$refs.calendar.prev()">
