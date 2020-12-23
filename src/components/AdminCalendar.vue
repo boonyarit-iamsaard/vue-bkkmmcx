@@ -120,7 +120,8 @@ export default {
           let event = {};
           if (leave.userId === user.id && leave.status !== 'Rejected') {
             event = {
-              name: `${leave.phase} | ${user.firstName} : ${leave.priority}`,
+              // name: `${leave.phase} | ${user.firstName} : ${leave.priority}`,
+              name: `${leave.priority} | ${user.firstName} : ${leave.phase}`,
               start: `${leave.startDate}`,
               end: `${leave.endDate}`,
               days: `${leave.days}`,

@@ -125,7 +125,7 @@ export default {
       for (let leave of this.getLeaves) {
         if (leave.status !== 'Rejected') {
           let event = {
-            name: `${leave.phase} | ${this.getUserProfile.firstName} : ${leave.priority}`,
+            name: `${leave.priority} | ${this.getUserProfile.firstName} : ${leave.phase}`,
             start: `${leave.startDate}`,
             end: `${leave.endDate}`,
             days: `${leave.days}`,

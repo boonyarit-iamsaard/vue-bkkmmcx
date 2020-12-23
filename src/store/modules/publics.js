@@ -11,7 +11,8 @@ const getters = {
 const actions = {
   async fetchPublic({ commit }) {
     try {
-      await firebase.publicsCollection.get().then(snapshot => {
+      // await firebase.publicsCollection.get().then(snapshot => {
+      await firebase.publicsCollection.onSnapshot(snapshot => {
         let publicList = [];
 
         snapshot.forEach(doc => {

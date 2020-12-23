@@ -27,6 +27,11 @@
           {{ item.status }}
         </v-chip>
       </template>
+      <template v-slot:[`item.priority`]="{ item }">
+        <v-chip outlined :color="setPriorityColor(item.priority)">
+          {{ item.priority }}
+        </v-chip>
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon color="primary" class="mr-2" @click="editItem(item)">
           mdi-pencil
@@ -123,6 +128,15 @@ export default {
         { text: 'Phase', value: 'phase', align: 'center' },
         { text: 'Status', value: 'status', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
+      ],
+      eventColor: [
+        'secondary',
+        'accent',
+        'primary',
+        'indigo lighten-1',
+        'pink darken-1',
+        'amber darken-4',
+        'blue-grey darken-1'
       ]
     };
   },
@@ -192,6 +206,24 @@ export default {
       }
 
       this.loading = false;
+    },
+    setPriorityColor(priority) {
+      switch (priority) {
+        case 'ANL-1':
+          return this.eventColor[0];
+        case 'ANL-2':
+          return this.eventColor[1];
+        case 'ANL-3':
+          return this.eventColor[2];
+        case 'H':
+          return this.eventColor[3];
+        case 'TYC':
+          return this.eventColor[4];
+        case 'SLS':
+          return this.eventColor[5];
+        default:
+          return this.eventColor[6];
+      }
     }
   },
   created() {
