@@ -50,6 +50,20 @@ const actions = {
     } catch (error) {
       console.log(error.message);
     }
+  },
+
+  async updateDayOff({ dispatch }, dayOff) {
+    try {
+      await firebase.daysOffCollection
+        .doc(dayOff.id)
+        .update({ startDate: dayOff.start, endDate: dayOff.end })
+        .then(() => {
+          dispatch('fetchAllDaysOff');
+          console.log('Updated');
+        });
+    } catch (error) {
+      return error.message;
+    }
   }
 };
 

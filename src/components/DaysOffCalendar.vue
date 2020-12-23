@@ -77,29 +77,47 @@
               <p><strong>Start:</strong> {{ selectedEvent.start }}</p>
               <p><strong>End:</strong> {{ selectedEvent.end }}</p>
               <p><strong>Days:</strong> {{ selectedEvent.days }}</p>
-              <p class="mb-0">
-                <strong>Status:</strong> {{ selectedEvent.status }}
-              </p>
+              <p><strong>Status:</strong> {{ selectedEvent.status }}</p>
+              <v-btn
+                dark
+                color="primary"
+                @click="onEditDayOff(selectedEvent)"
+                v-if="selectedEvent.name === 'Day Off'"
+                >Edit</v-btn
+              >
             </v-card-text>
           </v-card>
         </v-menu>
       </v-sheet>
+      <v-dialog
+        v-model="editDayOffDialog"
+        max-width="435"
+        transition="dialog-transition"
+      >
+        <EditDayOff
+          :dayOff="selectedEvent"
+          v-on:close="editDayOffDialog = false"
+        />
+      </v-dialog>
     </v-col>
   </v-row>
 </template>
 
 <script>
 import Spinner from '@/components/Spinner.vue';
+import EditDayOff from '@/components/EditDayOff.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'DaysOffCalendar',
   components: {
-    Spinner
+    Spinner,
+    EditDayOff
   },
   data() {
     return {
       loading: false,
+      editDayOffDialog: false,
       showMonthOnFirst: false,
       selectedOpen: false,
       selectedElement: null,
@@ -153,6 +171,7 @@ export default {
       this.getAllDaysOff.forEach(off => {
         if (off.userId === this.user.id) {
           let event = {
+            id: off.id,
             name: 'Day Off',
             start: `${off.startDate}`,
             end: `${off.endDate}`,
@@ -185,6 +204,11 @@ export default {
   },
   methods: {
     ...mapActions(['fetchAllLeaves', 'fetchPublic', 'fetchAllDaysOff']),
+    onEditDayOff(selectedEvent) {
+      this.selectedOpen = false;
+      this.editDayOffDialog = true;
+      console.log(selectedEvent.id, selectedEvent.start, selectedEvent.end);
+    },
     compare(a, b) {
       if (a.name < b.name) {
         return -1;
