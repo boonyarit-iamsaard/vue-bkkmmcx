@@ -91,7 +91,10 @@ export default {
       let items = [];
       this.getAllUsers.forEach(user => {
         let sls = this.getAllLeaves.filter(
-          leave => leave.type === 'SLS' && leave.userId === user.id
+          leave =>
+            leave.type === 'SLS' &&
+            leave.userId === user.id &&
+            leave.status !== 'Rejected'
         );
         let anl = this.getAllLeaves.filter(
           leave =>

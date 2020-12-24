@@ -8,7 +8,7 @@
             <v-icon>mdi-plus</v-icon>
           </v-btn> -->
           <v-select
-            :items="selectedUser"
+            :items="selectedUser || user"
             item-text="name"
             item-value="id"
             v-model="user"
@@ -156,7 +156,6 @@ export default {
       this.getAllLeaves.forEach(leave => {
         if (leave.status !== 'Rejected' && leave.userId === this.user.id) {
           let event = {
-            // name: `${leave.phase} | ${this.user.name} : ${leave.priority}`,
             name: `${leave.priority} | ${this.user.name} : ${leave.phase}`,
             start: `${leave.startDate}`,
             end: `${leave.endDate}`,
