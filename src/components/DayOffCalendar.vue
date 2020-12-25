@@ -8,7 +8,7 @@
             <v-icon>mdi-plus</v-icon>
           </v-btn> -->
           <v-select
-            :items="selectedUser || user"
+            :items="selectedUser"
             item-text="name"
             item-value="id"
             v-model="user"
@@ -109,7 +109,7 @@ import EditDayOff from '@/components/EditDayOff.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'DaysOffCalendar',
+  name: 'DayOffCalendar',
   components: {
     Spinner,
     EditDayOff

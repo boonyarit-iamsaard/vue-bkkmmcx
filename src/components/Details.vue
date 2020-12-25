@@ -132,13 +132,13 @@
       </v-card>
     </v-dialog>
     <v-dialog v-model="daysOffDialog" width="600">
-      <DaysOffList :userId="this.$route.params.id" />
+      <DayOffList :userId="this.$route.params.id" />
     </v-dialog>
   </v-container>
 </template>
 
 <script>
-import DaysOffList from '@/components/DaysOffList';
+import DaysOffList from '@/components/DayOffList';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {

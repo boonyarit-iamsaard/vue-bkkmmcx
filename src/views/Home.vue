@@ -24,7 +24,7 @@
         <AdminCalendar />
       </v-tab-item>
       <v-tab-item>
-        <DaysOffCalendar />
+        <DayOffCalendar />
       </v-tab-item>
     </v-tabs-items>
   </v-container>
@@ -32,7 +32,7 @@
 
 <script>
 import UserCalendar from '@/components/UserCalendar.vue';
-import DaysOffCalendar from '@/components/DaysOffCalendar.vue';
+import DayOffCalendar from "@/components/DayOffCalendar";
 import AdminCalendar from '@/components/AdminCalendar.vue';
 import { mapGetters, mapActions } from 'vuex';
 
@@ -40,7 +40,7 @@ export default {
   name: 'Home',
   components: {
     UserCalendar,
-    DaysOffCalendar,
+    DayOffCalendar,
     AdminCalendar
   },
   data() {
