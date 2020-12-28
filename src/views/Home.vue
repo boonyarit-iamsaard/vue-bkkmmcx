@@ -32,7 +32,7 @@
 
 <script>
 import UserCalendar from '@/components/UserCalendar.vue';
-import DayOffCalendar from "@/components/DayOffCalendar";
+import DayOffCalendar from '@/components/DayOffCalendar';
 import AdminCalendar from '@/components/AdminCalendar.vue';
 import { mapGetters, mapActions } from 'vuex';
 
