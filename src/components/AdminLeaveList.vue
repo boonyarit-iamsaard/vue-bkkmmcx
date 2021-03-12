@@ -32,6 +32,23 @@
           {{ item.priority }}
         </v-chip>
       </template>
+      <template v-slot:[`item.added`]="{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-if="item.added"
+              color="grey"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              mdi-clock
+            </v-icon>
+            <span v-else>N/A</span>
+          </template>
+          <span v-if="item.added">{{ new Date(item.added) }}</span>
+        </v-tooltip>
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon color="primary" class="mr-2" @click="editItem(item)">
           mdi-pencil
@@ -127,6 +144,7 @@ export default {
         { text: 'Priority', value: 'priority', align: 'center' },
         { text: 'Phase', value: 'phase', align: 'center' },
         { text: 'Status', value: 'status', align: 'left' },
+        { text: 'Added', value: 'added', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
       ],
       eventColor: [
