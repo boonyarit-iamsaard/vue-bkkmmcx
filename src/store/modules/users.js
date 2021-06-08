@@ -2,13 +2,15 @@ import * as firebase from '@/plugins/firebase';
 import router from '@/router';
 
 const state = {
-  userProfile: {},
-  allUsers: []
+  allUsers: [],
+  settings: {},
+  userProfile: {}
 };
 
 const getters = {
-  getUserProfile: state => state.userProfile,
-  getAllUsers: state => state.allUsers
+  getAllUsers: state => state.allUsers,
+  getSettings: state => state.settings,
+  getUserProfile: state => state.userProfile
 };
 
 const actions = {
@@ -147,6 +149,26 @@ const actions = {
     } catch (error) {
       console.log(error.message);
     }
+  },
+
+  async fetchSettings({ commit }) {
+    try {
+      await firebase.settingsCollection.onSnapshot(snapshot => {
+        let settings = {};
+
+        snapshot.forEach(doc => {
+          let setting = doc.data();
+          Object.keys(setting).forEach(key => {
+            settings[key] = setting[key];
+          });
+        });
+
+        commit('SET_SETTINGS', settings);
+        return settings;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
@@ -157,6 +179,10 @@ const mutations = {
 
   setAllUsers(state, allUsers) {
     state.allUsers = allUsers;
+  },
+
+  SET_SETTINGS(state, settings) {
+    state.settings = settings;
   }
 };
 

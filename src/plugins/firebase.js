@@ -18,16 +18,18 @@ const firestore = firebase.firestore();
 const auth = firebase.auth();
 
 // Collection references
-const usersCollection = firestore.collection('users');
-const leavesCollection = firestore.collection('leaves');
 const daysOffCollection = firestore.collection('ab');
+const leavesCollection = firestore.collection('leaves');
 const publicsCollection = firestore.collection('publics');
+const settingsCollection = firestore.collection('settings');
+const usersCollection = firestore.collection('users');
 
 export {
-  firestore,
   auth,
-  usersCollection,
-  leavesCollection,
   daysOffCollection,
-  publicsCollection
+  firestore,
+  leavesCollection,
+  publicsCollection,
+  settingsCollection,
+  usersCollection
 };

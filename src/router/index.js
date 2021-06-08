@@ -55,6 +55,16 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/admin/users',
+    name: 'AdminUsersList',
+    component: () => import('../components/AdminUsersList.vue')
+  },
+  {
+    path: '/admin/users/:id',
+    name: 'AdminUsersDetailsForm',
+    component: () => import('../components/AdminUsersDetailsForm.vue')
   }
 ];
 
