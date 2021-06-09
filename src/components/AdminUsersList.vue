@@ -10,7 +10,7 @@
       :items-per-page="10"
       :sort-by="['firstName']"
     >
-      <template v-slot:[`item.actions`]="{ item }">
+      <template v-slot:item.actions="{ item }">
         <v-icon @click="clickEditIcon(item)">
           mdi-pencil
         </v-icon>
@@ -29,14 +29,13 @@ export default {
       headers: [
         { text: 'Firstname', value: 'firstName' },
         { text: 'Lastname', value: 'lastName' },
-        { text: '', value: 'actions', align: 'right' }
+        { text: 'Actions', value: 'actions', align: 'right' }
       ]
     };
   },
 
   methods: {
     clickEditIcon(item) {
-      console.log(item.id);
       this.$router.push({
         name: 'AdminUsersDetailsForm',
         params: { id: item.id }

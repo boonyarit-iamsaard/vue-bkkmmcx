@@ -19,9 +19,6 @@
       <v-tab-item>
         <AdminLeaveList />
       </v-tab-item>
-      <v-tab-item>
-        Settings
-      </v-tab-item>
     </v-tabs-items>
   </v-container>
 </template>
@@ -43,7 +40,7 @@ export default {
     return {
       loading: false,
       isBoonyarit: false,
-      items: ['USERS', 'LEAVES', 'SETTING'],
+      items: ['USERS', 'LEAVES'],
       tab: null
     };
   },

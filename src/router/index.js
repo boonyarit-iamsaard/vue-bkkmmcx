@@ -1,9 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+import Admin from '@/views/Admin.vue';
 import Home from '@/views/Home.vue';
 import Profile from '@/views/Profile';
 import ApplyLeave from '@/views/ApplyLeave';
 import Login from '@/views/Login';
+
 import { auth } from '@/plugins/firebase';
 
 Vue.use(VueRouter);
@@ -51,7 +54,7 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import('../views/Admin.vue'),
+    component: Admin,
     meta: {
       requiresAuth: true
     }

@@ -4,7 +4,7 @@
     <v-form @submit.prevent="signInHandler" v-model="valid" ref="form">
       <v-container>
         <v-row>
-          <v-col sm="6" md="6" lg="4" class="mx-auto">
+          <v-col cols="12" sm="6" class="mx-auto">
             <v-card rounded="lg" class="pa-6" elevation="2">
               <p class="display-1 text-center">Login</p>
               <v-row>

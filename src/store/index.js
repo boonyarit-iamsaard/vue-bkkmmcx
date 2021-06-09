@@ -13,7 +13,7 @@ export default new Vuex.Store({
   state: {},
   actions: {},
   mutations: {},
-  plugins: [createPersistedState({ storage: window.sessionStorage })],
+  plugins: [createPersistedState()],
   modules: {
     users,
     leaves,

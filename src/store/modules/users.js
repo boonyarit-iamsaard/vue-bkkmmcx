@@ -60,7 +60,7 @@ const actions = {
     await dispatch('initiateNewUserDaysOff', {
       date: payload.initiateDate,
       id: payload.uid
-    }).then(console.log('initiateNewUserDaysOff successful.'));
+    });
   },
 
   async initiateNewUserDaysOff({ dispatch }, initiateData) {
@@ -105,7 +105,7 @@ const actions = {
     }
   },
 
-  async fetchAllUsers({ commit }) {
+  async fetchAllUsers(context) {
     try {
       await firebase.usersCollection.onSnapshot(snapshot => {
         let allUsers = [];
@@ -117,7 +117,7 @@ const actions = {
           allUsers.push(user);
         });
 
-        commit('setAllUsers', allUsers);
+        context.commit('setAllUsers', allUsers);
       });
     } catch (error) {
       console.error(error.message);
@@ -151,7 +151,7 @@ const actions = {
     }
   },
 
-  async fetchSettings({ commit }) {
+  async fetchSettings(context) {
     try {
       await firebase.settingsCollection.onSnapshot(snapshot => {
         let settings = {};
@@ -163,9 +163,22 @@ const actions = {
           });
         });
 
-        commit('SET_SETTINGS', settings);
+        context.commit('SET_SETTINGS', settings);
         return settings;
       });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async updateUserDetails(context, payload) {
+    try {
+      return await firebase.usersCollection
+        .doc(payload.id)
+        .set(payload)
+        .then(() => {
+          context.commit('UPDATE_USER', payload);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -183,6 +196,14 @@ const mutations = {
 
   SET_SETTINGS(state, settings) {
     state.settings = settings;
+  },
+
+  UPDATE_USER(state, payload) {
+    const index = state.allUsers.findIndex(user => user.id === payload.id);
+
+    if (index !== -1) {
+      state.allUsers.splice(index, 1, payload);
+    }
   }
 };
 

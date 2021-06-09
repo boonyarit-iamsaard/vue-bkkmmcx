@@ -36,20 +36,16 @@
           {{ item.usedPercent }}
         </v-chip>
       </template>
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              color="gray"
-              @click="viewProfile(item)"
-              v-bind="attrs"
-              v-on="on"
-            >
-              mdi-account
-            </v-icon>
-          </template>
-          <span>View Profile</span>
-        </v-tooltip>
+      <template v-slot:item.actions="{ item }">
+        <div class="d-flex align-center">
+          <v-icon class="mr-2" @click="viewProfile(item)">
+            mdi-account
+          </v-icon>
+
+          <v-icon @click="editUser(item)">
+            mdi-pencil
+          </v-icon>
+        </div>
       </template>
     </v-data-table>
   </v-container>
@@ -63,9 +59,9 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'UsersList',
   components: {
+    ProfileDialog,
     Progress,
-    UpdateLeave,
-    ProfileDialog
+    UpdateLeave
   },
   data() {
     return {
@@ -81,7 +77,6 @@ export default {
         { text: 'SLS3-Remains', value: 'slsRemains', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
       ],
-      // items: [],
       search: null
     };
   },
@@ -143,6 +138,13 @@ export default {
 
     viewProfile(item) {
       this.$router.push({ name: 'Profile', params: { id: item.id } });
+    },
+
+    editUser(item) {
+      this.$router.push({
+        name: 'AdminUsersDetailsForm',
+        params: { id: item.id }
+      });
     }
   },
 
