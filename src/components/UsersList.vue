@@ -72,9 +72,9 @@ export default {
         { text: 'ANL', value: 'entitled', align: 'left' },
         { text: 'ANL-Used', value: 'used', align: 'left' },
         { text: 'ANL-Used (%)', value: 'usedPercent', align: 'left' },
-        { text: 'SLS3', value: 'slsEntitled', align: 'left' },
-        { text: 'SLS3-Used', value: 'sls', align: 'left' },
-        { text: 'SLS3-Remains', value: 'slsRemains', align: 'left' },
+        { text: 'SLS4', value: 'slsEntitled', align: 'left' },
+        { text: 'SLS4-Used', value: 'sls', align: 'left' },
+        { text: 'SLS4-Remains', value: 'slsRemains', align: 'left' },
         { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
       ],
       search: null
@@ -87,7 +87,7 @@ export default {
       this.getAllUsers.forEach(user => {
         let sls = this.getAllLeaves.filter(
           leave =>
-            leave.type === 'SLS' &&
+            leave.type === 'SLS4' &&
             leave.userId === user.id &&
             leave.status !== 'Rejected'
         );
@@ -110,9 +110,9 @@ export default {
           entitled: user.entitled.toFixed(1),
           used: anlUsed,
           usedPercent: usedPercent.toFixed(1) + ' %',
-          slsEntitled: user.sls || 0,
+          slsEntitled: user.sls4 || 0,
           sls: slsUsed,
-          slsRemains: user.sls - slsUsed || 0
+          slsRemains: user.sls4 - slsUsed || 0
         });
       });
       return items;
