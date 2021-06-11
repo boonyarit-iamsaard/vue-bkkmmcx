@@ -82,7 +82,6 @@ export default {
     ...mapActions(['fetchSettings', 'updateUserDetails']),
 
     submitHandler() {
-      console.log(this.user);
       this.updateUserDetails(this.user).then(() => {
         this.$router.go(-1);
       });

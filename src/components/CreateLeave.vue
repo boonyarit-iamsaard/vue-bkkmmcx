@@ -142,7 +142,7 @@ export default {
     priorityRules: [v => v.length > 0 || 'Priority is required.'],
     startDate: new Date('2021-01-01').toISOString().substr(0, 10),
     endDate: new Date('2021-01-01').toISOString().substr(0, 10),
-    leaveTypeItems: ['ANL', 'SLS', 'H'],
+    leaveTypeItems: ['ANL', 'SLS4', 'H'],
     phaseItems: ['A', 'B'],
     leaveType: '',
     phase: 'B',
@@ -184,8 +184,8 @@ export default {
           priority = 'ANL';
         } else if (this.leaveType === 'H') {
           priority = 'H';
-        } else if (this.leaveType === 'SLS') {
-          priority = 'SLS';
+        } else if (this.leaveType === 'SLS4') {
+          priority = 'SLS4';
           this.phase = 'None';
         } else priority = this.priority;
 

@@ -64,7 +64,7 @@
             {{ deleteDialogItem.priority }}
           </p>
         </v-card-text>
-        <v-card-actions class="justify-center pb-4 pt-0 px-4">
+        <v-card-actions class="d-flex justify-space-between pb-4 pt-0 px-4">
           <v-btn outlined color="secondary" @click="deleteLeaveHandler">
             delete
             <v-icon class="ml-2">mdi-delete</v-icon>

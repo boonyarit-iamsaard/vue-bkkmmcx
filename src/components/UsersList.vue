@@ -42,8 +42,16 @@
             mdi-account
           </v-icon>
 
-          <v-icon @click="editUser(item)">
+          <v-icon
+            class="mr-2"
+            v-if="isSuperUser"
+            @click="editUserDetails(item)"
+          >
             mdi-pencil
+          </v-icon>
+
+          <v-icon v-if="isSuperUser">
+            mdi-delete
           </v-icon>
         </div>
       </template>
@@ -81,7 +89,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getAllUsers', 'getAllLeaves']),
+    ...mapGetters(['getAllUsers', 'getAllLeaves', 'getUserProfile']),
+
+    isSuperUser() {
+      return this.getUserProfile.firstName === 'Boonyarit';
+    },
+
     setItems() {
       let items = [];
       this.getAllUsers.forEach(user => {
@@ -140,7 +153,7 @@ export default {
       this.$router.push({ name: 'Profile', params: { id: item.id } });
     },
 
-    editUser(item) {
+    editUserDetails(item) {
       this.$router.push({
         name: 'AdminUsersDetailsForm',
         params: { id: item.id }

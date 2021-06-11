@@ -193,7 +193,7 @@ export default {
       );
 
       let used = leave
-        .filter(result => result.type !== 'SLS')
+        .filter(result => result.type !== 'SLS' && result.type !== 'SLS4')
         .reduce((a, b) => a + b.days, 0);
       let anl1 = leave.filter(result => result.priority === 'ANL-1').length;
       let anl2 = leave.filter(result => result.priority === 'ANL-2').length;
@@ -201,8 +201,11 @@ export default {
       let sls = leave
         .filter(result => result.type === 'SLS')
         .reduce((a, b) => a + b.days, 0);
+      let sls4 = leave
+        .filter(result => result.type === 'SLS4')
+        .reduce((a, b) => a + b.days, 0);
 
-      return { used: used, anl1: anl1, anl2: anl2, tyc: tyc, sls: sls };
+      return { used, anl1, anl2, tyc, sls, sls4 };
     },
 
     percentUsed() {
@@ -268,10 +271,10 @@ export default {
     },
     setSLS() {
       return [
-        { title: 'SLS-3', value: this.profile.sls || 0 },
+        { title: 'SLS-4', value: this.profile.sls4 || 0 },
         {
           title: 'Remains',
-          value: this.profile.sls - this.leaveUsed().sls || 0
+          value: this.profile.sls4 - this.leaveUsed().sls4 || 0
         }
       ];
     }

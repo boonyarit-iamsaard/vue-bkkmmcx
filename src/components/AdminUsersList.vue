@@ -11,7 +11,7 @@
       :sort-by="['firstName']"
     >
       <template v-slot:item.actions="{ item }">
-        <v-icon @click="clickEditIcon(item)">
+        <v-icon @click="editUserDetails(item)">
           mdi-pencil
         </v-icon>
       </template>
@@ -35,7 +35,7 @@ export default {
   },
 
   methods: {
-    clickEditIcon(item) {
+    editUserDetails(item) {
       this.$router.push({
         name: 'AdminUsersDetailsForm',
         params: { id: item.id }

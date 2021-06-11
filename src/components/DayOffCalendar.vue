@@ -238,6 +238,7 @@ export default {
         case 'TYC':
           return this.eventColor[4];
         case 'SLS':
+        case 'SLS4':
           return this.eventColor[5];
         default:
           return this.eventColor[6];

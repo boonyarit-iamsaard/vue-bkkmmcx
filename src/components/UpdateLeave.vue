@@ -144,7 +144,7 @@ export default {
         { text: 'Approved' },
         { text: 'Rejected' }
       ],
-      leaveTypeItems: ['ANL', 'SLS', 'H'],
+      leaveTypeItems: ['ANL', 'SLS', 'SLS4', 'H'],
       phaseItems: ['A', 'B'],
       leaveType: '',
       phase: 'B',
@@ -209,6 +209,9 @@ export default {
 
       if (this.item.type === 'SLS') {
         priority = 'SLS';
+        phase = 'None';
+      } else if (this.item.type === 'SLS4') {
+        priority = 'SLS4';
         phase = 'None';
       } else {
         priority = this.item.priority;
