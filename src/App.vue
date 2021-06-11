@@ -1,6 +1,9 @@
 <template>
   <v-app>
+    <LoadingProgress />
+
     <Navbar />
+
     <v-main>
       <router-view :key="$route.path" />
     </v-main>
@@ -9,10 +12,12 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import LoadingProgress from './components/common/LoadingProgress.vue';
 
 export default {
   name: 'App',
   components: {
+    LoadingProgress,
     Navbar
   },
   data() {
