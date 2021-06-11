@@ -24,7 +24,7 @@
               outlined
               type="number"
               v-if="detail.type === 'number'"
-              v-model="user[detail.key]"
+              v-model.number="user[detail.key]"
               :label="detail.label"
             ></v-text-field>
             <v-checkbox
@@ -82,6 +82,7 @@ export default {
     ...mapActions(['fetchSettings', 'updateUserDetails']),
 
     submitHandler() {
+      console.log(this.user);
       this.updateUserDetails(this.user).then(() => {
         this.$router.go(-1);
       });
