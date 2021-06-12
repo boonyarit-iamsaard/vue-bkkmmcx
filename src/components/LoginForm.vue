@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Progress v-if="loading" />
     <v-form @submit.prevent="signInHandler" v-model="valid" ref="form">
       <v-container>
         <v-row>
@@ -134,6 +135,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       valid: false,
       resetValid: false,
       dialog: false,
@@ -176,17 +178,14 @@ export default {
     },
 
     async signInHandler() {
-      this.$store.dispatch('setIsLoading', true);
-
+      this.loading = true;
       try {
         await this.signIn({
           email: this.email,
           password: this.password
-        }).then(() => {
-          this.$store.dispatch('setIsLoading', false);
         });
       } catch (error) {
-        this.$store.dispatch('setIsLoading', true);
+        this.loading = false;
         this.dialog = true;
         this.error = error.message;
         console.log(error.message);
