@@ -18,20 +18,25 @@
             single-line
             hide-details
           ></v-text-field>
+
           <v-spacer></v-spacer>
+
           <v-toolbar-title>All Leaves</v-toolbar-title>
         </v-toolbar>
       </template>
+
       <template v-slot:[`item.status`]="{ item }">
-        <v-chip outlined :color="getColor(item.status)">
-          {{ item.status }}
-        </v-chip>
+        <v-avatar size="32" :color="getColor(item.status)">
+          <span class="white--text">{{ item.status.substr(0, 1) }}</span>
+        </v-avatar>
       </template>
+
       <template v-slot:[`item.priority`]="{ item }">
         <v-chip outlined :color="setPriorityColor(item.priority)">
           {{ item.priority }}
         </v-chip>
       </template>
+
       <template v-slot:[`item.added`]="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
@@ -44,59 +49,76 @@
             >
               mdi-clock
             </v-icon>
+
             <span v-else>N/A</span>
           </template>
+
           <span v-if="item.added">{{ new Date(item.added) }}</span>
         </v-tooltip>
       </template>
+
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon color="primary" class="mr-2" @click="editItem(item)">
+        <v-icon class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
-        <v-icon color="secondary" @click="deleteItem(item)">
+
+        <v-icon @click="deleteItem(item)">
           mdi-delete
         </v-icon>
       </template>
     </v-data-table>
+
     <v-dialog v-model="editDialog" width="435">
       <UpdateLeave :item="editDialogItem" v-on:close="editDialog = false" />
     </v-dialog>
+
     <v-dialog v-model="deleteDialog" width="400">
       <v-card rounded-lg>
         <v-toolbar color="secondary" dark flat>
           <v-spacer></v-spacer>
+
           <v-toolbar-title class="justify-center"
             >Confirm Delete</v-toolbar-title
           >
+
           <v-spacer></v-spacer>
         </v-toolbar>
+
         <v-card-text class="pa-4">
           <p class="subtitle-2">{{ deleteDialogItem.name }}</p>
+
           <p>
             <span class="subtitle-2">From:</span> {{ deleteDialogItem.start }}
           </p>
+
           <p><span class="subtitle-2">End:</span> {{ deleteDialogItem.end }}</p>
+
           <p>
             <span class="subtitle-2">Days:</span> {{ deleteDialogItem.days }}
           </p>
+
           <p>
             <span class="subtitle-2">Type: </span>
             {{ deleteDialogItem.type }}
           </p>
+
           <p>
             <span class="subtitle-2">Priority: </span>
             {{ deleteDialogItem.priority }}
           </p>
+
           <p class="mb-0">
             <span class="subtitle-2">Phase: </span>
             {{ deleteDialogItem.phase }}
           </p>
         </v-card-text>
+
         <v-card-actions class="justify-center pb-4 pt-0 px-4">
           <v-btn outlined color="secondary" @click="deleteLeaveHandler">
             delete
             <v-icon class="ml-2">mdi-delete</v-icon>
           </v-btn>
+
           <v-btn outlined color="primary" @click="deleteDialog = false">
             cancel
             <v-icon class="ml-2">mdi-close</v-icon>
@@ -104,6 +126,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <v-dialog v-model="deleteResult" width="400">
       <v-alert type="success" color="primary" class="mb-0" border="left">
         {{ message }}
