@@ -47,23 +47,60 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-card class="mx-auto mb-4" max-width="599">
+      <v-row class="ma-0">
+        <v-col class="pa-4" cols="12">
+          <v-text-field dense label="UID" outlined v-model="uid"></v-text-field>
+        </v-col>
+
+        <v-col class="pa-4">
+          <v-btn block elevation="0" color="primary" @click="searchDaysOff"
+            >Search</v-btn
+          >
+        </v-col>
+      </v-row>
+
+      <v-data-table
+        :headers="headers"
+        :items="daysOff"
+        :sort-by="['startDate']"
+        :sort-desc="['true']"
+      >
+        <template v-slot:item.actions="{ item }">
+          <div class="d-flex align-center">
+            <v-icon @click="deleteDayOff(item)">
+              mdi-delete
+            </v-icon>
+          </div>
+        </template>
+      </v-data-table>
+    </v-card>
   </v-form>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import * as firebase from '@/plugins/firebase';
 export default {
   name: 'AdminUsersDetailsForm',
 
   data() {
     return {
+      daysOff: [],
       editableUserDetails: [],
+      headers: [
+        { text: 'Start', value: 'startDate', align: 'left' },
+        { text: 'End', value: 'endDate', align: 'left' },
+        { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
+      ],
+      uid: null,
       user: {}
     };
   },
 
   computed: {
-    ...mapGetters(['getAllUsers', 'getSettings']),
+    ...mapGetters(['getAllUsers', 'getSettings', 'getAllDaysOff']),
 
     userDetails() {
       const userDetails = this.user;
@@ -80,6 +117,35 @@ export default {
 
   methods: {
     ...mapActions(['fetchSettings', 'updateUserDetails']),
+
+    async searchDaysOff() {
+      try {
+        await firebase.daysOffCollection
+          .where('userId', '==', this.uid)
+          .get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              let off = doc.data();
+              off.id = doc.id;
+
+              this.daysOff.push(off);
+            });
+          });
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
+
+    async deleteDayOff(item) {
+      try {
+        await firebase.daysOffCollection
+          .doc(item.id)
+          .delete()
+          .then(() => console.log(item.id + ' deleted'));
+      } catch (error) {
+        console.log(error.message);
+      }
+    },
 
     submitHandler() {
       this.updateUserDetails(this.user).then(() => {
@@ -108,6 +174,10 @@ export default {
     }
 
     this.fetchStoredSettings();
+  },
+
+  beforeDestroy() {
+    this.daysOff = [];
   }
 };
 </script>
