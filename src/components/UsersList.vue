@@ -64,6 +64,7 @@ import Progress from '@/components/Progress.vue';
 import UpdateLeave from '@/components/UpdateLeave.vue';
 import ProfileDialog from '@/components/ProfileDialog';
 import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'UsersList',
   components: {
@@ -75,7 +76,6 @@ export default {
     return {
       loading: false,
       headers: [
-        { text: 'Position', value: 'position', align: 'left' },
         { text: 'Name', value: 'name', align: 'left' },
         { text: 'ANL', value: 'entitled', align: 'left' },
         { text: 'ANL-Used', value: 'used', align: 'left' },
@@ -83,6 +83,11 @@ export default {
         { text: 'SLS4', value: 'slsEntitled', align: 'left' },
         { text: 'SLS4-Used', value: 'sls', align: 'left' },
         { text: 'SLS4-Remains', value: 'slsRemains', align: 'left' },
+        {
+          text: 'Vaccination Leave Used',
+          value: 'vaccinationLeaveUsed',
+          align: 'left'
+        },
         { text: 'Actions', value: 'actions', sortable: false, align: 'left' }
       ],
       search: null
@@ -97,6 +102,7 @@ export default {
 
     setItems() {
       let items = [];
+
       this.getAllUsers.forEach(user => {
         let sls = this.getAllLeaves.filter(
           leave =>
@@ -104,20 +110,31 @@ export default {
             leave.userId === user.id &&
             leave.status !== 'Rejected'
         );
+
         let anl = this.getAllLeaves.filter(
           leave =>
             leave.userId === user.id &&
             leave.priority !== 'H' &&
             leave.status !== 'Rejected' &&
-            leave.type !== 'SLS'
+            leave.type !== 'SLS' &&
+            leave.type !== 'SLS4'
         );
+
+        let vaccinationLeave = this.getAllLeaves.filter(
+          leave =>
+            leave.type === 'VCL' &&
+            leave.userId === user.id &&
+            leave.status !== 'Rejected'
+        );
+
         let anlUsed = this.leaveUsed(anl);
         let slsUsed = this.leaveUsed(sls);
+        let vaccinationLeaveUsed = this.leaveUsed(vaccinationLeave);
         let usedPercent = (anlUsed / user.entitled) * 100;
+
         items.push({
           id: user.id,
           sortIndex: user.sortIndex,
-          position: user.position,
           name: `${user.firstName} ${user.lastName.slice(0, 1)}.`,
           lastName: user.lastName,
           entitled: user.entitled.toFixed(1),
@@ -125,12 +142,15 @@ export default {
           usedPercent: usedPercent.toFixed(1) + ' %',
           slsEntitled: user.sls4 || 0,
           sls: slsUsed,
-          slsRemains: user.sls4 - slsUsed || 0
+          slsRemains: user.sls4 - slsUsed || 0,
+          vaccinationLeaveUsed: vaccinationLeaveUsed || 0
         });
       });
+
       return items;
     }
   },
+
   methods: {
     ...mapActions(['fetchAllUsers', 'fetchAllLeaves', 'deleteLeave']),
 
@@ -168,4 +188,16 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+::v-deep th > span {
+  display: block;
+}
+
+::v-deep th {
+  color: rgba(0, 0, 0, 0.87) !important;
+  font-size: 0.8rem;
+  height: auto !important;
+  padding: 8px 16px !important;
+  vertical-align: top !important;
+}
+</style>

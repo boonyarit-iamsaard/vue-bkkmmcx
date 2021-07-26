@@ -144,7 +144,24 @@ export default {
         { text: 'Approved' },
         { text: 'Rejected' }
       ],
-      leaveTypeItems: ['ANL', 'SLS', 'SLS4', 'H'],
+      leaveTypeItems: [
+        {
+          text: 'ANL',
+          value: 'ANL'
+        },
+        {
+          text: 'H',
+          value: 'H'
+        },
+        {
+          text: 'SLS4',
+          value: 'SLS4'
+        },
+        {
+          text: 'Vaccination Leave',
+          value: 'VCL'
+        }
+      ],
       phaseItems: ['A', 'B'],
       leaveType: '',
       phase: 'B',
@@ -217,8 +234,6 @@ export default {
         priority = this.item.priority;
         phase = this.item.phase;
       }
-
-      console.log(this.item.type);
 
       if (this.$refs.form.validate()) {
         await this.updateLeave({

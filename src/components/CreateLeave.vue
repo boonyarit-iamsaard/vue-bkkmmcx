@@ -142,7 +142,24 @@ export default {
     priorityRules: [v => v.length > 0 || 'Priority is required.'],
     startDate: new Date('2021-01-01').toISOString().substr(0, 10),
     endDate: new Date('2021-01-01').toISOString().substr(0, 10),
-    leaveTypeItems: ['ANL', 'SLS4', 'H'],
+    leaveTypeItems: [
+      {
+        text: 'ANL',
+        value: 'ANL'
+      },
+      {
+        text: 'H',
+        value: 'H'
+      },
+      {
+        text: 'SLS4',
+        value: 'SLS4'
+      },
+      {
+        text: 'Vaccination Leave',
+        value: 'VCL'
+      }
+    ],
     phaseItems: ['A', 'B'],
     leaveType: '',
     phase: 'B',
@@ -177,6 +194,7 @@ export default {
 
     async createLeaveHandler() {
       this.loading = true;
+
       if (this.$refs.form.validate()) {
         let priority;
 
@@ -186,6 +204,9 @@ export default {
           priority = 'H';
         } else if (this.leaveType === 'SLS4') {
           priority = 'SLS4';
+          this.phase = 'None';
+        } else if (this.leaveType === 'VCL') {
+          priority = 'VCL';
           this.phase = 'None';
         } else priority = this.priority;
 
@@ -205,7 +226,9 @@ export default {
 
         await this.$router.push({
           name: 'Home',
-          params: { focus: targetMonth.toISOString().substr(0, 10) }
+          params: {
+            focus: targetMonth.toISOString().substr(0, 10)
+          }
         });
       }
     },

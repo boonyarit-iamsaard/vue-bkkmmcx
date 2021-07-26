@@ -34,6 +34,40 @@
             </v-row>
           </v-card-text>
         </v-card>
+
+        <v-card class="mt-4 rounded-lg">
+          <v-card-title class="d-flex">
+            <span class="subtitle-1 text-center" style="width: 50%">
+              Vaccination Leave
+            </span>
+
+            <span class="subtitle-1 text-center" style="width: 50%">
+              Remains
+            </span>
+          </v-card-title>
+
+          <v-card-text class="d-flex">
+            <div class="title text-center" style="width: 50%">
+              <div>
+                2
+              </div>
+
+              <div class="caption mt-2">
+                days
+              </div>
+            </div>
+
+            <div class="title text-center" style="width: 50%">
+              <div>
+                {{ 2 - leaveUsed().vaccinationLeave || 0 }}
+              </div>
+
+              <div class="caption mt-2">
+                days
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
       </v-col>
       <v-col>
         <v-row>
@@ -169,6 +203,7 @@ export default {
       'fetchAllLeaves',
       'updatePriorityQuota'
     ]),
+
     async addGift() {
       this.giftDialog = false;
       this.loading = true;
@@ -181,9 +216,11 @@ export default {
         console.log('TYC added');
       });
     },
+
     priorityRemains() {
       return this.profile.entitled - this.leaveUsed().used;
     },
+
     leaveUsed() {
       let leave = this.getAllLeaves.filter(
         leave =>
@@ -195,17 +232,26 @@ export default {
       let used = leave
         .filter(result => result.type !== 'SLS' && result.type !== 'SLS4')
         .reduce((a, b) => a + b.days, 0);
+
       let anl1 = leave.filter(result => result.priority === 'ANL-1').length;
+
       let anl2 = leave.filter(result => result.priority === 'ANL-2').length;
+
       let tyc = leave.filter(result => result.priority === 'TYC').length;
+
       let sls = leave
         .filter(result => result.type === 'SLS')
         .reduce((a, b) => a + b.days, 0);
+
       let sls4 = leave
         .filter(result => result.type === 'SLS4')
         .reduce((a, b) => a + b.days, 0);
 
-      return { used, anl1, anl2, tyc, sls, sls4 };
+      let vaccinationLeave = leave
+        .filter(result => result.type === 'VCL')
+        .reduce((a, b) => a + b.days, 0);
+
+      return { used, anl1, anl2, tyc, sls, sls4, vaccinationLeave };
     },
 
     percentUsed() {

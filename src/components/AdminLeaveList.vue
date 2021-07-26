@@ -141,7 +141,7 @@ import UpdateLeave from '@/components/UpdateLeave';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'LeaveList',
+  name: 'AdminLeaveList',
   components: {
     Progress,
     UpdateLeave
@@ -262,6 +262,7 @@ export default {
           return this.eventColor[4];
         case 'SLS':
         case 'SLS4':
+        case 'VCL':
           return this.eventColor[5];
         default:
           return this.eventColor[6];
@@ -274,4 +275,16 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+::v-deep th > span {
+  display: block;
+}
+
+::v-deep th {
+  color: rgba(0, 0, 0, 0.87) !important;
+  font-size: 0.8rem;
+  height: auto !important;
+  padding: 8px 16px !important;
+  vertical-align: top !important;
+}
+</style>
