@@ -117,7 +117,8 @@ export default {
             leave.priority !== 'H' &&
             leave.status !== 'Rejected' &&
             leave.type !== 'SLS' &&
-            leave.type !== 'SLS4'
+            leave.type !== 'SLS4' &&
+            leave.type !== 'VCL'
         );
 
         let vaccinationLeave = this.getAllLeaves.filter(
