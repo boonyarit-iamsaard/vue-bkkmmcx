@@ -176,7 +176,7 @@ import DaysOffList from '@/components/DayOffList';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'Profile',
+  name: 'Details',
   components: {
     DaysOffList
   },
@@ -230,7 +230,12 @@ export default {
       );
 
       let used = leave
-        .filter(result => result.type !== 'SLS' && result.type !== 'SLS4')
+        .filter(
+          result =>
+            result.type !== 'SLS' &&
+            result.type !== 'SLS4' &&
+            result.type !== 'VCL'
+        )
         .reduce((a, b) => a + b.days, 0);
 
       let anl1 = leave.filter(result => result.priority === 'ANL-1').length;
